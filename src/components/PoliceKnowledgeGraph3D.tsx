@@ -3,7 +3,8 @@ import * as THREE from 'three'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { Play, Pause, RotateCcw, Camera, X, Hand, ZoomIn, ZoomOut } from 'lucide-react'
+import { Play, Pause, RotateCcw, Camera, X, Hand, ZoomIn, ZoomOut, MousePointer2 } from 'lucide-react'
+import { Separator } from '@/components/ui/separator'
 
 interface Node {
   id: string
@@ -145,7 +146,11 @@ export function PoliceKnowledgeGraph3D() {
     }
 
     const handleClick = (event: MouseEvent) => {
-      if (!containerRef.current || !camera || !renderer || isDraggingRef.current) return
+      if (!containerRef.current || !camera || !renderer) return
+      
+      if (isDraggingRef.current) {
+        return
+      }
       
       const rect = containerRef.current.getBoundingClientRect()
       mouseRef.current.x = ((event.clientX - rect.left) / rect.width) * 2 - 1
@@ -164,32 +169,59 @@ export function PoliceKnowledgeGraph3D() {
       }
     }
 
+    const handleContextMenu = (event: MouseEvent) => {
+      event.preventDefault()
+      if (!containerRef.current || !camera || !renderer) return
+      
+      const rect = containerRef.current.getBoundingClientRect()
+      mouseRef.current.x = ((event.clientX - rect.left) / rect.width) * 2 - 1
+      mouseRef.current.y = -((event.clientY - rect.top) / rect.height) * 2 + 1
+
+      raycasterRef.current.setFromCamera(mouseRef.current, camera)
+      const meshes = Array.from(nodeMeshesRef.current.values())
+      const intersects = raycasterRef.current.intersectObjects(meshes)
+
+      if (intersects.length > 0) {
+        const clickedMesh = intersects[0].object as THREE.Mesh
+        const nodeId = clickedMesh.userData.id
+        handleNodeClick(nodeId)
+      }
+    }
+
     const handleMouseDown = (event: MouseEvent) => {
       isDraggingRef.current = false
       previousMouseRef.current = { x: event.clientX, y: event.clientY }
-      setIsManualControl(true)
-      setFlyThroughEnabled(false)
     }
 
     const handleMouseMove = (event: MouseEvent) => {
       if (event.buttons !== 1) return
       
-      isDraggingRef.current = true
-      const deltaX = event.clientX - previousMouseRef.current.x
-      const deltaY = event.clientY - previousMouseRef.current.y
+      const deltaX = Math.abs(event.clientX - previousMouseRef.current.x)
+      const deltaY = Math.abs(event.clientY - previousMouseRef.current.y)
       
-      cameraAnglesRef.current.theta -= deltaX * 0.01
-      cameraAnglesRef.current.phi -= deltaY * 0.01
-      cameraAnglesRef.current.phi = Math.max(0.1, Math.min(Math.PI - 0.1, cameraAnglesRef.current.phi))
+      if (deltaX > 5 || deltaY > 5) {
+        isDraggingRef.current = true
+        setIsManualControl(true)
+        setFlyThroughEnabled(false)
+      }
       
-      previousMouseRef.current = { x: event.clientX, y: event.clientY }
-      updateCameraPosition()
+      if (isDraggingRef.current) {
+        const dx = event.clientX - previousMouseRef.current.x
+        const dy = event.clientY - previousMouseRef.current.y
+        
+        cameraAnglesRef.current.theta -= dx * 0.01
+        cameraAnglesRef.current.phi -= dy * 0.01
+        cameraAnglesRef.current.phi = Math.max(0.1, Math.min(Math.PI - 0.1, cameraAnglesRef.current.phi))
+        
+        previousMouseRef.current = { x: event.clientX, y: event.clientY }
+        updateCameraPosition()
+      }
     }
 
     const handleMouseUp = () => {
       setTimeout(() => {
         isDraggingRef.current = false
-      }, 100)
+      }, 50)
     }
 
     const handleWheel = (event: WheelEvent) => {
@@ -203,6 +235,7 @@ export function PoliceKnowledgeGraph3D() {
     }
 
     renderer.domElement.addEventListener('click', handleClick)
+    renderer.domElement.addEventListener('contextmenu', handleContextMenu)
     renderer.domElement.addEventListener('mousedown', handleMouseDown)
     renderer.domElement.addEventListener('mousemove', handleMouseMove)
     renderer.domElement.addEventListener('mouseup', handleMouseUp)
@@ -214,6 +247,7 @@ export function PoliceKnowledgeGraph3D() {
     return () => {
       window.removeEventListener('resize', handleResize)
       renderer.domElement.removeEventListener('click', handleClick)
+      renderer.domElement.removeEventListener('contextmenu', handleContextMenu)
       renderer.domElement.removeEventListener('mousedown', handleMouseDown)
       renderer.domElement.removeEventListener('mousemove', handleMouseMove)
       renderer.domElement.removeEventListener('mouseup', handleMouseUp)
@@ -593,67 +627,107 @@ export function PoliceKnowledgeGraph3D() {
   return (
     <Card className="border-2 overflow-hidden">
       <CardHeader>
-        <div className="flex items-start justify-between">
-          <div>
-            <CardTitle className="text-2xl mb-2">3D Knowledge Graph Visualisierung</CardTitle>
-            <CardDescription className="text-base">
-              Interaktive Darstellung eines komplexen Ermittlungskomplexes. <strong>Ziehen</strong> zum Drehen, <strong>Mausrad</strong> zum Zoomen, <strong>Klicken</strong> auf Knoten für Details.
-            </CardDescription>
+        <div className="flex flex-col gap-4">
+          <div className="flex items-start justify-between">
+            <div>
+              <CardTitle className="text-2xl mb-2">3D Knowledge Graph Visualisierung</CardTitle>
+              <CardDescription className="text-base">
+                Interaktive Darstellung eines komplexen Ermittlungskomplexes mit mehreren Interaktionsmöglichkeiten
+              </CardDescription>
+            </div>
           </div>
-          <div className="flex flex-wrap gap-2">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={handleZoomIn}
-              title="Hineinzoomen"
-            >
-              <ZoomIn className="h-4 w-4" />
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={handleZoomOut}
-              title="Herauszoomen"
-            >
-              <ZoomOut className="h-4 w-4" />
-            </Button>
-            <Button
-              variant={isManualControl ? "default" : "outline"}
-              size="sm"
-              onClick={() => {
-                setIsManualControl(!isManualControl)
-                if (!isManualControl) {
-                  setFlyThroughEnabled(false)
-                }
-              }}
-              title="Manuelle Steuerung"
-            >
-              <Hand className="h-4 w-4" />
-            </Button>
-            <Button
-              variant={flyThroughEnabled ? "default" : "outline"}
-              size="sm"
-              onClick={toggleFlyThrough}
-              title="Automatischer Kameraflug"
-            >
-              <Camera className="h-4 w-4" />
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={handlePlayPause}
-              title={isAnimating ? "Physik pausieren" : "Physik fortsetzen"}
-            >
-              {isAnimating ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={handleReset}
-              title="Zurücksetzen"
-            >
-              <RotateCcw className="h-4 w-4" />
-            </Button>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-sm bg-muted/30 p-4 rounded-lg">
+            <div className="flex items-start gap-2">
+              <MousePointer2 className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
+              <div>
+                <div className="font-semibold">Linksklick</div>
+                <div className="text-muted-foreground text-xs">Entität auswählen und Beziehungen anzeigen</div>
+              </div>
+            </div>
+            <div className="flex items-start gap-2">
+              <Hand className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
+              <div>
+                <div className="font-semibold">Ziehen & Drehen</div>
+                <div className="text-muted-foreground text-xs">Gedrückt halten und bewegen zum Drehen</div>
+              </div>
+            </div>
+            <div className="flex items-start gap-2">
+              <ZoomIn className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
+              <div>
+                <div className="font-semibold">Mausrad</div>
+                <div className="text-muted-foreground text-xs">Scrollen zum Zoomen</div>
+              </div>
+            </div>
+          </div>
+
+          <Separator />
+          
+          <div className="flex flex-col gap-3">
+            <div className="text-sm font-semibold text-muted-foreground">Steuerung</div>
+            <div className="grid grid-cols-2 md:grid-cols-6 gap-2">
+              <Button
+                variant={flyThroughEnabled ? "default" : "outline"}
+                size="sm"
+                onClick={toggleFlyThrough}
+                className="relative"
+              >
+                <span className="absolute -top-2 -left-2 bg-primary text-primary-foreground rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold">1</span>
+                <Camera className="h-4 w-4 mr-2" />
+                <span className="hidden lg:inline">Kameraflug</span>
+              </Button>
+              <Button
+                variant={isAnimating ? "default" : "outline"}
+                size="sm"
+                onClick={handlePlayPause}
+                className="relative"
+              >
+                <span className="absolute -top-2 -left-2 bg-primary text-primary-foreground rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold">2</span>
+                {isAnimating ? <Pause className="h-4 w-4 mr-2" /> : <Play className="h-4 w-4 mr-2" />}
+                <span className="hidden lg:inline">{isAnimating ? 'Pause' : 'Start'}</span>
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleZoomIn}
+                className="relative"
+              >
+                <span className="absolute -top-2 -left-2 bg-primary text-primary-foreground rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold">3</span>
+                <ZoomIn className="h-4 w-4 mr-2" />
+                <span className="hidden lg:inline">Zoom +</span>
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleZoomOut}
+                className="relative"
+              >
+                <span className="absolute -top-2 -left-2 bg-primary text-primary-foreground rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold">4</span>
+                <ZoomOut className="h-4 w-4 mr-2" />
+                <span className="hidden lg:inline">Zoom -</span>
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleReset}
+                className="relative"
+              >
+                <span className="absolute -top-2 -left-2 bg-primary text-primary-foreground rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold">5</span>
+                <RotateCcw className="h-4 w-4 mr-2" />
+                <span className="hidden lg:inline">Reset</span>
+              </Button>
+              {selectedNode && (
+                <Button
+                  variant="secondary"
+                  size="sm"
+                  onClick={clearSelection}
+                  className="relative"
+                >
+                  <X className="h-4 w-4 mr-2" />
+                  <span className="hidden lg:inline">Auswahl aufheben</span>
+                </Button>
+              )}
+            </div>
           </div>
         </div>
       </CardHeader>
@@ -665,7 +739,7 @@ export function PoliceKnowledgeGraph3D() {
           />
           
           {selectedNodeData && (
-            <div className="absolute top-4 left-4 bg-card/95 backdrop-blur border-2 border-primary rounded-lg p-4 shadow-xl max-w-sm">
+            <div className="absolute top-4 right-4 bg-card/95 backdrop-blur border-2 border-primary rounded-lg p-4 shadow-xl max-w-md">
               <div className="flex items-start justify-between mb-3">
                 <div className="flex items-center gap-2">
                   <div 
@@ -682,22 +756,45 @@ export function PoliceKnowledgeGraph3D() {
               
               {relatedEdges.length > 0 && (
                 <div>
-                  <p className="text-sm font-semibold text-muted-foreground mb-2">
-                    Verbindungen ({relatedEdges.length}):
+                  <Separator className="mb-3" />
+                  <p className="text-sm font-semibold text-muted-foreground mb-3">
+                    Beziehungen ({relatedEdges.length})
                   </p>
-                  <div className="space-y-1.5 max-h-48 overflow-y-auto">
+                  <div className="space-y-2 max-h-64 overflow-y-auto pr-2">
                     {relatedEdges.map((edge, idx) => {
-                      const otherNodeId = edge.source === selectedNodeData.id ? edge.target : edge.source
+                      const isOutgoing = edge.source === selectedNodeData.id
+                      const otherNodeId = isOutgoing ? edge.target : edge.source
                       const otherNode = nodesRef.current.find(n => n.id === otherNodeId)
                       return (
-                        <div key={idx} className="text-sm bg-muted/50 rounded p-2">
-                          <span className="font-medium">{edge.type}</span>
-                          {' → '}
-                          <span className="text-primary">{otherNode?.label}</span>
-                        </div>
+                        <button
+                          key={idx}
+                          onClick={() => handleNodeClick(otherNodeId)}
+                          className="w-full text-left bg-muted/50 hover:bg-muted rounded p-3 transition-colors border-2 border-transparent hover:border-primary cursor-pointer group"
+                        >
+                          <div className="flex items-center gap-2 mb-1">
+                            <div 
+                              className="w-3 h-3 rounded-full flex-shrink-0"
+                              style={{ backgroundColor: `#${nodeColors[otherNode?.type || 'person'].toString(16).padStart(6, '0')}` }}
+                            />
+                            <span className="font-semibold text-sm group-hover:text-primary transition-colors">
+                              {otherNode?.label}
+                            </span>
+                            <Badge variant="secondary" className="ml-auto text-xs">
+                              {nodeLabels[otherNode?.type || 'person']}
+                            </Badge>
+                          </div>
+                          <div className="flex items-center gap-2 text-xs text-muted-foreground ml-5">
+                            {isOutgoing ? '→' : '←'}
+                            <span className="italic">{edge.type}</span>
+                          </div>
+                        </button>
                       )
                     })}
                   </div>
+                  <Separator className="my-3" />
+                  <p className="text-xs text-muted-foreground italic">
+                    💡 Klicken Sie auf eine Beziehung, um zur verbundenen Entität zu springen
+                  </p>
                 </div>
               )}
             </div>
