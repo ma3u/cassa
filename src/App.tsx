@@ -723,27 +723,11 @@ function App() {
 
 function SopraLogo() {
   return (
-    <svg width="180" height="40" viewBox="0 0 200 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <g>
-        <path d="M15.5 34.5C15.5 38.6421 12.1421 42 8 42C3.85786 42 0.5 38.6421 0.5 34.5C0.5 30.3579 3.85786 27 8 27C12.1421 27 15.5 30.3579 15.5 34.5Z" fill="#E2001A"/>
-        <path d="M32 34.5C32 38.6421 28.6421 42 24.5 42C20.3579 42 17 38.6421 17 34.5C17 30.3579 20.3579 27 24.5 27C28.6421 27 32 30.3579 32 34.5Z" fill="#FF6B35"/>
-        <rect x="0.5" y="6" width="31.5" height="18" rx="9" fill="#003D7A"/>
-        <text x="40" y="20" fontFamily="Space Grotesk, sans-serif" fontSize="16" fontWeight="700" fill="#003D7A" letterSpacing="-0.5">
-          SOPRA STERIA
-        </text>
-        <motion.line 
-          x1="40" 
-          y1="28" 
-          x2="160" 
-          y2="28" 
-          stroke="#E2001A"
-          strokeWidth="2.5"
-          initial={{ pathLength: 0 }}
-          animate={{ pathLength: 1 }}
-          transition={{ duration: 1.2, ease: "easeOut" }}
-        />
-      </g>
-    </svg>
+    <img 
+      src="https://www.soprasteria.de/ResourcePackages/Bootstrap4/assets/dist/logos/logo-soprasteria.svg" 
+      alt="Sopra Steria" 
+      className="h-8 md:h-10"
+    />
   )
 }
 
