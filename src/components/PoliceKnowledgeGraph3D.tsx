@@ -1,14 +1,14 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, useCallback } from 'react'
 import * as THREE from 'three'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { Play, Pause, RotateCcw } from 'lucide-react'
+import { Play, Pause, RotateCcw, Camera, X } from 'lucide-react'
 
 interface Node {
   id: string
   label: string
-  type: 'person' | 'case' | 'evidence' | 'location' | 'communication' | 'law'
+  type: 'person' | 'case' | 'evidence' | 'location' | 'communication' | 'law' | 'organization' | 'account' | 'vehicle'
   x: number
   y: number
   z: number
@@ -29,7 +29,10 @@ const nodeColors = {
   evidence: 0xffe66d,
   location: 0x95e1d3,
   communication: 0xffa07a,
-  law: 0x9b59b6
+  law: 0x9b59b6,
+  organization: 0xe74c3c,
+  account: 0x3498db,
+  vehicle: 0x2ecc71
 }
 
 const nodeLabels = {
@@ -38,7 +41,34 @@ const nodeLabels = {
   evidence: '🔍 Beweismittel',
   location: '📍 Ort',
   communication: '💬 Kommunikation',
-  law: '⚖️ Rechtsgrundlage'
+  law: '⚖️ Rechtsgrundlage',
+  organization: '🏢 Organisation',
+  account: '💳 Konto',
+  vehicle: '🚗 Fahrzeug'
+}
+
+function createTextSprite(text: string, color: number): THREE.Sprite {
+  const canvas = document.createElement('canvas')
+  const context = canvas.getContext('2d')!
+  canvas.width = 512
+  canvas.height = 128
+  
+  context.fillStyle = `#${color.toString(16).padStart(6, '0')}`
+  context.font = 'Bold 48px Inter, Arial'
+  context.textAlign = 'center'
+  context.textBaseline = 'middle'
+  context.fillText(text, 256, 64)
+  
+  const texture = new THREE.CanvasTexture(canvas)
+  const spriteMaterial = new THREE.SpriteMaterial({ 
+    map: texture,
+    transparent: true,
+    opacity: 0.9
+  })
+  const sprite = new THREE.Sprite(spriteMaterial)
+  sprite.scale.set(8, 2, 1)
+  
+  return sprite
 }
 
 export function PoliceKnowledgeGraph3D() {
@@ -50,16 +80,24 @@ export function PoliceKnowledgeGraph3D() {
   const nodesRef = useRef<Node[]>([])
   const edgesRef = useRef<Edge[]>([])
   const nodeMeshesRef = useRef<Map<string, THREE.Mesh>>(new Map())
+  const labelSpritesRef = useRef<Map<string, THREE.Sprite>>(new Map())
   const edgeLinesRef = useRef<THREE.Line[]>([])
+  const raycasterRef = useRef<THREE.Raycaster>(new THREE.Raycaster())
+  const mouseRef = useRef<THREE.Vector2>(new THREE.Vector2())
+  const cameraPathRef = useRef<number>(0)
   
   const [isAnimating, setIsAnimating] = useState(true)
-  const [hoveredNode, setHoveredNode] = useState<string | null>(null)
+  const [selectedNode, setSelectedNode] = useState<string | null>(null)
+  const [connectedNodes, setConnectedNodes] = useState<string[]>([])
+  const [flyThroughEnabled, setFlyThroughEnabled] = useState(true)
+  const [selectedNodeData, setSelectedNodeData] = useState<Node | null>(null)
+  const [relatedEdges, setRelatedEdges] = useState<Edge[]>([])
 
   useEffect(() => {
     if (!containerRef.current) return
 
     const scene = new THREE.Scene()
-    scene.background = new THREE.Color(0xfafafa)
+    scene.background = new THREE.Color(0xf5f5f5)
     sceneRef.current = scene
 
     const camera = new THREE.PerspectiveCamera(
@@ -68,12 +106,13 @@ export function PoliceKnowledgeGraph3D() {
       0.1,
       1000
     )
-    camera.position.z = 50
-    camera.position.y = 20
+    camera.position.set(60, 30, 60)
+    camera.lookAt(0, 0, 0)
     cameraRef.current = camera
 
     const renderer = new THREE.WebGLRenderer({ antialias: true })
     renderer.setSize(containerRef.current.clientWidth, containerRef.current.clientHeight)
+    renderer.setPixelRatio(window.devicePixelRatio)
     containerRef.current.appendChild(renderer.domElement)
     rendererRef.current = renderer
 
@@ -81,8 +120,12 @@ export function PoliceKnowledgeGraph3D() {
     scene.add(ambientLight)
 
     const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8)
-    directionalLight.position.set(10, 10, 10)
+    directionalLight.position.set(20, 30, 20)
     scene.add(directionalLight)
+
+    const pointLight = new THREE.PointLight(0xffffff, 0.5)
+    pointLight.position.set(-20, 20, -20)
+    scene.add(pointLight)
 
     initializeGraph()
 
@@ -93,12 +136,34 @@ export function PoliceKnowledgeGraph3D() {
       renderer.setSize(containerRef.current.clientWidth, containerRef.current.clientHeight)
     }
 
+    const handleClick = (event: MouseEvent) => {
+      if (!containerRef.current || !camera || !renderer) return
+      
+      const rect = containerRef.current.getBoundingClientRect()
+      mouseRef.current.x = ((event.clientX - rect.left) / rect.width) * 2 - 1
+      mouseRef.current.y = -((event.clientY - rect.top) / rect.height) * 2 + 1
+
+      raycasterRef.current.setFromCamera(mouseRef.current, camera)
+      const meshes = Array.from(nodeMeshesRef.current.values())
+      const intersects = raycasterRef.current.intersectObjects(meshes)
+
+      if (intersects.length > 0) {
+        const clickedMesh = intersects[0].object as THREE.Mesh
+        const nodeId = clickedMesh.userData.id
+        handleNodeClick(nodeId)
+      } else {
+        clearSelection()
+      }
+    }
+
+    renderer.domElement.addEventListener('click', handleClick)
     window.addEventListener('resize', handleResize)
 
     animate()
 
     return () => {
       window.removeEventListener('resize', handleResize)
+      renderer.domElement.removeEventListener('click', handleClick)
       if (animationIdRef.current) {
         cancelAnimationFrame(animationIdRef.current)
       }
@@ -113,46 +178,103 @@ export function PoliceKnowledgeGraph3D() {
     const nodes: Node[] = [
       { id: 'suspect1', label: 'Max Müller', type: 'person', x: 0, y: 0, z: 0, vx: 0, vy: 0, vz: 0 },
       { id: 'suspect2', label: 'Anna Schmidt', type: 'person', x: 0, y: 0, z: 0, vx: 0, vy: 0, vz: 0 },
-      { id: 'witness1', label: 'Peter Weber', type: 'person', x: 0, y: 0, z: 0, vx: 0, vy: 0, vz: 0 },
-      { id: 'case1', label: 'OK-Ermittlung 2024', type: 'case', x: 0, y: 0, z: 0, vx: 0, vy: 0, vz: 0 },
-      { id: 'case2', label: 'Cybercrime-Fall', type: 'case', x: 0, y: 0, z: 0, vx: 0, vy: 0, vz: 0 },
+      { id: 'suspect3', label: 'Tom Weber', type: 'person', x: 0, y: 0, z: 0, vx: 0, vy: 0, vz: 0 },
+      { id: 'witness1', label: 'Peter Koch', type: 'person', x: 0, y: 0, z: 0, vx: 0, vy: 0, vz: 0 },
+      { id: 'witness2', label: 'Lisa Bauer', type: 'person', x: 0, y: 0, z: 0, vx: 0, vy: 0, vz: 0 },
+      
+      { id: 'case1', label: 'OK-Verfahren 2024', type: 'case', x: 0, y: 0, z: 0, vx: 0, vy: 0, vz: 0 },
+      { id: 'case2', label: 'Cybercrime', type: 'case', x: 0, y: 0, z: 0, vx: 0, vy: 0, vz: 0 },
+      { id: 'case3', label: 'Geldwäsche', type: 'case', x: 0, y: 0, z: 0, vx: 0, vy: 0, vz: 0 },
+      
       { id: 'evidence1', label: 'Handy', type: 'evidence', x: 0, y: 0, z: 0, vx: 0, vy: 0, vz: 0 },
       { id: 'evidence2', label: 'Dokumente', type: 'evidence', x: 0, y: 0, z: 0, vx: 0, vy: 0, vz: 0 },
       { id: 'evidence3', label: 'Server-Logs', type: 'evidence', x: 0, y: 0, z: 0, vx: 0, vy: 0, vz: 0 },
+      { id: 'evidence4', label: 'Laptop', type: 'evidence', x: 0, y: 0, z: 0, vx: 0, vy: 0, vz: 0 },
+      { id: 'evidence5', label: 'USB-Stick', type: 'evidence', x: 0, y: 0, z: 0, vx: 0, vy: 0, vz: 0 },
+      
       { id: 'location1', label: 'Hamburg', type: 'location', x: 0, y: 0, z: 0, vx: 0, vy: 0, vz: 0 },
       { id: 'location2', label: 'München', type: 'location', x: 0, y: 0, z: 0, vx: 0, vy: 0, vz: 0 },
+      { id: 'location3', label: 'Berlin', type: 'location', x: 0, y: 0, z: 0, vx: 0, vy: 0, vz: 0 },
+      { id: 'location4', label: 'Frankfurt', type: 'location', x: 0, y: 0, z: 0, vx: 0, vy: 0, vz: 0 },
+      
       { id: 'comm1', label: 'TKÜ-Daten', type: 'communication', x: 0, y: 0, z: 0, vx: 0, vy: 0, vz: 0 },
       { id: 'comm2', label: 'Chat-Protokolle', type: 'communication', x: 0, y: 0, z: 0, vx: 0, vy: 0, vz: 0 },
+      { id: 'comm3', label: 'E-Mails', type: 'communication', x: 0, y: 0, z: 0, vx: 0, vy: 0, vz: 0 },
+      { id: 'comm4', label: 'Messenger', type: 'communication', x: 0, y: 0, z: 0, vx: 0, vy: 0, vz: 0 },
+      
       { id: 'law1', label: '§ 100a StPO', type: 'law', x: 0, y: 0, z: 0, vx: 0, vy: 0, vz: 0 },
       { id: 'law2', label: '§ 81b StPO', type: 'law', x: 0, y: 0, z: 0, vx: 0, vy: 0, vz: 0 },
+      { id: 'law3', label: '§ 261 StGB', type: 'law', x: 0, y: 0, z: 0, vx: 0, vy: 0, vz: 0 },
+      
+      { id: 'org1', label: 'Briefkastenfirma A', type: 'organization', x: 0, y: 0, z: 0, vx: 0, vy: 0, vz: 0 },
+      { id: 'org2', label: 'Briefkastenfirma B', type: 'organization', x: 0, y: 0, z: 0, vx: 0, vy: 0, vz: 0 },
+      { id: 'org3', label: 'IT-Firma', type: 'organization', x: 0, y: 0, z: 0, vx: 0, vy: 0, vz: 0 },
+      
+      { id: 'account1', label: 'Konto DE123', type: 'account', x: 0, y: 0, z: 0, vx: 0, vy: 0, vz: 0 },
+      { id: 'account2', label: 'Konto CH456', type: 'account', x: 0, y: 0, z: 0, vx: 0, vy: 0, vz: 0 },
+      { id: 'account3', label: 'Konto LU789', type: 'account', x: 0, y: 0, z: 0, vx: 0, vy: 0, vz: 0 },
+      
+      { id: 'vehicle1', label: 'BMW M5', type: 'vehicle', x: 0, y: 0, z: 0, vx: 0, vy: 0, vz: 0 },
+      { id: 'vehicle2', label: 'Mercedes AMG', type: 'vehicle', x: 0, y: 0, z: 0, vx: 0, vy: 0, vz: 0 },
     ]
 
     const edges: Edge[] = [
       { source: 'suspect1', target: 'case1', type: 'verdächtig in' },
       { source: 'suspect2', target: 'case1', type: 'verdächtig in' },
+      { source: 'suspect3', target: 'case2', type: 'verdächtig in' },
       { source: 'suspect1', target: 'suspect2', type: 'bekannt mit' },
+      { source: 'suspect2', target: 'suspect3', type: 'bekannt mit' },
+      
       { source: 'witness1', target: 'case1', type: 'Zeuge in' },
+      { source: 'witness2', target: 'case2', type: 'Zeuge in' },
+      
       { source: 'evidence1', target: 'suspect1', type: 'gehört zu' },
       { source: 'evidence2', target: 'case1', type: 'Beweis in' },
       { source: 'evidence3', target: 'case2', type: 'Beweis in' },
-      { source: 'suspect2', target: 'case2', type: 'verdächtig in' },
+      { source: 'evidence4', target: 'suspect3', type: 'gehört zu' },
+      { source: 'evidence5', target: 'case3', type: 'Beweis in' },
+      
       { source: 'location1', target: 'case1', type: 'Tatort' },
       { source: 'location2', target: 'case2', type: 'Tatort' },
+      { source: 'location3', target: 'suspect1', type: 'Wohnort' },
+      { source: 'location4', target: 'org1', type: 'Firmensitz' },
+      
       { source: 'comm1', target: 'suspect1', type: 'überwacht' },
       { source: 'comm2', target: 'suspect2', type: 'sichergestellt' },
+      { source: 'comm3', target: 'suspect3', type: 'analysiert' },
+      { source: 'comm4', target: 'suspect2', type: 'entschlüsselt' },
+      
       { source: 'law1', target: 'comm1', type: 'Rechtsgrundlage' },
       { source: 'law2', target: 'evidence1', type: 'Rechtsgrundlage' },
+      { source: 'law3', target: 'case3', type: 'Rechtsgrundlage' },
+      
+      { source: 'suspect1', target: 'org1', type: 'Geschäftsführer' },
+      { source: 'suspect2', target: 'org2', type: 'Gesellschafter' },
+      { source: 'org1', target: 'org2', type: 'verbunden mit' },
+      { source: 'org3', target: 'suspect3', type: 'Arbeitgeber' },
+      
+      { source: 'org1', target: 'account1', type: 'Kontoinhaber' },
+      { source: 'org2', target: 'account2', type: 'Kontoinhaber' },
+      { source: 'account1', target: 'account3', type: 'Überweisung' },
+      { source: 'account2', target: 'account3', type: 'Überweisung' },
+      { source: 'suspect1', target: 'account1', type: 'kontrolliert' },
+      { source: 'case3', target: 'account1', type: 'Ermittlung gegen' },
+      
+      { source: 'vehicle1', target: 'suspect1', type: 'Halter' },
+      { source: 'vehicle2', target: 'suspect2', type: 'Halter' },
+      { source: 'vehicle1', target: 'case1', type: 'verwendet in' },
     ]
 
     nodes.forEach((node, i) => {
       const angle = (i / nodes.length) * Math.PI * 2
-      const radius = 25
+      const radius = 40
+      const height = Math.sin(i * 0.5) * 20
       node.x = Math.cos(angle) * radius
-      node.y = (Math.random() - 0.5) * 15
+      node.y = height
       node.z = Math.sin(angle) * radius
-      node.vx = (Math.random() - 0.5) * 0.1
-      node.vy = (Math.random() - 0.5) * 0.1
-      node.vz = (Math.random() - 0.5) * 0.1
+      node.vx = (Math.random() - 0.5) * 0.08
+      node.vy = (Math.random() - 0.5) * 0.08
+      node.vz = (Math.random() - 0.5) * 0.08
     })
 
     nodesRef.current = nodes
@@ -165,12 +287,18 @@ export function PoliceKnowledgeGraph3D() {
   const createNodeMeshes = () => {
     if (!sceneRef.current) return
 
+    nodeMeshesRef.current.forEach(mesh => sceneRef.current!.remove(mesh))
+    labelSpritesRef.current.forEach(sprite => sceneRef.current!.remove(sprite))
+    nodeMeshesRef.current.clear()
+    labelSpritesRef.current.clear()
+
     nodesRef.current.forEach(node => {
-      const geometry = new THREE.SphereGeometry(1.5, 32, 32)
+      const geometry = new THREE.SphereGeometry(1.8, 32, 32)
       const material = new THREE.MeshPhongMaterial({ 
         color: nodeColors[node.type],
         emissive: nodeColors[node.type],
-        emissiveIntensity: 0.2
+        emissiveIntensity: 0.3,
+        shininess: 100
       })
       const mesh = new THREE.Mesh(geometry, material)
       mesh.position.set(node.x, node.y, node.z)
@@ -178,6 +306,11 @@ export function PoliceKnowledgeGraph3D() {
       
       sceneRef.current!.add(mesh)
       nodeMeshesRef.current.set(node.id, mesh)
+
+      const sprite = createTextSprite(node.label, nodeColors[node.type])
+      sprite.position.set(node.x, node.y + 3, node.z)
+      sceneRef.current!.add(sprite)
+      labelSpritesRef.current.set(node.id, sprite)
     })
   }
 
@@ -197,10 +330,13 @@ export function PoliceKnowledgeGraph3D() {
           new THREE.Vector3(targetNode.x, targetNode.y, targetNode.z)
         ]
         const geometry = new THREE.BufferGeometry().setFromPoints(points)
+        
+        const isHighlighted = selectedNode && (edge.source === selectedNode || edge.target === selectedNode)
         const material = new THREE.LineBasicMaterial({ 
-          color: 0xcccccc,
-          opacity: 0.5,
-          transparent: true
+          color: isHighlighted ? 0xff6b6b : 0xcccccc,
+          opacity: isHighlighted ? 1 : 0.3,
+          transparent: true,
+          linewidth: isHighlighted ? 3 : 1
         })
         const line = new THREE.Line(geometry, material)
         sceneRef.current!.add(line)
@@ -209,11 +345,66 @@ export function PoliceKnowledgeGraph3D() {
     })
   }
 
+  const handleNodeClick = (nodeId: string) => {
+    setSelectedNode(nodeId)
+    const node = nodesRef.current.find(n => n.id === nodeId)
+    setSelectedNodeData(node || null)
+
+    const related = edgesRef.current.filter(e => e.source === nodeId || e.target === nodeId)
+    setRelatedEdges(related)
+
+    const connectedIds = new Set<string>()
+    related.forEach(edge => {
+      if (edge.source === nodeId) connectedIds.add(edge.target)
+      if (edge.target === nodeId) connectedIds.add(edge.source)
+    })
+    setConnectedNodes(Array.from(connectedIds))
+
+    highlightSelectedNode(nodeId, Array.from(connectedIds))
+    createEdgeLines()
+  }
+
+  const clearSelection = () => {
+    setSelectedNode(null)
+    setSelectedNodeData(null)
+    setRelatedEdges([])
+    setConnectedNodes([])
+    resetNodeHighlights()
+    createEdgeLines()
+  }
+
+  const highlightSelectedNode = (nodeId: string, connectedIds: string[]) => {
+    nodeMeshesRef.current.forEach((mesh, id) => {
+      const material = mesh.material as THREE.MeshPhongMaterial
+      if (id === nodeId) {
+        material.emissiveIntensity = 0.8
+        mesh.scale.set(1.5, 1.5, 1.5)
+      } else if (connectedIds.includes(id)) {
+        material.emissiveIntensity = 0.5
+        mesh.scale.set(1.2, 1.2, 1.2)
+      } else {
+        material.emissiveIntensity = 0.1
+        material.opacity = 0.3
+        material.transparent = true
+      }
+    })
+  }
+
+  const resetNodeHighlights = () => {
+    nodeMeshesRef.current.forEach(mesh => {
+      const material = mesh.material as THREE.MeshPhongMaterial
+      material.emissiveIntensity = 0.3
+      material.opacity = 1
+      material.transparent = false
+      mesh.scale.set(1, 1, 1)
+    })
+  }
+
   const updatePhysics = () => {
-    const centerForce = 0.001
-    const repulsionForce = 0.5
-    const attractionForce = 0.01
-    const damping = 0.95
+    const centerForce = 0.0008
+    const repulsionForce = 0.8
+    const attractionForce = 0.015
+    const damping = 0.92
 
     nodesRef.current.forEach(node => {
       node.vx -= node.x * centerForce
@@ -271,14 +462,22 @@ export function PoliceKnowledgeGraph3D() {
       if (mesh) {
         mesh.position.set(node.x, node.y, node.z)
       }
+      
+      const sprite = labelSpritesRef.current.get(node.id)
+      if (sprite) {
+        sprite.position.set(node.x, node.y + 3, node.z)
+      }
     })
 
     createEdgeLines()
 
-    if (cameraRef.current && sceneRef.current) {
-      const time = Date.now() * 0.0001
-      cameraRef.current.position.x = Math.sin(time) * 50
-      cameraRef.current.position.z = Math.cos(time) * 50
+    if (cameraRef.current && sceneRef.current && flyThroughEnabled) {
+      cameraPathRef.current += 0.0003
+      const radius = 70
+      const height = Math.sin(cameraPathRef.current * 0.5) * 20
+      cameraRef.current.position.x = Math.sin(cameraPathRef.current) * radius
+      cameraRef.current.position.y = 30 + height
+      cameraRef.current.position.z = Math.cos(cameraPathRef.current) * radius
       cameraRef.current.lookAt(0, 0, 0)
     }
 
@@ -292,8 +491,14 @@ export function PoliceKnowledgeGraph3D() {
   }
 
   const handleReset = () => {
+    clearSelection()
     initializeGraph()
     setIsAnimating(true)
+    cameraPathRef.current = 0
+  }
+
+  const toggleFlyThrough = () => {
+    setFlyThroughEnabled(!flyThroughEnabled)
   }
 
   return (
@@ -303,14 +508,23 @@ export function PoliceKnowledgeGraph3D() {
           <div>
             <CardTitle className="text-2xl mb-2">3D Knowledge Graph Visualisierung</CardTitle>
             <CardDescription className="text-base">
-              Interaktive Darstellung eines typischen Ermittlungskomplexes mit Personen, Beweismitteln und Rechtsgrundlagen
+              Interaktive Darstellung eines komplexen Ermittlungskomplexes. Klicken Sie auf Knoten, um Beziehungen zu erkunden.
             </CardDescription>
           </div>
           <div className="flex gap-2">
             <Button
+              variant={flyThroughEnabled ? "default" : "outline"}
+              size="sm"
+              onClick={toggleFlyThrough}
+              title="Kamera Fly-Through"
+            >
+              <Camera className="h-4 w-4" />
+            </Button>
+            <Button
               variant="outline"
               size="sm"
               onClick={handlePlayPause}
+              title={isAnimating ? "Pause" : "Play"}
             >
               {isAnimating ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
             </Button>
@@ -318,6 +532,7 @@ export function PoliceKnowledgeGraph3D() {
               variant="outline"
               size="sm"
               onClick={handleReset}
+              title="Zurücksetzen"
             >
               <RotateCcw className="h-4 w-4" />
             </Button>
@@ -325,10 +540,52 @@ export function PoliceKnowledgeGraph3D() {
         </div>
       </CardHeader>
       <CardContent>
-        <div 
-          ref={containerRef} 
-          className="w-full h-[500px] rounded-lg bg-muted/20"
-        />
+        <div className="relative">
+          <div 
+            ref={containerRef} 
+            className="w-full h-[600px] rounded-lg bg-muted/20 cursor-pointer"
+          />
+          
+          {selectedNodeData && (
+            <div className="absolute top-4 left-4 bg-card/95 backdrop-blur border-2 border-primary rounded-lg p-4 shadow-xl max-w-sm">
+              <div className="flex items-start justify-between mb-3">
+                <div className="flex items-center gap-2">
+                  <div 
+                    className="w-4 h-4 rounded-full"
+                    style={{ backgroundColor: `#${nodeColors[selectedNodeData.type].toString(16).padStart(6, '0')}` }}
+                  />
+                  <Badge variant="outline">{nodeLabels[selectedNodeData.type]}</Badge>
+                </div>
+                <Button variant="ghost" size="sm" onClick={clearSelection}>
+                  <X className="h-4 w-4" />
+                </Button>
+              </div>
+              <h4 className="font-bold text-lg mb-3">{selectedNodeData.label}</h4>
+              
+              {relatedEdges.length > 0 && (
+                <div>
+                  <p className="text-sm font-semibold text-muted-foreground mb-2">
+                    Verbindungen ({relatedEdges.length}):
+                  </p>
+                  <div className="space-y-1.5 max-h-48 overflow-y-auto">
+                    {relatedEdges.map((edge, idx) => {
+                      const otherNodeId = edge.source === selectedNodeData.id ? edge.target : edge.source
+                      const otherNode = nodesRef.current.find(n => n.id === otherNodeId)
+                      return (
+                        <div key={idx} className="text-sm bg-muted/50 rounded p-2">
+                          <span className="font-medium">{edge.type}</span>
+                          {' → '}
+                          <span className="text-primary">{otherNode?.label}</span>
+                        </div>
+                      )
+                    })}
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+        
         <div className="mt-6 grid grid-cols-2 md:grid-cols-3 gap-3">
           {Object.entries(nodeLabels).map(([type, label]) => (
             <div key={type} className="flex items-center gap-2">
