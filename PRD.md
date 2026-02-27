@@ -7,8 +7,8 @@ A professional interactive website showcasing Sopra Steria's CASSA solution for 
 2. **Informative** - Clearly explains complex technical concepts through visual storytelling and structured information hierarchy
 3. **Modern** - Projects cutting-edge innovation through contemporary design while maintaining professional decorum
 
-**Complexity Level**: Content Showcase (information-focused)
-This is primarily an informational landing page that educates German police about CASSA technology, featuring interactive elements to demonstrate concepts but focused on content presentation rather than application functionality.
+**Complexity Level**: Light Application (multiple features with basic state) 
+This is an interactive educational landing page that guides German police through CASSA technology with stateful interactions, animated visualizations, and a progressive disclosure user journey. Features include clickable layers, tabbed scenarios, scroll-based animations, and guided navigation.
 
 ## Essential Features
 

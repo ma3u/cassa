@@ -1,8 +1,9 @@
-import { motion } from "framer-motion"
+import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { 
   ArrowRight, 
   Shield, 
@@ -15,37 +16,70 @@ import {
   AlertTriangle,
   Users,
   FileText,
-  BrainCircuit
+  BrainCircuit,
+  CheckCircle2,
+  TrendingUp,
+  Zap,
+  Eye,
+  Play,
+  ArrowDown
 } from "lucide-react"
-import { useState } from "react"
+import { useState, useEffect, useRef } from "react"
 
 function App() {
   const [selectedLayer, setSelectedLayer] = useState<number | null>(null)
+  const [activeScenario, setActiveScenario] = useState<number>(0)
+  const [showIntroGuide, setShowIntroGuide] = useState<boolean>(true)
+  const architectureRef = useRef<HTMLDivElement>(null)
+  
+  const { scrollYProgress } = useScroll()
+  const heroOpacity = useTransform(scrollYProgress, [0, 0.15], [1, 0.3])
+
+  useEffect(() => {
+    const timer = setTimeout(() => setShowIntroGuide(false), 5000)
+    return () => clearTimeout(timer)
+  }, [])
+
+  const scrollToSection = (id: string) => {
+    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
+  }
 
   const challenges = [
     {
       icon: Network,
       title: "Organisierte Kriminalität & Cybercrime",
       stat: "2,7 Mrd. €",
-      description: "Schadensumme 2023 durch Organisierte Kriminalität – ein neuer Höchstwert mit steigender Tendenz bei Cyberkriminalität."
+      statLabel: "Schaden 2023",
+      description: "Schadensumme durch Organisierte Kriminalität erreichte 2023 einen Höchstwert – mit steigender Tendenz bei Cyberkriminalität.",
+      trend: "+120%",
+      color: "oklch(0.55 0.22 25)"
     },
     {
       icon: Database,
       title: "Datensilos & föderale Fragmentierung",
-      stat: "20 Polizeien",
-      description: "Heterogene IT-Landschaft erschwert bundesländerübergreifenden Datenaustausch und effiziente Ermittlungsarbeit."
+      stat: "20",
+      statLabel: "Polizeien",
+      description: "Heterogene IT-Landschaft erschwert bundesländerübergreifenden Datenaustausch und effiziente Ermittlungsarbeit.",
+      trend: "320k",
+      color: "oklch(0.45 0.12 240)"
     },
     {
       icon: FileText,
       title: "Rechtliche Rahmenbedingungen",
-      stat: "BVerfG 2023",
-      description: "Höhere Hürden für automatisierte Datenanalyse bei gleichzeitigem Beschleunigungsgrundsatz in Strafverfahren."
+      stat: "BVerfG",
+      statLabel: "Urteil 2023",
+      description: "Höhere Hürden für automatisierte Datenanalyse bei gleichzeitigem Beschleunigungsgrundsatz in Strafverfahren.",
+      trend: "Neu",
+      color: "oklch(0.25 0.05 250)"
     },
     {
       icon: Users,
       title: "Personalmangel & Überlastung",
-      stat: "320.000",
-      description: "Beschäftigte bewältigen exponentiell wachsende Datenmengen – KI als Multiplikator menschlicher Expertise."
+      stat: "320k",
+      statLabel: "Beschäftigte",
+      description: "Polizeibeschäftigte bewältigen exponentiell wachsende Datenmengen – KI als Multiplikator menschlicher Expertise.",
+      trend: "Kritisch",
+      color: "oklch(0.55 0.18 200)"
     }
   ]
 
@@ -53,10 +87,11 @@ function App() {
     {
       number: 1,
       title: "Normative Schicht",
-      subtitle: "Das Strukturelle Skelett",
+      subtitle: "Das strukturelle Skelett",
       description: "Hierarchie der Rechtsquellen vom EU-Recht bis zu Dienstvorschriften. Das System versteht Normenhierarchien und traversiert sie konsistent.",
       icon: Shield,
-      color: "oklch(0.25 0.05 250)"
+      color: "oklch(0.25 0.05 250)",
+      examples: ["EU-Recht", "Grundgesetz", "StPO", "Landespolizeigesetze"]
     },
     {
       number: 2,
@@ -64,7 +99,8 @@ function App() {
       subtitle: "Validität & Versionierung",
       description: "Zeitliche Gültigkeit jeder Rechtsgrundlage. Automatische Prüfung welche Gesetzesfassung zum Tatzeitpunkt galt und korrekte Fristberechnung.",
       icon: Clock,
-      color: "oklch(0.45 0.12 240)"
+      color: "oklch(0.45 0.12 240)",
+      examples: ["Verjährungsfristen", "Gesetzesänderungen", "Haftprüfungen", "TKÜ-Verlängerungen"]
     },
     {
       number: 3,
@@ -72,7 +108,8 @@ function App() {
       subtitle: "Die Prozessdimension",
       description: "Ermittlungsverfahren als formale Prozesse mit definierten Zuständen, Übergängen und Fristen. Proaktive Vorschläge für nächste Schritte.",
       icon: ChartBar,
-      color: "oklch(0.55 0.18 200)"
+      color: "oklch(0.55 0.18 200)",
+      examples: ["Verfahrenszustände", "Prozessübergänge", "Fristüberwachung", "SOPs"]
     },
     {
       number: 4,
@@ -80,7 +117,8 @@ function App() {
       subtitle: "Die Faktendimension",
       description: "Konkrete Fakten eines Ermittlungsvorgangs: Personen, Beweismittel, Zeugenaussagen, Kommunikationsdaten im Kontext der Normenhierarchie.",
       icon: Database,
-      color: "oklch(0.55 0.22 25)"
+      color: "oklch(0.55 0.22 25)",
+      examples: ["Personen", "Beweismittel", "Kommunikation", "Ortsdaten"]
     }
   ]
 
@@ -94,7 +132,9 @@ function App() {
         "Proaktive Warnungen vor ablaufenden Fristen",
         "Graph-Algorithmen identifizieren versteckte Netzwerkverbindungen"
       ],
-      icon: Network
+      icon: Network,
+      color: "oklch(0.55 0.22 25)",
+      impact: "2 Billionen USD weltweit gewaschen jährlich"
     },
     {
       title: "Cybercrime-Ermittlungen",
@@ -105,7 +145,9 @@ function App() {
         "Sprachübergreifende Analyse unter Beibehaltung semantischer Kontexte",
         "Nachvollziehbare Dokumentation für Beweisführung vor Gericht"
       ],
-      icon: Lock
+      icon: Lock,
+      color: "oklch(0.45 0.12 240)",
+      impact: "178,6 Mrd. € Schaden durch Cyberangriffe in 2024"
     },
     {
       title: "Grenzüberschreitende Fahndung",
@@ -116,121 +158,207 @@ function App() {
         "Sicherstellung der Datenverarbeitung nach nationalen und EU-Rechtsgrundlagen",
         "Granulare Zugriffssteuerung und vollständige Auditierbarkeit"
       ],
-      icon: Handshake
+      icon: Handshake,
+      color: "oklch(0.55 0.18 200)",
+      impact: "Über 131.000 Cybercrime-Fälle in Deutschland"
     }
   ]
 
   return (
-    <div className="min-h-screen bg-background">
-      <header className="border-b border-border bg-card/50 backdrop-blur-sm sticky top-0 z-50">
+    <div className="min-h-screen bg-background relative">
+      <AnimatePresence>
+        {showIntroGuide && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed bottom-8 right-8 z-50"
+          >
+            <Card className="shadow-2xl border-2 border-accent">
+              <CardContent className="p-6 flex items-center gap-4">
+                <motion.div
+                  animate={{ y: [0, 10, 0] }}
+                  transition={{ duration: 1.5, repeat: Infinity }}
+                >
+                  <ArrowDown className="h-6 w-6 text-accent" />
+                </motion.div>
+                <div>
+                  <p className="font-semibold text-foreground">Scrollen Sie, um mehr zu erfahren</p>
+                  <p className="text-sm text-muted-foreground">Interaktive Elemente erwarten Sie</p>
+                </div>
+              </CardContent>
+            </Card>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <header className="border-b border-border bg-card/80 backdrop-blur-md sticky top-0 z-40">
         <div className="container mx-auto px-6 py-4 flex items-center justify-between max-w-7xl">
           <div className="flex items-center gap-3">
             <SopraLogo />
+            <Separator orientation="vertical" className="h-8 hidden md:block" />
+            <span className="text-sm font-medium text-muted-foreground hidden md:block">CASSA</span>
           </div>
-          <Button 
-            asChild 
-            variant="outline" 
-            className="hidden md:flex"
-          >
-            <a 
-              href="https://www.soprasteria.de/products/cassa" 
-              target="_blank" 
-              rel="noopener noreferrer"
+          <div className="flex items-center gap-4">
+            <Button 
+              variant="ghost"
+              size="sm"
+              onClick={() => scrollToSection('architecture')}
+              className="hidden md:flex"
             >
-              Mehr erfahren
-              <ArrowRight className="ml-2 h-4 w-4" />
-            </a>
-          </Button>
+              Technologie
+            </Button>
+            <Button 
+              variant="ghost"
+              size="sm"
+              onClick={() => scrollToSection('scenarios')}
+              className="hidden md:flex"
+            >
+              Praxisszenarien
+            </Button>
+            <Button 
+              asChild 
+              size="sm"
+              className="bg-accent hover:bg-accent/90 text-accent-foreground"
+            >
+              <a 
+                href="https://www.soprasteria.de/products/cassa" 
+                target="_blank" 
+                rel="noopener noreferrer"
+              >
+                Mehr erfahren
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </a>
+            </Button>
+          </div>
         </div>
       </header>
 
-      <section className="hero-pattern py-24 md:py-32">
-        <div className="container mx-auto px-6 max-w-7xl">
+      <motion.section 
+        style={{ opacity: heroOpacity }}
+        className="hero-pattern py-32 md:py-40 relative overflow-hidden"
+      >
+        <AnimatedBackground />
+        <div className="container mx-auto px-6 max-w-7xl relative z-10">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
             className="max-w-4xl"
           >
-            <Badge className="mb-6 bg-accent text-accent-foreground">
-              Neuro-Symbolische KI-Architektur
-            </Badge>
-            <h1 className="text-5xl md:text-6xl font-bold tracking-tight mb-6 text-foreground">
-              Digitaler Wissensassistent für die Polizei
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ duration: 0.5 }}
+            >
+              <Badge className="mb-6 bg-accent text-accent-foreground text-base px-4 py-2">
+                <Zap className="h-4 w-4 mr-2" />
+                Neuro-Symbolische KI-Architektur
+              </Badge>
+            </motion.div>
+            
+            <h1 className="text-5xl md:text-7xl font-bold tracking-tight mb-8 text-foreground leading-tight">
+              Digitaler Wissens&shy;assistent für die Polizei
             </h1>
-            <p className="text-xl md:text-2xl text-muted-foreground mb-8 leading-relaxed">
+            
+            <p className="text-xl md:text-2xl text-muted-foreground mb-10 leading-relaxed">
               Wie Multi-Layered Ontologien die Defizite von KI-Sprachmodellen überwinden und moderne Ermittlungsarbeit revolutionieren.
             </p>
+            
             <div className="flex flex-col sm:flex-row gap-4">
               <Button 
                 asChild 
                 size="lg" 
-                className="bg-accent hover:bg-accent/90 text-accent-foreground text-lg px-8"
+                className="bg-accent hover:bg-accent/90 text-accent-foreground text-lg px-10 h-14 shadow-lg hover:shadow-xl transition-shadow"
               >
                 <a 
                   href="https://www.soprasteria.de/products/cassa" 
                   target="_blank" 
                   rel="noopener noreferrer"
                 >
+                  <Play className="mr-2 h-5 w-5" />
                   CASSA entdecken
-                  <ArrowRight className="ml-2 h-5 w-5" />
                 </a>
               </Button>
               <Button 
                 variant="outline" 
                 size="lg"
-                className="text-lg px-8"
-                onClick={() => document.getElementById('architecture')?.scrollIntoView({ behavior: 'smooth' })}
+                className="text-lg px-10 h-14 border-2"
+                onClick={() => scrollToSection('challenges')}
               >
-                Technologie verstehen
+                Herausforderungen verstehen
+                <ArrowDown className="ml-2 h-5 w-5" />
               </Button>
             </div>
           </motion.div>
         </div>
-      </section>
+      </motion.section>
 
-      <section className="py-24 bg-muted/30">
+      <section id="challenges" className="py-24 bg-muted/30 relative">
         <div className="container mx-auto px-6 max-w-7xl">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.6 }}
             className="text-center mb-16"
           >
+            <Badge className="mb-4 text-base px-4 py-2">
+              <Eye className="h-4 w-4 mr-2" />
+              Schritt 1: Das Problem verstehen
+            </Badge>
             <h2 className="text-4xl md:text-5xl font-bold mb-6">
               Die Herausforderungen der modernen Polizeiarbeit
             </h2>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
               320.000 Polizeibeschäftigte in Deutschland stehen vor einem fundamentalen Dilemma: 
               exponentiell wachsende Datenmengen bei fragmentierter IT-Infrastruktur.
             </p>
           </motion.div>
 
-          <div className="grid md:grid-cols-2 gap-8">
+          <div className="grid md:grid-cols-2 gap-6">
             {challenges.map((challenge, index) => {
               const Icon = challenge.icon
               return (
                 <motion.div
                   key={index}
-                  initial={{ opacity: 0, y: 20 }}
+                  initial={{ opacity: 0, y: 30 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
+                  viewport={{ once: true, margin: "-50px" }}
                   transition={{ duration: 0.5, delay: index * 0.1 }}
                 >
-                  <Card className="h-full hover:shadow-lg transition-shadow">
+                  <Card className="h-full hover:shadow-xl transition-all duration-300 hover:-translate-y-1 group border-2 hover:border-primary/50">
                     <CardHeader>
                       <div className="flex items-start gap-4">
-                        <div className="p-3 rounded-lg bg-primary/10">
-                          <Icon className="h-6 w-6 text-primary" />
-                        </div>
+                        <motion.div 
+                          className="p-4 rounded-xl"
+                          style={{ backgroundColor: `${challenge.color}15` }}
+                          whileHover={{ scale: 1.05, rotate: 5 }}
+                          transition={{ type: "spring", stiffness: 300 }}
+                        >
+                          <Icon 
+                            className="h-8 w-8" 
+                            style={{ color: challenge.color }}
+                          />
+                        </motion.div>
                         <div className="flex-1">
-                          <div className="flex items-center justify-between mb-2">
-                            <CardTitle className="text-2xl">{challenge.title}</CardTitle>
+                          <CardTitle className="text-2xl mb-3 group-hover:text-primary transition-colors">
+                            {challenge.title}
+                          </CardTitle>
+                          <div className="flex items-center gap-3 mb-3">
+                            <div>
+                              <div className="text-3xl font-bold" style={{ color: challenge.color }}>
+                                {challenge.stat}
+                              </div>
+                              <div className="text-xs text-muted-foreground uppercase tracking-wide">
+                                {challenge.statLabel}
+                              </div>
+                            </div>
+                            <Badge variant="secondary" className="text-sm font-semibold">
+                              <TrendingUp className="h-3 w-3 mr-1" />
+                              {challenge.trend}
+                            </Badge>
                           </div>
-                          <Badge variant="secondary" className="font-bold text-lg">
-                            {challenge.stat}
-                          </Badge>
                         </div>
                       </div>
                     </CardHeader>
@@ -247,87 +375,100 @@ function App() {
         </div>
       </section>
 
-      <section className="py-24 bg-card">
-        <div className="container mx-auto px-6 max-w-7xl">
+      <section className="py-24 bg-card relative">
+        <div className="absolute inset-0 bg-destructive/5"></div>
+        <div className="container mx-auto px-6 max-w-7xl relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.6 }}
             className="text-center mb-16"
           >
-            <Badge className="mb-4 bg-destructive/10 text-destructive border-destructive/20">
+            <Badge className="mb-4 bg-destructive/10 text-destructive border-destructive/20 text-base px-4 py-2">
               <AlertTriangle className="h-4 w-4 mr-2" />
-              Warum reine LLMs nicht genügen
+              Schritt 2: Warum reine LLMs nicht genügen
             </Badge>
             <h2 className="text-4xl md:text-5xl font-bold mb-6">
               ChatGPT & Co. für die Polizei ungeeignet
             </h2>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
               Large Language Models sind probabilistisch – Polizeiarbeit ist deterministisch. 
               Halluzinationen, temporale Blindheit und fehlende Zustandsverwaltung machen reine LLMs unbrauchbar.
             </p>
           </motion.div>
 
-          <div className="grid md:grid-cols-3 gap-6">
+          <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
             {[
               {
                 title: "Statistische Plausibilität ≠ Logische Validität",
-                description: "Ein halluzinierter Paragraf oder falsche Fristberechnung kann fatale Folgen haben."
+                description: "Ein halluzinierter Paragraf oder falsche Fristberechnung kann fatale Folgen haben – von Verfahrensverzögerung bis zur Unverwertbarkeit von Beweisen.",
+                icon: AlertTriangle
               },
               {
                 title: "Temporale Blindheit",
-                description: "Kein Verständnis für Verjährungsfristen, Gesetzesänderungen oder zeitliche Abhängigkeiten."
+                description: "Kein Verständnis für Verjährungsfristen, Gesetzesänderungen oder zeitliche Abhängigkeiten. Kritisch bei Haftprüfungen und TKÜ-Verlängerungen.",
+                icon: Clock
               },
               {
                 title: "Fehlende Zustandsverwaltung",
-                description: "Ermittlungsverfahren sind langfristige State Machines – LLMs haben kein Gedächtnis."
+                description: "Ermittlungsverfahren sind langfristige State Machines – LLMs haben kein Gedächtnis über Sitzungen hinweg.",
+                icon: Database
               }
-            ].map((problem, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-              >
-                <Card className="h-full bg-destructive/5 border-destructive/20">
-                  <CardHeader>
-                    <CardTitle className="text-xl">{problem.title}</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-muted-foreground">{problem.description}</p>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            ))}
+            ].map((problem, index) => {
+              const Icon = problem.icon
+              return (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  viewport={{ once: true, margin: "-50px" }}
+                  transition={{ duration: 0.4, delay: index * 0.1 }}
+                >
+                  <Card className="h-full bg-destructive/5 border-2 border-destructive/20 hover:border-destructive/40 transition-colors">
+                    <CardHeader>
+                      <div className="mb-4">
+                        <Icon className="h-10 w-10 text-destructive" />
+                      </div>
+                      <CardTitle className="text-xl leading-tight">{problem.title}</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <p className="text-muted-foreground text-sm leading-relaxed">{problem.description}</p>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              )
+            })}
           </div>
         </div>
       </section>
 
-      <section id="architecture" className="py-24 bg-primary/5 network-pattern">
+      <section id="architecture" ref={architectureRef} className="py-32 bg-primary/5 network-pattern relative">
         <div className="container mx-auto px-6 max-w-7xl">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.6 }}
-            className="text-center mb-16"
+            className="text-center mb-20"
           >
-            <Badge className="mb-4 bg-primary text-primary-foreground">
+            <Badge className="mb-4 bg-primary text-primary-foreground text-base px-4 py-2">
               <BrainCircuit className="h-4 w-4 mr-2" />
-              Die CASSA-Lösung
+              Schritt 3: Die CASSA-Lösung
             </Badge>
             <h2 className="text-4xl md:text-5xl font-bold mb-6">
               Multi-Layered Ontologie-Architektur
             </h2>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed mb-8">
               Structure-Aware Temporal Graph RAG (SAT-Graph RAG) in Neo4j-Graphdatenbank 
               kombiniert symbolische KI mit LLM-Sprachverarbeitung.
             </p>
+            <p className="text-base text-primary font-semibold">
+              👆 Klicken Sie auf die Schichten, um mehr zu erfahren
+            </p>
           </motion.div>
 
-          <div className="grid lg:grid-cols-2 gap-12 items-start">
+          <div className="grid lg:grid-cols-2 gap-12 items-start max-w-6xl mx-auto">
             <div className="space-y-4">
               {layers.map((layer, index) => {
                 const Icon = layer.icon
@@ -335,34 +476,39 @@ function App() {
                 return (
                   <motion.div
                     key={index}
-                    initial={{ opacity: 0, x: -20 }}
+                    initial={{ opacity: 0, x: -30 }}
                     whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true }}
+                    viewport={{ once: true, margin: "-50px" }}
                     transition={{ duration: 0.5, delay: index * 0.1 }}
                   >
                     <Card 
-                      className={`cursor-pointer transition-all ${
+                      className={`cursor-pointer transition-all duration-300 ${
                         isSelected 
-                          ? 'ring-2 ring-primary shadow-lg' 
-                          : 'hover:shadow-md'
+                          ? 'ring-4 ring-primary shadow-2xl scale-105' 
+                          : 'hover:shadow-lg hover:scale-102'
                       }`}
                       onClick={() => setSelectedLayer(isSelected ? null : index)}
                     >
                       <CardHeader>
                         <div className="flex items-start gap-4">
-                          <div 
-                            className="p-3 rounded-lg"
+                          <motion.div 
+                            className="p-4 rounded-xl"
                             style={{ backgroundColor: `${layer.color}15` }}
+                            animate={{ 
+                              scale: isSelected ? [1, 1.1, 1] : 1,
+                            }}
+                            transition={{ duration: 0.5 }}
                           >
                             <Icon 
-                              className="h-6 w-6" 
+                              className="h-8 w-8" 
                               style={{ color: layer.color }}
                             />
-                          </div>
+                          </motion.div>
                           <div className="flex-1">
                             <div className="flex items-center gap-3 mb-2">
                               <Badge 
                                 variant="outline"
+                                className="text-sm"
                                 style={{ borderColor: layer.color, color: layer.color }}
                               >
                                 Schicht {layer.number}
@@ -375,13 +521,30 @@ function App() {
                           </div>
                         </div>
                       </CardHeader>
-                      {isSelected && (
-                        <CardContent>
-                          <p className="text-muted-foreground leading-relaxed">
-                            {layer.description}
-                          </p>
-                        </CardContent>
-                      )}
+                      <AnimatePresence>
+                        {isSelected && (
+                          <motion.div
+                            initial={{ opacity: 0, height: 0 }}
+                            animate={{ opacity: 1, height: "auto" }}
+                            exit={{ opacity: 0, height: 0 }}
+                            transition={{ duration: 0.3 }}
+                          >
+                            <CardContent className="pt-0">
+                              <Separator className="mb-4" />
+                              <p className="text-muted-foreground leading-relaxed mb-4">
+                                {layer.description}
+                              </p>
+                              <div className="flex flex-wrap gap-2">
+                                {layer.examples.map((example, i) => (
+                                  <Badge key={i} variant="secondary" className="text-xs">
+                                    {example}
+                                  </Badge>
+                                ))}
+                              </div>
+                            </CardContent>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
                     </Card>
                   </motion.div>
                 )
@@ -389,89 +552,137 @@ function App() {
             </div>
 
             <motion.div
-              initial={{ opacity: 0, x: 20 }}
+              initial={{ opacity: 0, x: 30 }}
               whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
+              viewport={{ once: true, margin: "-50px" }}
               transition={{ duration: 0.6 }}
               className="sticky top-24"
             >
-              <Card className="p-8 bg-card">
-                <ArchitectureDiagram selectedLayer={selectedLayer} />
+              <Card className="p-8 bg-card border-2">
+                <InteractiveArchitectureDiagram selectedLayer={selectedLayer} layers={layers} />
               </Card>
             </motion.div>
           </div>
         </div>
       </section>
 
-      <section className="py-24 bg-background">
+      <section id="scenarios" className="py-32 bg-background">
         <div className="container mx-auto px-6 max-w-7xl">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.6 }}
             className="text-center mb-16"
           >
+            <Badge className="mb-4 text-base px-4 py-2">
+              <CheckCircle2 className="h-4 w-4 mr-2" />
+              Schritt 4: Praxis erleben
+            </Badge>
             <h2 className="text-4xl md:text-5xl font-bold mb-6">
               Praxisszenarien für die Polizei
             </h2>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
               Konkrete Anwendungsfälle zeigen, wie CASSA die tägliche Ermittlungsarbeit unterstützt.
             </p>
           </motion.div>
 
-          <div className="grid md:grid-cols-3 gap-8">
+          <Tabs value={String(activeScenario)} onValueChange={(v) => setActiveScenario(Number(v))} className="w-full">
+            <TabsList className="grid w-full grid-cols-3 h-auto p-2 mb-12 max-w-4xl mx-auto">
+              {scenarios.map((scenario, index) => {
+                const Icon = scenario.icon
+                return (
+                  <TabsTrigger 
+                    key={index} 
+                    value={String(index)}
+                    className="flex flex-col items-center gap-2 py-4 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
+                  >
+                    <Icon className="h-6 w-6" />
+                    <span className="text-xs md:text-sm font-medium text-center">
+                      {scenario.title.split(' ').slice(0, 2).join(' ')}
+                    </span>
+                  </TabsTrigger>
+                )
+              })}
+            </TabsList>
+
             {scenarios.map((scenario, index) => {
               const Icon = scenario.icon
               return (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
-                >
-                  <Card className="h-full hover:shadow-lg transition-shadow">
-                    <CardHeader>
-                      <div className="p-3 rounded-lg bg-primary/10 w-fit mb-4">
-                        <Icon className="h-8 w-8 text-primary" />
-                      </div>
-                      <CardTitle className="text-xl mb-3">{scenario.title}</CardTitle>
-                      <p className="text-muted-foreground text-sm leading-relaxed">
-                        {scenario.description}
-                      </p>
-                    </CardHeader>
-                    <CardContent>
-                      <Separator className="mb-4" />
-                      <ul className="space-y-2">
-                        {scenario.benefits.map((benefit, i) => (
-                          <li key={i} className="flex gap-2 text-sm">
-                            <ArrowRight className="h-4 w-4 text-accent flex-shrink-0 mt-0.5" />
-                            <span className="text-muted-foreground">{benefit}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </CardContent>
-                  </Card>
-                </motion.div>
+                <TabsContent key={index} value={String(index)}>
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5 }}
+                  >
+                    <Card className="border-2 hover:shadow-2xl transition-shadow">
+                      <CardHeader className="pb-8">
+                        <div className="flex items-start gap-6">
+                          <motion.div 
+                            className="p-6 rounded-2xl"
+                            style={{ backgroundColor: `${scenario.color}15` }}
+                            animate={{ rotate: [0, 5, -5, 0] }}
+                            transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
+                          >
+                            <Icon 
+                              className="h-12 w-12" 
+                              style={{ color: scenario.color }}
+                            />
+                          </motion.div>
+                          <div className="flex-1">
+                            <CardTitle className="text-3xl mb-4">{scenario.title}</CardTitle>
+                            <CardDescription className="text-base leading-relaxed">
+                              {scenario.description}
+                            </CardDescription>
+                            <Badge variant="secondary" className="mt-4">
+                              <TrendingUp className="h-3 w-3 mr-1" />
+                              {scenario.impact}
+                            </Badge>
+                          </div>
+                        </div>
+                      </CardHeader>
+                      <CardContent>
+                        <Separator className="mb-6" />
+                        <h4 className="font-semibold text-lg mb-4">CASSA-Funktionen für diesen Fall:</h4>
+                        <div className="grid md:grid-cols-2 gap-4">
+                          {scenario.benefits.map((benefit, i) => (
+                            <motion.div
+                              key={i}
+                              initial={{ opacity: 0, x: -20 }}
+                              animate={{ opacity: 1, x: 0 }}
+                              transition={{ duration: 0.4, delay: i * 0.1 }}
+                              className="flex gap-3 p-4 rounded-lg bg-muted/50 hover:bg-muted transition-colors"
+                            >
+                              <CheckCircle2 className="h-5 w-5 text-accent flex-shrink-0 mt-0.5" />
+                              <span className="text-sm text-foreground leading-relaxed">{benefit}</span>
+                            </motion.div>
+                          ))}
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </motion.div>
+                </TabsContent>
               )
             })}
-          </div>
+          </Tabs>
         </div>
       </section>
 
-      <section className="py-24 bg-primary text-primary-foreground">
-        <div className="container mx-auto px-6 max-w-7xl text-center">
+      <section className="py-32 bg-primary text-primary-foreground relative overflow-hidden">
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute inset-0 network-pattern"></div>
+        </div>
+        <div className="container mx-auto px-6 max-w-7xl text-center relative z-10">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.6 }}
           >
-            <h2 className="text-4xl md:text-5xl font-bold mb-6">
+            <h2 className="text-4xl md:text-6xl font-bold mb-8 leading-tight">
               Bereit für die Zeitenwende in der inneren Sicherheit?
             </h2>
-            <p className="text-xl text-primary-foreground/80 max-w-3xl mx-auto mb-10 leading-relaxed">
+            <p className="text-xl text-primary-foreground/90 max-w-3xl mx-auto mb-12 leading-relaxed">
               Erfahren Sie mehr über CASSA und wie neuro-symbolische KI-Architektur 
               Ihre Ermittlungsarbeit unterstützen kann – datenschutzkonform und rechtsstaatlich.
             </p>
@@ -479,7 +690,7 @@ function App() {
               asChild 
               size="lg" 
               variant="secondary"
-              className="text-lg px-8"
+              className="text-lg px-12 h-16 text-primary font-semibold shadow-xl hover:shadow-2xl transition-all hover:scale-105"
             >
               <a 
                 href="https://www.soprasteria.de/products/cassa" 
@@ -487,7 +698,7 @@ function App() {
                 rel="noopener noreferrer"
               >
                 Zur offiziellen CASSA-Website
-                <ArrowRight className="ml-2 h-5 w-5" />
+                <ArrowRight className="ml-3 h-6 w-6" />
               </a>
             </Button>
           </motion.div>
@@ -516,142 +727,204 @@ function SopraLogo() {
       <text x="0" y="28" fontFamily="Space Grotesk, sans-serif" fontSize="24" fontWeight="700" fill="oklch(0.25 0.05 250)">
         SOPRA STERIA
       </text>
-      <rect x="0" y="32" width="120" height="3" fill="oklch(0.55 0.22 25)" />
+      <motion.rect 
+        x="0" 
+        y="32" 
+        width="120" 
+        height="3" 
+        fill="oklch(0.55 0.22 25)"
+        initial={{ width: 0 }}
+        animate={{ width: 120 }}
+        transition={{ duration: 1, ease: "easeOut" }}
+      />
     </svg>
   )
 }
 
-function ArchitectureDiagram({ selectedLayer }: { selectedLayer: number | null }) {
+function AnimatedBackground() {
   return (
-    <div className="space-y-4">
-      <div className="text-center mb-6">
-        <h3 className="text-2xl font-bold mb-2">Knowledge Graph Architektur</h3>
+    <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      {[...Array(20)].map((_, i) => (
+        <motion.div
+          key={i}
+          className="absolute w-2 h-2 bg-primary/10 rounded-full"
+          initial={{ 
+            x: Math.random() * 100 + '%',
+            y: Math.random() * 100 + '%',
+            scale: 0
+          }}
+          animate={{ 
+            y: [null, Math.random() * 100 + '%'],
+            scale: [0, 1, 0],
+            opacity: [0, 0.5, 0]
+          }}
+          transition={{ 
+            duration: Math.random() * 10 + 5,
+            repeat: Infinity,
+            delay: Math.random() * 5
+          }}
+        />
+      ))}
+    </div>
+  )
+}
+
+function InteractiveArchitectureDiagram({ 
+  selectedLayer, 
+  layers 
+}: { 
+  selectedLayer: number | null
+  layers: Array<{ color: string; number: number; title: string }>
+}) {
+  return (
+    <div className="space-y-6">
+      <div className="text-center mb-8">
+        <h3 className="text-2xl font-bold mb-3">Knowledge Graph Architektur</h3>
         <p className="text-sm text-muted-foreground">
           Neo4j-Graphdatenbank mit vier integrierten Schichten
         </p>
       </div>
       
-      <svg viewBox="0 0 400 500" className="w-full h-auto">
+      <svg viewBox="0 0 400 550" className="w-full h-auto">
         <defs>
-          <linearGradient id="grad1" x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" style={{ stopColor: 'oklch(0.25 0.05 250)', stopOpacity: 0.8 }} />
-            <stop offset="100%" style={{ stopColor: 'oklch(0.25 0.05 250)', stopOpacity: 0.3 }} />
-          </linearGradient>
-          <linearGradient id="grad2" x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" style={{ stopColor: 'oklch(0.45 0.12 240)', stopOpacity: 0.8 }} />
-            <stop offset="100%" style={{ stopColor: 'oklch(0.45 0.12 240)', stopOpacity: 0.3 }} />
-          </linearGradient>
-          <linearGradient id="grad3" x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" style={{ stopColor: 'oklch(0.55 0.18 200)', stopOpacity: 0.8 }} />
-            <stop offset="100%" style={{ stopColor: 'oklch(0.55 0.18 200)', stopOpacity: 0.3 }} />
-          </linearGradient>
-          <linearGradient id="grad4" x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" style={{ stopColor: 'oklch(0.55 0.22 25)', stopOpacity: 0.8 }} />
-            <stop offset="100%" style={{ stopColor: 'oklch(0.55 0.22 25)', stopOpacity: 0.3 }} />
-          </linearGradient>
+          {layers.map((layer, i) => (
+            <linearGradient key={i} id={`grad${i + 1}`} x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" style={{ stopColor: layer.color, stopOpacity: 0.9 }} />
+              <stop offset="100%" style={{ stopColor: layer.color, stopOpacity: 0.4 }} />
+            </linearGradient>
+          ))}
+          <filter id="glow">
+            <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+            <feMerge>
+              <feMergeNode in="coloredBlur"/>
+              <feMergeNode in="SourceGraphic"/>
+            </feMerge>
+          </filter>
         </defs>
 
-        <motion.rect
-          x="50" y="50" width="300" height="80" rx="12"
-          fill="url(#grad1)"
-          stroke="oklch(0.25 0.05 250)"
-          strokeWidth="2"
-          initial={{ opacity: 0.3 }}
-          animate={{ opacity: selectedLayer === 0 ? 1 : 0.3 }}
-          transition={{ duration: 0.3 }}
-        />
-        <text x="200" y="85" textAnchor="middle" fill="white" fontSize="16" fontWeight="600">
-          Schicht 1: Normativ
-        </text>
-        <text x="200" y="105" textAnchor="middle" fill="white" fontSize="12" opacity="0.9">
-          Rechtshierarchie
-        </text>
+        {layers.map((layer, i) => {
+          const y = 50 + i * 120
+          const isSelected = selectedLayer === i
+          return (
+            <g key={i}>
+              <motion.rect
+                x="50" 
+                y={y} 
+                width="300" 
+                height="90" 
+                rx="16"
+                fill={`url(#grad${i + 1})`}
+                stroke={layer.color}
+                strokeWidth={isSelected ? "3" : "2"}
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ 
+                  opacity: isSelected ? 1 : 0.6,
+                  scale: isSelected ? 1.02 : 1
+                }}
+                transition={{ duration: 0.3 }}
+                filter={isSelected ? "url(#glow)" : undefined}
+              />
+              <text 
+                x="200" 
+                y={y + 35} 
+                textAnchor="middle" 
+                fill="white" 
+                fontSize="18" 
+                fontWeight="700"
+              >
+                Schicht {layer.number}
+              </text>
+              <text 
+                x="200" 
+                y={y + 58} 
+                textAnchor="middle" 
+                fill="white" 
+                fontSize="14" 
+                fontWeight="500"
+                opacity="0.95"
+              >
+                {layer.title}
+              </text>
+              
+              {isSelected && (
+                <>
+                  <motion.circle
+                    cx="80"
+                    cy={y + 45}
+                    r="6"
+                    fill="white"
+                    initial={{ scale: 0 }}
+                    animate={{ scale: [0, 1.2, 1] }}
+                    transition={{ duration: 0.4 }}
+                  />
+                  <motion.circle
+                    cx="200"
+                    cy={y + 45}
+                    r="6"
+                    fill="white"
+                    initial={{ scale: 0 }}
+                    animate={{ scale: [0, 1.2, 1] }}
+                    transition={{ duration: 0.4, delay: 0.1 }}
+                  />
+                  <motion.circle
+                    cx="320"
+                    cy={y + 45}
+                    r="6"
+                    fill="white"
+                    initial={{ scale: 0 }}
+                    animate={{ scale: [0, 1.2, 1] }}
+                    transition={{ duration: 0.4, delay: 0.2 }}
+                  />
+                </>
+              )}
+            </g>
+          )
+        })}
 
-        <motion.rect
-          x="50" y="160" width="300" height="80" rx="12"
-          fill="url(#grad2)"
-          stroke="oklch(0.45 0.12 240)"
-          strokeWidth="2"
-          initial={{ opacity: 0.3 }}
-          animate={{ opacity: selectedLayer === 1 ? 1 : 0.3 }}
-          transition={{ duration: 0.3 }}
-        />
-        <text x="200" y="195" textAnchor="middle" fill="white" fontSize="16" fontWeight="600">
-          Schicht 2: Temporal
-        </text>
-        <text x="200" y="215" textAnchor="middle" fill="white" fontSize="12" opacity="0.9">
-          Zeit & Fristen
-        </text>
+        {[0, 1, 2].map((i) => {
+          const y1 = 140 + i * 120
+          const y2 = y1 + 30
+          return (
+            <motion.path
+              key={i}
+              d={`M 200 ${y1} L 200 ${y2}`}
+              stroke="oklch(0.45 0.01 240)"
+              strokeWidth="2"
+              strokeDasharray="6 4"
+              initial={{ pathLength: 0, opacity: 0 }}
+              animate={{ pathLength: 1, opacity: 0.4 }}
+              transition={{ duration: 1, delay: i * 0.2 }}
+            />
+          )
+        })}
 
-        <motion.rect
-          x="50" y="270" width="300" height="80" rx="12"
-          fill="url(#grad3)"
-          stroke="oklch(0.55 0.18 200)"
-          strokeWidth="2"
-          initial={{ opacity: 0.3 }}
-          animate={{ opacity: selectedLayer === 2 ? 1 : 0.3 }}
-          transition={{ duration: 0.3 }}
-        />
-        <text x="200" y="305" textAnchor="middle" fill="white" fontSize="16" fontWeight="600">
-          Schicht 3: Prozedural
-        </text>
-        <text x="200" y="325" textAnchor="middle" fill="white" fontSize="12" opacity="0.9">
-          Verfahrensabläufe
-        </text>
-
-        <motion.rect
-          x="50" y="380" width="300" height="80" rx="12"
-          fill="url(#grad4)"
-          stroke="oklch(0.55 0.22 25)"
-          strokeWidth="2"
-          initial={{ opacity: 0.3 }}
-          animate={{ opacity: selectedLayer === 3 ? 1 : 0.3 }}
-          transition={{ duration: 0.3 }}
-        />
-        <text x="200" y="415" textAnchor="middle" fill="white" fontSize="16" fontWeight="600">
-          Schicht 4: Faktisch
-        </text>
-        <text x="200" y="435" textAnchor="middle" fill="white" fontSize="12" opacity="0.9">
-          Konkrete Fälle
-        </text>
-
-        <path
-          d="M 200 130 L 200 160"
-          stroke="oklch(0.45 0.01 240)"
-          strokeWidth="2"
-          strokeDasharray="4 4"
-          opacity="0.5"
-        />
-        <path
-          d="M 200 240 L 200 270"
-          stroke="oklch(0.45 0.01 240)"
-          strokeWidth="2"
-          strokeDasharray="4 4"
-          opacity="0.5"
-        />
-        <path
-          d="M 200 350 L 200 380"
-          stroke="oklch(0.45 0.01 240)"
-          strokeWidth="2"
-          strokeDasharray="4 4"
-          opacity="0.5"
-        />
-
-        <circle cx="120" cy="90" r="6" fill="white" opacity="0.6" />
-        <circle cx="280" cy="90" r="6" fill="white" opacity="0.6" />
-        <circle cx="120" cy="200" r="6" fill="white" opacity="0.6" />
-        <circle cx="280" cy="200" r="6" fill="white" opacity="0.6" />
-        <circle cx="120" cy="310" r="6" fill="white" opacity="0.6" />
-        <circle cx="280" cy="310" r="6" fill="white" opacity="0.6" />
-        <circle cx="120" cy="420" r="6" fill="white" opacity="0.6" />
-        <circle cx="280" cy="420" r="6" fill="white" opacity="0.6" />
-
-        <path d="M 120 96 L 120 194" stroke="white" strokeWidth="1.5" opacity="0.3" />
-        <path d="M 280 96 L 280 194" stroke="white" strokeWidth="1.5" opacity="0.3" />
-        <path d="M 120 206 L 120 304" stroke="white" strokeWidth="1.5" opacity="0.3" />
-        <path d="M 280 206 L 280 304" stroke="white" strokeWidth="1.5" opacity="0.3" />
-        <path d="M 120 316 L 120 414" stroke="white" strokeWidth="1.5" opacity="0.3" />
-        <path d="M 280 316 L 280 414" stroke="white" strokeWidth="1.5" opacity="0.3" />
+        <motion.g
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1, delay: 1.5 }}
+        >
+          {[80, 200, 320].map((x, i) => 
+            [95, 215, 335, 455].map((y, j) => (
+              <motion.circle
+                key={`${i}-${j}`}
+                cx={x}
+                cy={y}
+                r="4"
+                fill="oklch(0.55 0.22 25)"
+                opacity="0.3"
+                animate={{ 
+                  scale: [1, 1.3, 1],
+                  opacity: [0.3, 0.6, 0.3]
+                }}
+                transition={{
+                  duration: 2,
+                  repeat: Infinity,
+                  delay: (i + j) * 0.2
+                }}
+              />
+            ))
+          )}
+        </motion.g>
       </svg>
     </div>
   )
