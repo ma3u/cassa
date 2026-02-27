@@ -1,9 +1,9 @@
-import { useEffect, useRef, useState, useCallback } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import * as THREE from 'three'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { Play, Pause, RotateCcw, Camera, X } from 'lucide-react'
+import { Play, Pause, RotateCcw, Camera, X, Hand, ZoomIn, ZoomOut } from 'lucide-react'
 
 interface Node {
   id: string
@@ -85,6 +85,13 @@ export function PoliceKnowledgeGraph3D() {
   const raycasterRef = useRef<THREE.Raycaster>(new THREE.Raycaster())
   const mouseRef = useRef<THREE.Vector2>(new THREE.Vector2())
   const cameraPathRef = useRef<number>(0)
+  const isDraggingRef = useRef<boolean>(false)
+  const previousMouseRef = useRef<{ x: number; y: number }>({ x: 0, y: 0 })
+  const cameraAnglesRef = useRef<{ theta: number; phi: number; radius: number }>({ 
+    theta: Math.PI / 4, 
+    phi: Math.PI / 6, 
+    radius: 80 
+  })
   
   const [isAnimating, setIsAnimating] = useState(true)
   const [selectedNode, setSelectedNode] = useState<string | null>(null)
@@ -92,6 +99,7 @@ export function PoliceKnowledgeGraph3D() {
   const [flyThroughEnabled, setFlyThroughEnabled] = useState(true)
   const [selectedNodeData, setSelectedNodeData] = useState<Node | null>(null)
   const [relatedEdges, setRelatedEdges] = useState<Edge[]>([])
+  const [isManualControl, setIsManualControl] = useState(false)
 
   useEffect(() => {
     if (!containerRef.current) return
@@ -137,7 +145,7 @@ export function PoliceKnowledgeGraph3D() {
     }
 
     const handleClick = (event: MouseEvent) => {
-      if (!containerRef.current || !camera || !renderer) return
+      if (!containerRef.current || !camera || !renderer || isDraggingRef.current) return
       
       const rect = containerRef.current.getBoundingClientRect()
       mouseRef.current.x = ((event.clientX - rect.left) / rect.width) * 2 - 1
@@ -156,7 +164,49 @@ export function PoliceKnowledgeGraph3D() {
       }
     }
 
+    const handleMouseDown = (event: MouseEvent) => {
+      isDraggingRef.current = false
+      previousMouseRef.current = { x: event.clientX, y: event.clientY }
+      setIsManualControl(true)
+      setFlyThroughEnabled(false)
+    }
+
+    const handleMouseMove = (event: MouseEvent) => {
+      if (event.buttons !== 1) return
+      
+      isDraggingRef.current = true
+      const deltaX = event.clientX - previousMouseRef.current.x
+      const deltaY = event.clientY - previousMouseRef.current.y
+      
+      cameraAnglesRef.current.theta -= deltaX * 0.01
+      cameraAnglesRef.current.phi -= deltaY * 0.01
+      cameraAnglesRef.current.phi = Math.max(0.1, Math.min(Math.PI - 0.1, cameraAnglesRef.current.phi))
+      
+      previousMouseRef.current = { x: event.clientX, y: event.clientY }
+      updateCameraPosition()
+    }
+
+    const handleMouseUp = () => {
+      setTimeout(() => {
+        isDraggingRef.current = false
+      }, 100)
+    }
+
+    const handleWheel = (event: WheelEvent) => {
+      event.preventDefault()
+      setIsManualControl(true)
+      setFlyThroughEnabled(false)
+      
+      cameraAnglesRef.current.radius += event.deltaY * 0.05
+      cameraAnglesRef.current.radius = Math.max(20, Math.min(150, cameraAnglesRef.current.radius))
+      updateCameraPosition()
+    }
+
     renderer.domElement.addEventListener('click', handleClick)
+    renderer.domElement.addEventListener('mousedown', handleMouseDown)
+    renderer.domElement.addEventListener('mousemove', handleMouseMove)
+    renderer.domElement.addEventListener('mouseup', handleMouseUp)
+    renderer.domElement.addEventListener('wheel', handleWheel, { passive: false })
     window.addEventListener('resize', handleResize)
 
     animate()
@@ -164,6 +214,10 @@ export function PoliceKnowledgeGraph3D() {
     return () => {
       window.removeEventListener('resize', handleResize)
       renderer.domElement.removeEventListener('click', handleClick)
+      renderer.domElement.removeEventListener('mousedown', handleMouseDown)
+      renderer.domElement.removeEventListener('mousemove', handleMouseMove)
+      renderer.domElement.removeEventListener('mouseup', handleMouseUp)
+      renderer.domElement.removeEventListener('wheel', handleWheel)
       if (animationIdRef.current) {
         cancelAnimationFrame(animationIdRef.current)
       }
@@ -176,11 +230,11 @@ export function PoliceKnowledgeGraph3D() {
 
   const initializeGraph = () => {
     const nodes: Node[] = [
-      { id: 'suspect1', label: 'Max Müller', type: 'person', x: 0, y: 0, z: 0, vx: 0, vy: 0, vz: 0 },
-      { id: 'suspect2', label: 'Anna Schmidt', type: 'person', x: 0, y: 0, z: 0, vx: 0, vy: 0, vz: 0 },
-      { id: 'suspect3', label: 'Tom Weber', type: 'person', x: 0, y: 0, z: 0, vx: 0, vy: 0, vz: 0 },
-      { id: 'witness1', label: 'Peter Koch', type: 'person', x: 0, y: 0, z: 0, vx: 0, vy: 0, vz: 0 },
-      { id: 'witness2', label: 'Lisa Bauer', type: 'person', x: 0, y: 0, z: 0, vx: 0, vy: 0, vz: 0 },
+      { id: 'suspect1', label: 'Person A', type: 'person', x: 0, y: 0, z: 0, vx: 0, vy: 0, vz: 0 },
+      { id: 'suspect2', label: 'Person B', type: 'person', x: 0, y: 0, z: 0, vx: 0, vy: 0, vz: 0 },
+      { id: 'suspect3', label: 'Person C', type: 'person', x: 0, y: 0, z: 0, vx: 0, vy: 0, vz: 0 },
+      { id: 'witness1', label: 'Zeuge 1', type: 'person', x: 0, y: 0, z: 0, vx: 0, vy: 0, vz: 0 },
+      { id: 'witness2', label: 'Zeuge 2', type: 'person', x: 0, y: 0, z: 0, vx: 0, vy: 0, vz: 0 },
       
       { id: 'case1', label: 'OK-Verfahren 2024', type: 'case', x: 0, y: 0, z: 0, vx: 0, vy: 0, vz: 0 },
       { id: 'case2', label: 'Cybercrime', type: 'case', x: 0, y: 0, z: 0, vx: 0, vy: 0, vz: 0 },
@@ -400,6 +454,16 @@ export function PoliceKnowledgeGraph3D() {
     })
   }
 
+  const updateCameraPosition = () => {
+    if (!cameraRef.current) return
+    
+    const { theta, phi, radius } = cameraAnglesRef.current
+    cameraRef.current.position.x = radius * Math.sin(phi) * Math.cos(theta)
+    cameraRef.current.position.y = radius * Math.cos(phi)
+    cameraRef.current.position.z = radius * Math.sin(phi) * Math.sin(theta)
+    cameraRef.current.lookAt(0, 0, 0)
+  }
+
   const updatePhysics = () => {
     const centerForce = 0.0008
     const repulsionForce = 0.8
@@ -471,7 +535,7 @@ export function PoliceKnowledgeGraph3D() {
 
     createEdgeLines()
 
-    if (cameraRef.current && sceneRef.current && flyThroughEnabled) {
+    if (cameraRef.current && sceneRef.current && flyThroughEnabled && !isManualControl) {
       cameraPathRef.current += 0.0003
       const radius = 70
       const height = Math.sin(cameraPathRef.current * 0.5) * 20
@@ -494,11 +558,36 @@ export function PoliceKnowledgeGraph3D() {
     clearSelection()
     initializeGraph()
     setIsAnimating(true)
+    setIsManualControl(false)
     cameraPathRef.current = 0
+    cameraAnglesRef.current = { 
+      theta: Math.PI / 4, 
+      phi: Math.PI / 6, 
+      radius: 80 
+    }
   }
 
   const toggleFlyThrough = () => {
-    setFlyThroughEnabled(!flyThroughEnabled)
+    const newFlyThroughState = !flyThroughEnabled
+    setFlyThroughEnabled(newFlyThroughState)
+    if (newFlyThroughState) {
+      setIsManualControl(false)
+      cameraPathRef.current = 0
+    }
+  }
+
+  const handleZoomIn = () => {
+    setIsManualControl(true)
+    setFlyThroughEnabled(false)
+    cameraAnglesRef.current.radius = Math.max(20, cameraAnglesRef.current.radius - 10)
+    updateCameraPosition()
+  }
+
+  const handleZoomOut = () => {
+    setIsManualControl(true)
+    setFlyThroughEnabled(false)
+    cameraAnglesRef.current.radius = Math.min(150, cameraAnglesRef.current.radius + 10)
+    updateCameraPosition()
   }
 
   return (
@@ -508,15 +597,44 @@ export function PoliceKnowledgeGraph3D() {
           <div>
             <CardTitle className="text-2xl mb-2">3D Knowledge Graph Visualisierung</CardTitle>
             <CardDescription className="text-base">
-              Interaktive Darstellung eines komplexen Ermittlungskomplexes. Klicken Sie auf Knoten, um Beziehungen zu erkunden.
+              Interaktive Darstellung eines komplexen Ermittlungskomplexes. <strong>Ziehen</strong> zum Drehen, <strong>Mausrad</strong> zum Zoomen, <strong>Klicken</strong> auf Knoten für Details.
             </CardDescription>
           </div>
-          <div className="flex gap-2">
+          <div className="flex flex-wrap gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleZoomIn}
+              title="Hineinzoomen"
+            >
+              <ZoomIn className="h-4 w-4" />
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleZoomOut}
+              title="Herauszoomen"
+            >
+              <ZoomOut className="h-4 w-4" />
+            </Button>
+            <Button
+              variant={isManualControl ? "default" : "outline"}
+              size="sm"
+              onClick={() => {
+                setIsManualControl(!isManualControl)
+                if (!isManualControl) {
+                  setFlyThroughEnabled(false)
+                }
+              }}
+              title="Manuelle Steuerung"
+            >
+              <Hand className="h-4 w-4" />
+            </Button>
             <Button
               variant={flyThroughEnabled ? "default" : "outline"}
               size="sm"
               onClick={toggleFlyThrough}
-              title="Kamera Fly-Through"
+              title="Automatischer Kameraflug"
             >
               <Camera className="h-4 w-4" />
             </Button>
@@ -524,7 +642,7 @@ export function PoliceKnowledgeGraph3D() {
               variant="outline"
               size="sm"
               onClick={handlePlayPause}
-              title={isAnimating ? "Pause" : "Play"}
+              title={isAnimating ? "Physik pausieren" : "Physik fortsetzen"}
             >
               {isAnimating ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
             </Button>
