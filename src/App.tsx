@@ -25,6 +25,7 @@ import {
   ArrowDown
 } from "lucide-react"
 import { useState, useEffect, useRef } from "react"
+import { PoliceKnowledgeGraph3D } from "@/components/PoliceKnowledgeGraph3D"
 
 function App() {
   const [selectedLayer, setSelectedLayer] = useState<number | null>(null)
@@ -558,9 +559,7 @@ function App() {
               transition={{ duration: 0.6 }}
               className="sticky top-24"
             >
-              <Card className="p-8 bg-card border-2">
-                <InteractiveArchitectureDiagram selectedLayer={selectedLayer} layers={layers} />
-              </Card>
+              <PoliceKnowledgeGraph3D />
             </motion.div>
           </div>
         </div>
@@ -755,167 +754,6 @@ function AnimatedBackground() {
           }}
         />
       ))}
-    </div>
-  )
-}
-
-function InteractiveArchitectureDiagram({ 
-  selectedLayer, 
-  layers 
-}: { 
-  selectedLayer: number | null
-  layers: Array<{ color: string; number: number; title: string }>
-}) {
-  return (
-    <div className="space-y-6">
-      <div className="text-center mb-8">
-        <h3 className="text-2xl font-bold mb-3">Knowledge Graph Architektur</h3>
-        <p className="text-sm text-muted-foreground">
-          Neo4j-Graphdatenbank mit vier integrierten Schichten
-        </p>
-      </div>
-      
-      <svg viewBox="0 0 400 550" className="w-full h-auto">
-        <defs>
-          {layers.map((layer, i) => (
-            <linearGradient key={i} id={`grad${i + 1}`} x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" style={{ stopColor: layer.color, stopOpacity: 0.9 }} />
-              <stop offset="100%" style={{ stopColor: layer.color, stopOpacity: 0.4 }} />
-            </linearGradient>
-          ))}
-          <filter id="glow">
-            <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
-            <feMerge>
-              <feMergeNode in="coloredBlur"/>
-              <feMergeNode in="SourceGraphic"/>
-            </feMerge>
-          </filter>
-        </defs>
-
-        {layers.map((layer, i) => {
-          const y = 50 + i * 120
-          const isSelected = selectedLayer === i
-          return (
-            <g key={i}>
-              <motion.rect
-                x="50" 
-                y={y} 
-                width="300" 
-                height="90" 
-                rx="16"
-                fill={`url(#grad${i + 1})`}
-                stroke={layer.color}
-                strokeWidth={isSelected ? "3" : "2"}
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ 
-                  opacity: isSelected ? 1 : 0.6,
-                  scale: isSelected ? 1.02 : 1
-                }}
-                transition={{ duration: 0.3 }}
-                filter={isSelected ? "url(#glow)" : undefined}
-              />
-              <text 
-                x="200" 
-                y={y + 35} 
-                textAnchor="middle" 
-                fill="white" 
-                fontSize="18" 
-                fontWeight="700"
-              >
-                Schicht {layer.number}
-              </text>
-              <text 
-                x="200" 
-                y={y + 58} 
-                textAnchor="middle" 
-                fill="white" 
-                fontSize="14" 
-                fontWeight="500"
-                opacity="0.95"
-              >
-                {layer.title}
-              </text>
-              
-              {isSelected && (
-                <>
-                  <motion.circle
-                    cx="80"
-                    cy={y + 45}
-                    r="6"
-                    fill="white"
-                    initial={{ scale: 0 }}
-                    animate={{ scale: [0, 1.2, 1] }}
-                    transition={{ duration: 0.4 }}
-                  />
-                  <motion.circle
-                    cx="200"
-                    cy={y + 45}
-                    r="6"
-                    fill="white"
-                    initial={{ scale: 0 }}
-                    animate={{ scale: [0, 1.2, 1] }}
-                    transition={{ duration: 0.4, delay: 0.1 }}
-                  />
-                  <motion.circle
-                    cx="320"
-                    cy={y + 45}
-                    r="6"
-                    fill="white"
-                    initial={{ scale: 0 }}
-                    animate={{ scale: [0, 1.2, 1] }}
-                    transition={{ duration: 0.4, delay: 0.2 }}
-                  />
-                </>
-              )}
-            </g>
-          )
-        })}
-
-        {[0, 1, 2].map((i) => {
-          const y1 = 140 + i * 120
-          const y2 = y1 + 30
-          return (
-            <motion.path
-              key={i}
-              d={`M 200 ${y1} L 200 ${y2}`}
-              stroke="oklch(0.45 0.01 240)"
-              strokeWidth="2"
-              strokeDasharray="6 4"
-              initial={{ pathLength: 0, opacity: 0 }}
-              animate={{ pathLength: 1, opacity: 0.4 }}
-              transition={{ duration: 1, delay: i * 0.2 }}
-            />
-          )
-        })}
-
-        <motion.g
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1, delay: 1.5 }}
-        >
-          {[80, 200, 320].map((x, i) => 
-            [95, 215, 335, 455].map((y, j) => (
-              <motion.circle
-                key={`${i}-${j}`}
-                cx={x}
-                cy={y}
-                r="4"
-                fill="oklch(0.55 0.22 25)"
-                opacity="0.3"
-                animate={{ 
-                  scale: [1, 1.3, 1],
-                  opacity: [0.3, 0.6, 0.3]
-                }}
-                transition={{
-                  duration: 2,
-                  repeat: Infinity,
-                  delay: (i + j) * 0.2
-                }}
-              />
-            ))
-          )}
-        </motion.g>
-      </svg>
     </div>
   )
 }
