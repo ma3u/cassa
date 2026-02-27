@@ -125,7 +125,7 @@ function App() {
 
   const scenarios = [
     {
-      title: "Ermittlungskomplexe der Organisierten Kriminalität",
+      title: "Organisierte Kriminalität",
       description: "Analyse komplexer OK-Strukturen mit Geldwäsche, Drogenhandel und Menschenschmuggel über Ländergrenzen hinweg.",
       benefits: [
         "Automatische Verknüpfung von Personen, Firmen und Konten im Knowledge Graph",
@@ -162,6 +162,19 @@ function App() {
       icon: Handshake,
       color: "oklch(0.55 0.18 200)",
       impact: "Über 131.000 Cybercrime-Fälle in Deutschland"
+    },
+    {
+      title: "Digital Twin & Standards",
+      description: "Digitaler Zwilling eines Ermittlungsfalls: alle Datenquellen – GPS, Mobilfunk, Finanztransaktionen, Social Media, Computer-Forensik – werden in einem einheitlichen, standardbasierten Wissensmodell aggregiert.",
+      benefits: [
+        "Aggregation aller Quellen (Bank, PayPal, Krypto, OSINT, Mobilfunkdaten, GPS) zu einem ganzheitlichen Fallbild",
+        "Interoperabilität durch ISO 23247, STIX 2.1, ISO 27037/27042 und XPolizei-Standards",
+        "Lückenlose digitale Beweiskette (Chain of Custody) nach BSI IT-Forensik & NIST SP 800-86",
+        "Automatische Erkennung und Korrelation von Transaktionsmustern über Konto-, Krypto- und E-Geld-Netzwerke"
+      ],
+      icon: BrainCircuit,
+      color: "oklch(0.55 0.22 170)",
+      impact: "Ganzheitlicher Digital Twin pro Ermittlungsfall"
     }
   ]
 
@@ -557,7 +570,7 @@ function App() {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true, margin: "-50px" }}
               transition={{ duration: 0.6 }}
-              className="sticky top-24"
+              className="sticky top-24 h-[700px]"
             >
               <PoliceKnowledgeGraph3D />
             </motion.div>
@@ -587,7 +600,7 @@ function App() {
           </motion.div>
 
           <Tabs value={String(activeScenario)} onValueChange={(v) => setActiveScenario(Number(v))} className="w-full">
-            <TabsList className="grid w-full grid-cols-3 h-auto p-2 mb-12 max-w-4xl mx-auto">
+            <TabsList className="grid w-full grid-cols-4 h-auto p-2 mb-12 max-w-5xl mx-auto">
               {scenarios.map((scenario, index) => {
                 const Icon = scenario.icon
                 return (
@@ -597,8 +610,8 @@ function App() {
                     className="flex flex-col items-center gap-2 py-4 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
                   >
                     <Icon className="h-6 w-6" />
-                    <span className="text-xs md:text-sm font-medium text-center">
-                      {scenario.title.split(' ').slice(0, 2).join(' ')}
+                    <span className="text-xs md:text-sm font-medium text-center leading-tight">
+                      {scenario.title}
                     </span>
                   </TabsTrigger>
                 )
@@ -710,9 +723,19 @@ function App() {
             <div className="flex items-center gap-3">
               <SopraLogo />
             </div>
-            <p className="text-sm text-muted-foreground text-center">
-              © 2024 Sopra Steria. Alle Rechte vorbehalten.
-            </p>
+            <div className="flex flex-col md:flex-row items-center gap-4">
+              <p className="text-sm text-muted-foreground text-center">
+                © 2024 Sopra Steria. Alle Rechte vorbehalten.
+              </p>
+              <a
+                href="https://www.soprasteria.de/footer/impressum"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-sm text-muted-foreground hover:text-foreground transition-colors underline underline-offset-4"
+              >
+                Impressum
+              </a>
+            </div>
           </div>
         </div>
       </footer>
