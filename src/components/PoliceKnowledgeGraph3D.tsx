@@ -687,12 +687,13 @@ export function PoliceKnowledgeGraph3D() {
   }, [highlightLinks, linkKey])
 
   const linkThreeObject = useCallback((link: any) => {
-    if (highlightLinks.size === 0 || !highlightLinks.has(linkKey(link))) return undefined
+    const isHighlighted = highlightLinks.size > 0 && highlightLinks.has(linkKey(link))
     const sprite = new SpriteText(`${link.type}`) as any
-    sprite.color = '#ffd166'
-    sprite.textHeight = 2.2
-    sprite.backgroundColor = 'rgba(0,0,0,0.55)'
-    sprite.padding = 1
+    sprite.color = isHighlighted ? '#ffd166' : 'rgba(255,255,255,0.35)'
+    sprite.textHeight = isHighlighted ? 2.5 : 1.4
+    sprite.fontWeight = isHighlighted ? 'bold' : 'normal'
+    sprite.backgroundColor = isHighlighted ? 'rgba(0,0,0,0.7)' : 'rgba(0,0,0,0.25)'
+    sprite.padding = isHighlighted ? 1.2 : 0.6
     sprite.borderRadius = 3
     return sprite as THREE.Object3D
   }, [highlightLinks, linkKey])
@@ -752,13 +753,16 @@ export function PoliceKnowledgeGraph3D() {
       {/* Case title */}
       <div className="absolute top-4 left-4 pointer-events-none select-none">
         <div className="text-white/90 text-lg font-bold tracking-wide">
-          🔒 Operation Hydra
+          🔒 Operation Hydra — Polizeilicher Knowledge Graph
         </div>
         <div className="text-white/50 text-xs mt-1">
-          Grenzüberschreitende OK · Cybercrime · Geldwäsche · BtM
+          Grenzüberschreitende OK · Cybercrime · Geldwäsche · BtM · Krypto-Forensik
         </div>
         <div className="text-white/30 text-[10px] mt-0.5">
-          {graphData.nodes.length} Entitäten · {graphData.links.length} Beziehungen
+          {graphData.nodes.length} Entitäten · {graphData.links.length} Beziehungen · STIX 2.1 / XPolizei 2.0
+        </div>
+        <div className="text-white/20 text-[9px] mt-0.5">
+          Quellen: BKA, DOJ, OFAC, Chainalysis, Elliptic, TRM Labs, Gwern
         </div>
       </div>
 
@@ -781,17 +785,34 @@ export function PoliceKnowledgeGraph3D() {
       </div>
 
       {/* Legend */}
-      <div className="absolute bottom-4 left-4 flex flex-wrap gap-x-4 gap-y-1 max-w-xl pointer-events-none select-none">
-        {Object.entries(NODE_LABELS).map(([type, label]) => (
-          <div key={type} className="flex items-center gap-1.5">
-            <div
-              className="w-2.5 h-2.5 rounded-full flex-shrink-0"
-              style={{ backgroundColor: NODE_COLORS[type as NodeType] }}
-            />
-            <span className="text-[10px] text-white/60 whitespace-nowrap">{label}</span>
+      {(() => {
+        const typeCounts: Record<string, number> = {}
+        graphData.nodes.forEach(n => { typeCounts[n.type] = (typeCounts[n.type] || 0) + 1 })
+        // Only show types that actually exist in the graph, sorted by count desc
+        const activeTypes = Object.entries(typeCounts).sort((a, b) => b[1] - a[1])
+        return (
+          <div className="absolute bottom-4 left-4 pointer-events-none select-none">
+            <div className="bg-gray-900/80 backdrop-blur-sm rounded-xl border border-white/10 p-3 max-w-lg">
+              <div className="text-[9px] text-white/40 uppercase tracking-wider font-semibold mb-2">
+                Legende — {graphData.nodes.length} Entitäten · {graphData.links.length} Relationen
+              </div>
+              <div className="flex flex-wrap gap-x-3 gap-y-1.5">
+                {activeTypes.map(([type, count]) => (
+                  <div key={type} className="flex items-center gap-1.5">
+                    <div
+                      className="w-2.5 h-2.5 rounded-full flex-shrink-0"
+                      style={{ backgroundColor: NODE_COLORS[type as NodeType] }}
+                    />
+                    <span className="text-[10px] text-white/60 whitespace-nowrap">
+                      {NODE_LABELS[type as NodeType]} <span className="text-white/30">({count})</span>
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
-        ))}
-      </div>
+        )
+      })()}
 
       {/* Interaction hint */}
       {!selectedNode && (
@@ -871,17 +892,17 @@ export function PoliceKnowledgeGraph3D() {
                       </span>
                     </div>
                     <div className="flex items-center gap-1 ml-5 mt-0.5">
-                      <span className="text-[10px] text-white/40">
+                      <span className={`text-[10px] px-1.5 py-0.5 rounded ${isOutgoing ? 'bg-amber-500/15 text-amber-400/80' : 'bg-cyan-500/15 text-cyan-400/80'}`}>
                         {isOutgoing ? '→' : '←'} {link.type}
                       </span>
                       {link.description && (
-                        <span className="text-[10px] text-white/30 truncate">
-                          · {link.description}
+                        <span className="text-[10px] text-white/40 truncate">
+                          {link.description}
                         </span>
                       )}
                     </div>
                     {other.description && (
-                      <div className="text-[10px] text-white/25 ml-5 mt-0.5 truncate">{other.description}</div>
+                      <div className="text-[10px] text-white/30 ml-5 mt-0.5 leading-relaxed">{other.description}</div>
                     )}
                   </button>
                 ))}
@@ -891,7 +912,7 @@ export function PoliceKnowledgeGraph3D() {
         }
 
         return (
-        <div className="absolute top-16 right-4 w-80 max-h-[calc(100vh-6rem)] overflow-y-auto rounded-xl bg-gray-900/95 backdrop-blur-md border border-white/10 shadow-2xl text-white">
+        <div className="absolute top-16 right-4 w-96 max-h-[calc(100vh-6rem)] overflow-y-auto rounded-xl bg-gray-900/95 backdrop-blur-md border border-white/10 shadow-2xl text-white">
           {/* Header */}
           <div className="sticky top-0 bg-gray-900/98 backdrop-blur-md p-4 border-b border-white/10 z-10">
             <div className="flex items-start justify-between">
@@ -912,7 +933,7 @@ export function PoliceKnowledgeGraph3D() {
               </button>
             </div>
             <h3 className="text-base font-bold mt-2 leading-tight">{selectedNode.label}</h3>
-            <p className="text-xs text-white/60 mt-1">{selectedNode.description}</p>
+            <p className="text-xs text-white/60 mt-1 leading-relaxed">{selectedNode.description}</p>
             {selectedNode.score != null && (
               <div className="mt-2 px-2 py-1.5 rounded-md bg-white/5 border border-white/10">
                 <div className="flex items-center justify-between mb-1">
@@ -946,19 +967,51 @@ export function PoliceKnowledgeGraph3D() {
           </div>
 
           {/* Details */}
-          {selectedNode.details && (
+          {selectedNode.details && Object.keys(selectedNode.details).length > 0 && (
             <div className="px-4 py-3 border-b border-white/10">
-              <div className="text-[10px] font-semibold text-white/40 uppercase tracking-wider mb-2">Details</div>
+              <div className="text-[10px] font-semibold text-white/40 uppercase tracking-wider mb-2">
+                📋 Details ({Object.keys(selectedNode.details).length} Felder)
+              </div>
               <div className="space-y-1.5">
                 {Object.entries(selectedNode.details).map(([key, val]) => (
-                  <div key={key} className="flex gap-2 text-xs">
-                    <span className="text-white/40 flex-shrink-0">{key}:</span>
-                    <span className="text-white/90">{val}</span>
+                  <div key={key} className="flex gap-2 text-xs p-1.5 rounded-md hover:bg-white/5 transition-colors">
+                    <span className="text-white/50 flex-shrink-0 min-w-[100px] font-medium">{key}:</span>
+                    <span className="text-white/90 break-words">{val}</span>
                   </div>
                 ))}
               </div>
             </div>
           )}
+
+          {/* Connection summary */}
+          <div className="px-4 py-3 border-b border-white/10">
+            <div className="text-[10px] font-semibold text-white/40 uppercase tracking-wider mb-2">
+              🔗 Verbindungen ({relatedLinks.length})
+            </div>
+            <div className="grid grid-cols-3 gap-2">
+              {(() => {
+                const incoming = categorized.filter(c => !c.isOutgoing).length
+                const outgoing = categorized.filter(c => c.isOutgoing).length
+                const uniqueTypes = new Set(categorized.map(c => c.other.type)).size
+                return (
+                  <>
+                    <div className="text-center p-2 rounded-lg bg-white/5">
+                      <div className="text-sm font-bold text-cyan-400">{incoming}</div>
+                      <div className="text-[9px] text-white/40">Eingehend</div>
+                    </div>
+                    <div className="text-center p-2 rounded-lg bg-white/5">
+                      <div className="text-sm font-bold text-amber-400">{outgoing}</div>
+                      <div className="text-[9px] text-white/40">Ausgehend</div>
+                    </div>
+                    <div className="text-center p-2 rounded-lg bg-white/5">
+                      <div className="text-sm font-bold text-emerald-400">{uniqueTypes}</div>
+                      <div className="text-[9px] text-white/40">Typen</div>
+                    </div>
+                  </>
+                )
+              })()}
+            </div>
+          </div>
 
           {sources.length > 0 && (
             <div className="px-4 py-3 border-b border-white/10">
