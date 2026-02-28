@@ -24,14 +24,30 @@ import {
   Play,
   ArrowDown
 } from "lucide-react"
-import { useState, useEffect, useRef } from "react"
+import { useState, useEffect, useRef, useCallback } from "react"
 import { PoliceKnowledgeGraph3D } from "@/components/PoliceKnowledgeGraph3D"
 
 function App() {
   const [selectedLayer, setSelectedLayer] = useState<number | null>(null)
   const [activeScenario, setActiveScenario] = useState<number>(0)
   const [showIntroGuide, setShowIntroGuide] = useState<boolean>(true)
+  const [isPlayingNarration, setIsPlayingNarration] = useState(false)
   const architectureRef = useRef<HTMLDivElement>(null)
+  const narrationAudioRef = useRef<HTMLAudioElement | null>(null)
+
+  const toggleNarration = useCallback(() => {
+    if (!narrationAudioRef.current) {
+      const audio = new Audio(import.meta.env.BASE_URL + 'audio/hydra_narration.mp3')
+      audio.addEventListener('ended', () => setIsPlayingNarration(false))
+      narrationAudioRef.current = audio
+    }
+    if (isPlayingNarration) {
+      narrationAudioRef.current.pause()
+      setIsPlayingNarration(false)
+    } else {
+      narrationAudioRef.current.play().then(() => setIsPlayingNarration(true)).catch(() => {})
+    }
+  }, [isPlayingNarration])
   
   const { scrollYProgress } = useScroll()
   const heroOpacity = useTransform(scrollYProgress, [0, 0.15], [1, 0.3])
@@ -572,6 +588,30 @@ function App() {
               transition={{ duration: 0.6 }}
               className="sticky top-24 h-[700px]"
             >
+              <div className="absolute top-3 left-3 z-10">
+                <Button
+                  variant={isPlayingNarration ? "default" : "outline"}
+                  size="sm"
+                  onClick={toggleNarration}
+                  className="gap-2 shadow-lg backdrop-blur-sm bg-background/80 hover:bg-background/90"
+                  title="Operation Hydra – Fallbeschreibung anhören"
+                >
+                  {isPlayingNarration ? (
+                    <>
+                      <span className="relative flex h-2 w-2">
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75" />
+                        <span className="relative inline-flex rounded-full h-2 w-2 bg-primary" />
+                      </span>
+                      Narration läuft …
+                    </>
+                  ) : (
+                    <>
+                      <Play className="h-4 w-4" />
+                      OP Hydra anhören
+                    </>
+                  )}
+                </Button>
+              </div>
               <PoliceKnowledgeGraph3D />
             </motion.div>
           </div>
