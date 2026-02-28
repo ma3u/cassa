@@ -28,7 +28,15 @@ import {
   Zap,
   Eye,
   Play,
-  ArrowDown
+  ArrowDown,
+  Scale,
+  Globe,
+  BookOpen,
+  ShieldCheck,
+  Fingerprint,
+  Landmark,
+  ScrollText,
+  Workflow
 } from "lucide-react"
 import { useState, useEffect, useRef, useCallback } from "react"
 import { PoliceKnowledgeGraph3D } from "@/components/PoliceKnowledgeGraph3D"
@@ -254,6 +262,22 @@ function App() {
               className="hidden md:flex"
             >
               Praxisszenarien
+            </Button>
+            <Button 
+              variant="ghost"
+              size="sm"
+              onClick={() => scrollToSection('standards')}
+              className="hidden md:flex"
+            >
+              Standards
+            </Button>
+            <Button 
+              variant="ghost"
+              size="sm"
+              onClick={() => scrollToSection('cooperation')}
+              className="hidden md:flex"
+            >
+              Kooperation
             </Button>
             <Button 
               asChild 
@@ -742,6 +766,404 @@ function App() {
               )
             })}
           </Tabs>
+        </div>
+      </section>
+
+      {/* ── SECTION: Standards & Normen ── */}
+      <section id="standards" className="py-32 bg-muted/30 relative">
+        <div className="container mx-auto px-6 max-w-7xl">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-16"
+          >
+            <Badge className="mb-4 text-base px-4 py-2">
+              <Scale className="h-4 w-4 mr-2" />
+              Schritt 5: Standards & Compliance
+            </Badge>
+            <h2 className="text-4xl md:text-5xl font-bold mb-6">
+              Welche Standards müssen beachtet werden?
+            </h2>
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+              Polizeiliche Ermittlungen im digitalen Raum unterliegen einem komplexen Geflecht aus internationalen,
+              europäischen und nationalen Normen. CASSA integriert diese Standards direkt in den Knowledge Graph.
+            </p>
+          </motion.div>
+
+          <div className="grid md:grid-cols-3 gap-6 mb-12">
+            {[
+              {
+                icon: Globe,
+                title: "Internationale Standards",
+                color: "oklch(0.55 0.18 200)",
+                standards: [
+                  { name: "STIX 2.1 (OASIS)", desc: "Structured Threat Intelligence eXpression — standardisiertes Format für den Austausch von Cyber-Bedrohungsinformationen zwischen Behörden und Organisationen weltweit" },
+                  { name: "ISO 27037", desc: "Richtlinien zur Identifizierung, Sammlung, Sicherung und Aufbewahrung digitaler Beweismittel — internationale Grundlage der IT-Forensik" },
+                  { name: "ISO 27042", desc: "Analyse und Interpretation digitaler Beweismittel — Sicherstellung der Gerichtsverwertbarkeit" },
+                  { name: "NIST SP 800-86", desc: "Guide to Integrating Forensic Techniques — Best-Practice-Framework des US-Handelsministeriums für digitale Forensik" },
+                  { name: "ISO 23247", desc: "Digital Twin Framework — standardisierte Architektur für digitale Zwillinge, angewandt auf Ermittlungsfälle" }
+                ]
+              },
+              {
+                icon: Landmark,
+                title: "EU-Recht & Regulierung",
+                color: "oklch(0.45 0.12 240)",
+                standards: [
+                  { name: "DSGVO (EU 2016/679)", desc: "Datenschutz-Grundverordnung — Rechtsrahmen für die Verarbeitung personenbezogener Daten, einschl. Recht auf Löschung und Auskunft" },
+                  { name: "NIS2-Richtlinie (EU 2022/2555)", desc: "Cybersicherheits-Richtlinie für kritische Infrastrukturen — Meldepflichten, Risikomanagement, Aufsichtsbefugnisse" },
+                  { name: "EU-Geldwäscherichtlinien (AMLD 5/6)", desc: "Bekämpfung von Geldwäsche und Terrorismusfinanzierung — Know-Your-Customer-Pflichten für Kryptobörsen" },
+                  { name: "Europäische Ermittlungsanordnung (EEA)", desc: "Rechtsinstrument für den gegenseitigen Beweis-Austausch zwischen EU-Mitgliedstaaten innerhalb von 120 Tagen" },
+                  { name: "Prümer Vertrag (EU 2024)", desc: "Automatisierter Abgleich von DNA, Fingerabdrücken, Kfz-Daten und Gesichtsbildern zwischen EU-Polizeibehörden" }
+                ]
+              },
+              {
+                icon: Shield,
+                title: "Nationale Normen (DE/US)",
+                color: "oklch(0.25 0.05 250)",
+                standards: [
+                  { name: "XPolizei 2.0", desc: "Deutscher Interoperabilitätsstandard der Polizei — einheitliches Datenaustauschformat zwischen Bundes- und Landespolizeien" },
+                  { name: "StPO (Strafprozessordnung)", desc: "Verfahrensrechtliche Grundlage für Ermittlungen — §100a TKÜ, §100b Online-Durchsuchung, §94 Beschlagnahmung" },
+                  { name: "BSI IT-Forensik-Leitfaden", desc: "Bundesamt für Sicherheit — Leitfaden zur forensischen Sicherung und Analyse digitaler Beweismittel" },
+                  { name: "EO 13694 (US)", desc: "Executive Order zur Blockierung von Eigentum bei bösartigen Cyber-Aktivitäten — Rechtsgrundlage der OFAC-Sanktionen gegen Hydra, Garantex" },
+                  { name: "BVerfG-Urteil 2023", desc: "Verfassungsrechtliche Anforderungen an automatisierte Datenanalyse — Verhältnismäßigkeit, Transparenz, Überprüfbarkeit" }
+                ]
+              }
+            ].map((category, catIndex) => {
+              const CatIcon = category.icon
+              return (
+                <motion.div
+                  key={catIndex}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-50px" }}
+                  transition={{ duration: 0.5, delay: catIndex * 0.15 }}
+                >
+                  <Card className="h-full hover:shadow-xl transition-all duration-300 border-2 hover:border-primary/50">
+                    <CardHeader>
+                      <div className="flex items-center gap-3 mb-4">
+                        <div className="p-3 rounded-xl" style={{ backgroundColor: `${category.color}15` }}>
+                          <CatIcon className="h-7 w-7" style={{ color: category.color }} />
+                        </div>
+                        <CardTitle className="text-xl">{category.title}</CardTitle>
+                      </div>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                      {category.standards.map((std, i) => (
+                        <div key={i} className="p-3 rounded-lg bg-muted/50 hover:bg-muted transition-colors">
+                          <div className="font-semibold text-sm text-foreground mb-1">{std.name}</div>
+                          <p className="text-xs text-muted-foreground leading-relaxed">{std.desc}</p>
+                        </div>
+                      ))}
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              )
+            })}
+          </div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+          >
+            <Card className="border-2 border-primary/30 bg-primary/5">
+              <CardContent className="p-8">
+                <div className="flex items-start gap-4">
+                  <ShieldCheck className="h-8 w-8 text-primary flex-shrink-0 mt-1" />
+                  <div>
+                    <h3 className="text-xl font-bold mb-2">CASSA-Integration</h3>
+                    <p className="text-muted-foreground leading-relaxed">
+                      Alle genannten Standards sind direkt im Knowledge Graph verankert. Jede Entität trägt STIX-2.1-Typinformationen,
+                      jede Ermittlungsmaßnahme wird automatisch gegen die normative Schicht (StPO, DSGVO, NIS2) validiert,
+                      und die zeitliche Dimension prüft die Anwendbarkeit der jeweiligen Gesetzesfassung zum Tatzeitpunkt.
+                      XPolizei-2.0-Typisierungen ermöglichen den nahtlosen Datenaustausch zwischen Bundes- und Landespolizeien.
+                    </p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* ── SECTION: Ermittlungs-Best-Practices ── */}
+      <section id="bestpractices" className="py-32 bg-card relative">
+        <div className="container mx-auto px-6 max-w-7xl">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-16"
+          >
+            <Badge className="mb-4 text-base px-4 py-2">
+              <BookOpen className="h-4 w-4 mr-2" />
+              Schritt 6: Best Practices
+            </Badge>
+            <h2 className="text-4xl md:text-5xl font-bold mb-6">
+              Ermittlungs-Best-Practices
+            </h2>
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+              Bewährte Methoden der digitalen Ermittlungsarbeit — systematisch, rechtskonform und gerichtsverwertbar.
+            </p>
+          </motion.div>
+
+          <div className="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto">
+            {[
+              {
+                icon: Fingerprint,
+                title: "Digitale Beweissicherung (Chain of Custody)",
+                color: "oklch(0.55 0.22 25)",
+                practices: [
+                  "Kryptographische Hashwerte (SHA-256) bei jeder Sicherung — lückenloser Nachweis der Unverändertheit",
+                  "Write-Blocker bei forensischen Kopien — Originalbeweise niemals direkt verändern",
+                  "Vier-Augen-Prinzip bei Beschlagnahmung und Auswertung digitaler Asservate",
+                  "Vollständige Protokollierung aller Zugriffe mit Zeitstempo, Person und Zweck (Audit Trail)",
+                  "ISO 27037-konforme Dokumentation — vom Auffinden bis zur Vorlage vor Gericht"
+                ]
+              },
+              {
+                icon: Network,
+                title: "Blockchain-Forensik & Kryptoanalyse",
+                color: "oklch(0.45 0.12 240)",
+                practices: [
+                  "Cluster-Analyse zur Identifikation zusammengehöriger Wallet-Adressen (Heuristiken: Common-Input, Change-Address)",
+                  "Cross-Chain-Tracking bei Mixer-/Bridge-Transaktionen — z.B. Hydras Bitcoin Bank Mixer",
+                  "Korrelation von On-Chain-Daten mit Off-Chain-Informationen (KYC-Daten, IP-Adressen, Forum-Accounts)",
+                  "OFAC SDN-Listen-Abgleich — automatische Flagging sanktionierter Adressen (>100 Hydra-Adressen)",
+                  "Zeitliche Muster-Erkennung: Transaktionszeitpunkte korreliert mit realen Ereignissen"
+                ]
+              },
+              {
+                icon: ScrollText,
+                title: "Strukturierte Ermittlungsführung",
+                color: "oklch(0.25 0.05 250)",
+                practices: [
+                  "Ermittlungshypothesen formal im Knowledge Graph modellieren und systematisch verifizieren/falsifizieren",
+                  "Proaktives Fristenmanagement — automatische Warnung vor Verjährung, Haftprüfung, TKÜ-Verlängerung",
+                  "Ermittlungsverfahren als Zustandsmaschine: definierte Übergänge von Vorermittlung → Hauptermittlung → Anklage",
+                  "Aktenzeichen-basierte Verknüpfung aller Beweismittel, Beschlüsse und Protokolle",
+                  "Regelmäßige Ermittlungsreviews mit Graph-gestützter Lagedarstellung"
+                ]
+              },
+              {
+                icon: Workflow,
+                title: "KI-gestützte Analyse & Qualitätssicherung",
+                color: "oklch(0.55 0.18 200)",
+                practices: [
+                  "Neuro-symbolischer Ansatz: LLM-Sprachverarbeitung + deterministische Graph-Validierung = keine Halluzinationen",
+                  "Automatische Anonymisierung personenbezogener Daten nach DSGVO-Vorgaben bei Datenexport",
+                  "BVerfG-konforme automatisierte Datenanalyse: Verhältnismäßigkeit, Transparenz und Nachvollziehbarkeit",
+                  "Entity Resolution: Fuzzy-Matching erkennt verschiedene Schreibweisen derselben Person/Organisation",
+                  "Automatisierte Plausibilitätsprüfung: Graph-Algorithmen identifizieren Widersprüche und Lücken"
+                ]
+              }
+            ].map((bp, bpIndex) => {
+              const BpIcon = bp.icon
+              return (
+                <motion.div
+                  key={bpIndex}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-50px" }}
+                  transition={{ duration: 0.5, delay: bpIndex * 0.1 }}
+                >
+                  <Card className="h-full hover:shadow-xl transition-all duration-300 border-2 hover:border-primary/50">
+                    <CardHeader>
+                      <div className="flex items-center gap-3">
+                        <div className="p-3 rounded-xl" style={{ backgroundColor: `${bp.color}15` }}>
+                          <BpIcon className="h-7 w-7" style={{ color: bp.color }} />
+                        </div>
+                        <CardTitle className="text-lg">{bp.title}</CardTitle>
+                      </div>
+                    </CardHeader>
+                    <CardContent>
+                      <ul className="space-y-3">
+                        {bp.practices.map((practice, i) => (
+                          <li key={i} className="flex gap-3 text-sm">
+                            <CheckCircle2 className="h-4 w-4 text-accent flex-shrink-0 mt-0.5" />
+                            <span className="text-muted-foreground leading-relaxed">{practice}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              )
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* ── SECTION: Grenzüberschreitende Zusammenarbeit ── */}
+      <section id="cooperation" className="py-32 bg-primary/5 relative">
+        <div className="container mx-auto px-6 max-w-7xl">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-16"
+          >
+            <Badge className="mb-4 text-base px-4 py-2">
+              <Globe className="h-4 w-4 mr-2" />
+              Schritt 7: Internationale Kooperation
+            </Badge>
+            <h2 className="text-4xl md:text-5xl font-bold mb-6">
+              Grenzüberschreitende Zusammenarbeit
+            </h2>
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+              Moderne Kriminalität kennt keine Grenzen. Die Zerschlagung von Hydra Market zeigt:
+              Nur das koordinierte Zusammenwirken internationaler Behörden führt zum Erfolg.
+            </p>
+          </motion.div>
+
+          <div className="grid lg:grid-cols-3 gap-8 mb-12">
+            {[
+              {
+                title: "Operation Hydra: Das Modell",
+                icon: Network,
+                color: "oklch(0.55 0.22 25)",
+                description: "Die Zerschlagung von Hydra Market am 5. April 2022 ist ein Musterbeispiel für erfolgreiche internationale Kooperation.",
+                facts: [
+                  { label: "Federführung", value: "BKA (Deutschland) + ZIT Frankfurt" },
+                  { label: "US-Partner", value: "DOJ, FBI, DEA, IRS-CI, HSI, USPIS (JCODE)" },
+                  { label: "Sanktionen", value: "OFAC – >100 Krypto-Adressen auf SDN-Liste" },
+                  { label: "Russische Justiz", value: "Moskauer Regionalgericht – Lebenslänglich" },
+                  { label: "Estland", value: "FIU – Garantex-Lizenzentzug Feb 2022" },
+                  { label: "Ergebnis", value: "543,3 BTC beschlagnahmt, Tagesumsatz –89%" }
+                ]
+              },
+              {
+                title: "Institutionelle Rahmenwerke",
+                icon: Landmark,
+                color: "oklch(0.45 0.12 240)",
+                description: "Formale Kooperationsmechanismen ermöglichen den rechtssicheren Informationsaustausch über Grenzen hinweg.",
+                facts: [
+                  { label: "Europol / EC3", value: "Europäisches Cybercrime Centre – Analyse, Koordination, J-CAT" },
+                  { label: "Eurojust", value: "Justizielle Zusammenarbeit – Joint Investigation Teams (JITs)" },
+                  { label: "MLATs", value: "Bilaterale Rechtshilfeabkommen – z.B. DE-US, DE-RU" },
+                  { label: "JCODE (USA)", value: "Joint Criminal Opioid & Darknet Enforcement – FBI, DEA, IRS-CI" },
+                  { label: "Interpol I-24/7", value: "Globales Polizei-Kommunikationsnetzwerk – 195 Länder" },
+                  { label: "Five Eyes + ", value: "Nachrichtendienstlicher Austausch – UK, US, CA, AU, NZ + Partner" }
+                ]
+              },
+              {
+                title: "Technische Interoperabilität",
+                icon: Database,
+                color: "oklch(0.55 0.18 200)",
+                description: "Standardisierte Datenformate und sichere Austauschkanäle sind die technische Basis jeder Kooperation.",
+                facts: [
+                  { label: "STIX/TAXII", value: "Automatisierter Echtzeit-Austausch von Threat Intelligence" },
+                  { label: "SIENA", value: "Europols Secure Information Exchange Network" },
+                  { label: "Prümer Vertrag", value: "Automatischer DNA-, Fingerabdruck- und Kfz-Abgleich (EU)" },
+                  { label: "XPolizei 2.0", value: "Interoperabilität der 16+1 deutschen Polizeien" },
+                  { label: "Blockchain Analytics", value: "Chainalysis, Elliptic, TRM Labs – gemeinsame Werkzeuge" },
+                  { label: "CASSA Knowledge Graph", value: "Föderierter Graph – jede Behörde behält Datenhoheit" }
+                ]
+              }
+            ].map((pillar, pIndex) => {
+              const PillarIcon = pillar.icon
+              return (
+                <motion.div
+                  key={pIndex}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-50px" }}
+                  transition={{ duration: 0.5, delay: pIndex * 0.15 }}
+                >
+                  <Card className="h-full hover:shadow-xl transition-all duration-300 border-2 hover:border-primary/50">
+                    <CardHeader>
+                      <div className="flex items-center gap-3 mb-2">
+                        <div className="p-3 rounded-xl" style={{ backgroundColor: `${pillar.color}15` }}>
+                          <PillarIcon className="h-7 w-7" style={{ color: pillar.color }} />
+                        </div>
+                        <CardTitle className="text-lg">{pillar.title}</CardTitle>
+                      </div>
+                      <CardDescription className="text-sm leading-relaxed">
+                        {pillar.description}
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="space-y-3">
+                        {pillar.facts.map((fact, i) => (
+                          <div key={i} className="flex gap-3 p-2 rounded-lg bg-muted/50 hover:bg-muted transition-colors">
+                            <Badge variant="outline" className="text-[10px] flex-shrink-0 h-fit mt-0.5 whitespace-nowrap">
+                              {fact.label}
+                            </Badge>
+                            <span className="text-xs text-muted-foreground leading-relaxed">{fact.value}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              )
+            })}
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+            >
+              <Card className="h-full border-2 border-accent/30 bg-accent/5">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2 text-lg">
+                    <Handshake className="h-5 w-5 text-accent" />
+                    Lessons Learned: Hydra Market
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                  {[
+                    "Parallel ermitteln, koordiniert zuschlagen: BKA beschlagnahmte Server am selben Tag, an dem OFAC Sanktionen verhängte und DOJ die Anklage veröffentlichte",
+                    "Verschiedene Rechtssysteme nutzen: Deutsches Strafrecht für Server-Beschlagnahmung, US-Sanktionsrecht für Kryptobörsen, russisches Strafrecht für Betreiber",
+                    "Blockchain-Forensik als Brücke: On-Chain-Daten sind jurisdiktionsübergreifend verfügbar und bieten objektive Beweismittel",
+                    "Timing ist entscheidend: Estlands Lizenzentzug (Feb), BKA-Zugriff (Apr), OFAC-Sanktionen (Apr) — orchestrierte Eskalation"
+                  ].map((lesson, i) => (
+                    <div key={i} className="flex gap-3 text-sm">
+                      <CheckCircle2 className="h-4 w-4 text-accent flex-shrink-0 mt-0.5" />
+                      <span className="text-muted-foreground leading-relaxed">{lesson}</span>
+                    </div>
+                  ))}
+                </CardContent>
+              </Card>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+            >
+              <Card className="h-full border-2 border-primary/30 bg-primary/5">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2 text-lg">
+                    <BrainCircuit className="h-5 w-5 text-primary" />
+                    CASSA als Kooperationsplattform
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                  {[
+                    "Föderierter Knowledge Graph: Jede Behörde behält Datenhoheit (Data Sovereignty), teilt aber Erkenntnisse über standardisierte STIX-2.1-Schnittstellen",
+                    "Granulare Zugriffssteuerung (ABAC): Rollenbasierte und attributbasierte Freigabe — vom einzelnen Knoten bis zur Ermittlungsgruppe",
+                    "Vollständige Auditierbarkeit: Jeder Zugriff, jede Abfrage, jeder Datenexport wird unveränderlich protokolliert",
+                    "Multi-jurisdiktionale Normprüfung: Automatische Validierung von Maßnahmen gegen die jeweiligen nationalen Rechtsgrundlagen aller beteiligten Staaten"
+                  ].map((feature, i) => (
+                    <div key={i} className="flex gap-3 text-sm">
+                      <CheckCircle2 className="h-4 w-4 text-primary flex-shrink-0 mt-0.5" />
+                      <span className="text-muted-foreground leading-relaxed">{feature}</span>
+                    </div>
+                  ))}
+                </CardContent>
+              </Card>
+            </motion.div>
+          </div>
         </div>
       </section>
 
