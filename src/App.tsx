@@ -4,6 +4,12 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
 import { 
   ArrowRight, 
   Shield, 
@@ -37,7 +43,7 @@ function App() {
 
   const toggleNarration = useCallback(() => {
     if (!narrationAudioRef.current) {
-      const audio = new Audio(import.meta.env.BASE_URL + 'audio/hydra_narration.mp3')
+      const audio = new Audio(import.meta.env.BASE_URL + 'audio/hydra_erklaerung.mp3')
       audio.addEventListener('ended', () => setIsPlayingNarration(false))
       narrationAudioRef.current = audio
     }
@@ -589,28 +595,44 @@ function App() {
               className="sticky top-24 h-[700px]"
             >
               <div className="absolute top-3 left-3 z-10">
-                <Button
-                  variant={isPlayingNarration ? "default" : "outline"}
-                  size="sm"
-                  onClick={toggleNarration}
-                  className="gap-2 shadow-lg backdrop-blur-sm bg-background/80 hover:bg-background/90"
-                  title="Operation Hydra – Fallbeschreibung anhören"
-                >
-                  {isPlayingNarration ? (
-                    <>
-                      <span className="relative flex h-2 w-2">
-                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75" />
-                        <span className="relative inline-flex rounded-full h-2 w-2 bg-primary" />
-                      </span>
-                      Narration läuft …
-                    </>
-                  ) : (
-                    <>
-                      <Play className="h-4 w-4" />
-                      OP Hydra anhören
-                    </>
-                  )}
-                </Button>
+                <TooltipProvider delayDuration={300}>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        variant={isPlayingNarration ? "default" : "outline"}
+                        size="sm"
+                        onClick={toggleNarration}
+                        className="gap-2 shadow-lg backdrop-blur-sm bg-background/80 hover:bg-background/90"
+                      >
+                        {isPlayingNarration ? (
+                          <>
+                            <span className="relative flex h-2 w-2">
+                              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75" />
+                              <span className="relative inline-flex rounded-full h-2 w-2 bg-primary" />
+                            </span>
+                            Erklärung läuft …
+                          </>
+                        ) : (
+                          <>
+                            <Play className="h-4 w-4" />
+                            Erkläre Hydra
+                          </>
+                        )}
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent
+                      side="bottom"
+                      align="start"
+                      className="max-w-xs text-sm leading-relaxed"
+                    >
+                      <p className="font-semibold mb-1">KI-Erklärung anhören</p>
+                      <p>
+                        Erkläre die Polizeiakte &bdquo;Hydra&ldquo; und die Beziehungen zwischen den Knoten.
+                        Erkläre, warum eine Graphendatenbank eine effektive Lösung für den Polizeidienst ist.
+                      </p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
               </div>
               <PoliceKnowledgeGraph3D />
             </motion.div>

@@ -12,30 +12,62 @@ from pathlib import Path
 
 # ── Narration text (German) ──────────────────────────────────────────────────
 HYDRA_NARRATION = """
-Willkommen bei CASSA – dem intelligenten Wissensgrafen für die organisierte Kriminalitätsbekämpfung von Sopra Steria.
+Willkommen bei CASSA – dem intelligenten Wissensgrafen der Polizei von Sopra Steria.
 
-Was Sie hier sehen, ist Operation Hydra: ein reales Fallszenario, das zeigt, wie CASSA komplexe Ermittlungen sichtbar macht.
+Ich erkläre Ihnen jetzt die Polizeiakte Operation Hydra, die Beziehungen zwischen den Knoten im Graphen, 
+und warum eine Graphendatenbank die ideale Lösung für den modernen Polizeidienst ist.
 
-Im Mittelpunkt steht Viktor "Wolf" Sokolov – mutmaßlicher Kopf einer grenzüberschreitenden kriminellen Organisation. 
-Sein Netzwerk verbindet vier Kernsachverhalte: Organisierte Kriminalität, Cybercrime, Geldwäsche und Betäubungsmittelhandel.
+Die Polizeiakte Operation Hydra.
 
-Der Cybercrime-Komplex ist besonders bedeutsam. Leon "Byte" Krause entwickelte die Ransomware HydraLock – 
-sie traf vierzehn europäische Unternehmen, darunter das Klinikum Nord und die Stadtwerke Kiel als kritische Infrastruktur. 
-Schaden: über drei Millionen Euro. Meldepflichten nach NIS2 und DSGVO wurden ausgelöst.
+Im Zentrum steht Viktor "Wolf" Sokolov – mutmaßlicher Kopf einer grenzüberschreitenden kriminellen Organisation.
+In diesem Graphen sehen Sie ihn als orangefarbenen Knoten. Vier Verfahren verbinden sich mit ihm:
+Organisierte Kriminalität, Cybercrime, Geldwäsche und Betäubungsmittelhandel.
 
-Gleichzeitig lief eine internationale Geldwäsche-Struktur über Scheinfirmen in Frankfurt, Tallinn und ein Schweizer Nummernkonto – 
-ein Gesamtvolumen von rund 47 Millionen Euro. Maria Petrova, derzeit auf der Fahndungsliste, koordinierte die Finanzkanäle.
+Schauen wir auf die Beziehungen zwischen den Knoten.
 
-Ergänzt wird das Bild durch Darknet-Drogenhandel: 145 Kilogramm Kokain und 23 Kilogramm Heroin – 
-beschlagnahmt im Hamburger Hafen, Straßenwert neun Millionen Euro.
+Sokolov ist über eine direkte Kante als Hauptverdächtiger mit der Operation Hydra verknüpft. 
+Von ihm führen Kanten zu seinen Mitstreitern: Leon Krause, dem Ransomware-Entwickler; 
+Maria Petrova, der Finanzverwalterin; Kadir Yılmaz, zuständig für Logistik; 
+Anna Bergmann, Strohfrau der Scheinfirmen; sowie zu den Lieferanten in Osteuropa und dem Vertriebsnetz in Deutschland.
 
-CASSA verbindet all diese Sachverhalte: Verdächtige, Beweismittel, Konten, Kommunikationsdaten, Fahrzeuge, 
-Standorte, Rechtsgrundlagen und EU-Regulierungen – alles in einem einzigen, interaktiven Wissensgraphen.
+Die Beweismittel-Knoten zeigen ebenfalls wichtige Verbindungen: 
+Das beschlagnahmte Laptop von Krause ist direkt mit dem Ransomware-Code HydraLock verknüpft – 
+und dieser wiederum mit den beiden Opfern: dem Klinikum Nord und den Stadtwerken Kiel als kritische Infrastruktur.
 
-Die KI-gestützte Wahrscheinlichkeitsbewertung hilft Ermittlern, die relevantesten Hinweise zu priorisieren. 
-Strafanzeigen – ob über die Internetwache oder die Polizei-App – werden automatisch mit bestehenden Verfahren verknüpft.
+Die Geldflüsse verlaufen über Kontenknoten: von der Phoenix Consulting GmbH in Frankfurt 
+über die Baltic Trade in Tallinn bis zu einem Schweizer Nummernkonto – insgesamt 47 Millionen Euro Geldwäsche.
+Jede Transaktion ist als Kante mit Zeitstempel und Betrag gespeichert.
 
-Das ist CASSA: Vernetzte Intelligenz für eine wirksamere Strafverfolgung.
+Rechtsgrundlagen-Knoten wie Paragraph 129 Strafgesetzbuch, Paragraph 303b Strafgesetzbuch und Paragraph 261 Strafgesetzbuch 
+sind direkt mit den betroffenen Verdächtigen und Verfahren verbunden. 
+Europäische Regelungen wie NIS2 und DSGVO sind mit den Opfern und dem Cybercrime-Komplex verknüpft.
+
+Warum ist eine Graphendatenbank die optimale Lösung für den Polizeidienst?
+
+Erstens: Komplexe Netzwerke auf einen Blick. Traditionelle Datenbanken speichern Daten in Tabellen. 
+Bei einem Fall wie Hydra mit über 80 Entitäten und hunderten Beziehungen 
+bräuchte man dutzende Tabellen-Joins, die Sekunden oder Minuten dauern würden. 
+In einer Graphendatenbank folgt die Abfrage einfach den Kanten – in Millisekunden.
+
+Zweitens: Entdeckung verborgener Zusammenhänge. 
+Ein Ermittler kann fragen: Wer kannte Sokolov, der auch Kontakt zu einer Kryptobörse hatte? 
+Der Graph traversiert alle Verbindungen und findet die Antwort sofort – 
+Erkenntnisse, die in Tabellen monatelange manuelle Analyse erfordert hätten.
+
+Drittens: Dynamische Fallverknüpfung. 
+Neue Strafanzeigen werden automatisch auf Übereinstimmungen mit bestehenden Knoten geprüft. 
+Kommt eine neue Anzeige mit dem Username "ByteL0rd" herein, erkennt das System sofort: 
+dieser Handle ist bereits in der Beweismitteldatenbank mit Leon Krause verknüpft.
+
+Viertens: Rechtssichere Rückverfolgbarkeit. 
+Jede Kante trägt Metadaten: Zeitstempel der Erfassung, Sachbearbeiter, Rechtsgrundlage der Maßnahme. 
+Die vollständige Chain of Custody ist im Graphen abbildbar – gerichtsverwertbar von Anfang an.
+
+Fünftens: Föderale Interoperabilität. 
+Durch den XPolizei-Standard können Behörden Teilgraphen sicher tauschen – 
+LKA Hamburg sieht nur die freigegebenen Knoten aus dem BKA-Graphen, Europol erhält seinen eigenen Teilgraphen.
+
+Das ist CASSA: Eine Graphendatenbank, die vernetzt denkt – genauso wie organisierte Kriminalität vernetzt agiert.
 """.strip()
 
 # ── Voice preference (German professional voices) ────────────────────────────
@@ -133,7 +165,7 @@ def generate(api_key: str, output_path: Path) -> None:
 def main() -> None:
     parser = argparse.ArgumentParser(description="Generate Operation Hydra audio via ElevenLabs")
     parser.add_argument("--login", action="store_true", help="Prompt for API key and save to .env")
-    parser.add_argument("--output", default="public/audio/hydra_narration.mp3", help="Output file path")
+    parser.add_argument("--output", default="public/audio/hydra_erklaerung.mp3", help="Output file path")
     args = parser.parse_args()
 
     if args.login:
