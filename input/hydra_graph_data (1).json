@@ -2,9 +2,108 @@
   "metadata": {
     "title": "Hydra Market - Graph Database Dataset",
     "generated": "2026-02-28",
-    "description": "Complete entity-relationship model of the Hydra Market darknet marketplace case for graph database import",
-    "node_count": 81,
-    "relationship_count": 105
+    "description": "Complete entity-relationship model of the Hydra Market darknet marketplace case for graph database import. Enriched with source citations, STIX 2.1 type mappings, and applicable forensic/legal standards.",
+    "node_count": 88,
+    "relationship_count": 113,
+    "standards": {
+      "STIX_2.1": {
+        "name": "Structured Threat Information Expression 2.1",
+        "authority": "OASIS Open",
+        "url": "https://docs.oasis-open.org/cti/stix/v2.1/os/stix-v2.1-os.html",
+        "usage": "SDO/SRO type mappings on each node and relationship"
+      },
+      "XPolizei_2.0": {
+        "name": "XPolizei 2.0 Datenaustauschstandard",
+        "authority": "Bundeskriminalamt (BKA)",
+        "usage": "German police data exchange types on relevant nodes"
+      },
+      "ISO_27037": {
+        "name": "ISO/IEC 27037:2012 — Digital Evidence Identification, Collection, Acquisition, Preservation",
+        "authority": "ISO/IEC",
+        "usage": "Applicable to evidence seizure events and digital assets"
+      },
+      "ISO_27042": {
+        "name": "ISO/IEC 27042:2015 — Digital Evidence Analysis and Interpretation",
+        "authority": "ISO/IEC",
+        "usage": "Applicable to blockchain analysis and financial tracing"
+      },
+      "NIST_800-86": {
+        "name": "NIST SP 800-86 — Guide to Integrating Forensic Techniques into Incident Response",
+        "authority": "NIST",
+        "usage": "Applicable to forensic data handling of crypto assets and server infrastructure"
+      },
+      "EO_13694": {
+        "name": "Executive Order 13694 — Blocking Property of Certain Persons Engaging in Significant Malicious Cyber-Enabled Activities",
+        "authority": "President of the United States",
+        "usage": "Legal basis for OFAC sanctions designations"
+      }
+    },
+    "sources": {
+      "OFAC": {
+        "title": "Treasury Press Release jy0701: Treasury Sanctions Russia-Based Hydra and Garantex",
+        "date": "2022-04-05",
+        "url": "https://home.treasury.gov/news/press-releases/jy0701",
+        "type": "Government Press Release"
+      },
+      "CHA_SANCTIONS": {
+        "title": "Chainalysis: OFAC Sanctions Hydra Marketplace and Garantex — Background and Analysis",
+        "date": "2022-04-05",
+        "url": "https://blog.chainalysis.com/reports/ofac-sanctions-hydra-marketplace-garantex-background/",
+        "type": "Blockchain Analytics Report"
+      },
+      "CHA_POST_HYDRA": {
+        "title": "Chainalysis: Post-Hydra Dark Web Market Analysis 2022",
+        "date": "2022",
+        "url": "https://blog.chainalysis.com/reports/hydra-dark-web-market-2022/",
+        "type": "Blockchain Analytics Report"
+      },
+      "ELLIPTIC": {
+        "title": "Elliptic: $5 Billion Hydra Cryptocurrency Marketplace Analysis",
+        "date": "2022-04-05",
+        "url": "https://www.elliptic.co/blog/elliptic-analysis-hydra-cryptocurrency-marketplace",
+        "type": "Blockchain Analytics Report"
+      },
+      "TRM": {
+        "title": "TRM Labs: Hydra — The Largest Darknet Marketplace Shutdown by Law Enforcement",
+        "date": "2022-04",
+        "url": "https://www.trmlabs.com/post/hydra-darknet-market",
+        "type": "Blockchain Analytics Report"
+      },
+      "DOJ": {
+        "title": "U.S. DOJ: Justice Department Investigation Leads to Shutdown of Largest Online Darknet Marketplace",
+        "date": "2022-04-05",
+        "url": "https://www.justice.gov/opa/pr/justice-department-investigation-leads-shutdown-largest-online-darknet-marketplace",
+        "type": "Government Press Release"
+      },
+      "BKA": {
+        "title": "BKA Pressemitteilung: Hydra Market — Weltweit größter illegaler Darknet-Marktplatz abgeschaltet",
+        "date": "2022-04-05",
+        "url": "https://www.bka.de/SharedDocs/Kurzmeldungen/DE/Kurzmeldungen/220405_PM_HydraMarket.html",
+        "type": "Government Press Release"
+      },
+      "GWERN": {
+        "title": "Gwern: Hydra DNM Bibliography Index",
+        "url": "https://gwern.net/doc/darknet-market/hydra/index",
+        "type": "Academic Bibliography"
+      },
+      "GOONETILLEKE_2023": {
+        "title": "Goonetilleke et al.: Hydra — Lessons from the World's Largest Darknet Market",
+        "date": "2023",
+        "type": "Academic Paper",
+        "via": "GWERN"
+      },
+      "VOROBYOV_2020": {
+        "title": "Vorobyov (Vice): Inside Hydra Dead-Drop Drug Delivery System",
+        "date": "2020",
+        "type": "Investigative Journalism",
+        "via": "GWERN"
+      },
+      "RUSSIAN_COURT_2024": {
+        "title": "Moscow Regional Court: Moiseyev Sentencing (Life Imprisonment)",
+        "date": "2024-12-02",
+        "type": "Court Record"
+      }
+    }
   },
   "nodes": [
     {
@@ -24,10 +123,21 @@
       "revenue_2018_usd": "500000000",
       "revenue_2020_eur": "1230000000",
       "revenue_2020_usd": "1340000000",
+      "revenue_2021_crypto_usd": "1700000000",
+      "illicit_sources_since_2020_usd": "645000000",
       "total_crypto_2015_2022_usd": "5200000000",
       "market_share_2021": "80%",
+      "market_share_2022_pre_shutdown": "93.3%",
+      "daily_revenue_pre_shutdown_usd": "4200000",
+      "daily_revenue_post_shutdown_usd": "447000",
       "geographic_coverage_russia": "69%",
-      "status": "Seized/Closed"
+      "illicit_btc_share_russian_exchanges_2019": "86%",
+      "ransomware_proceeds_laundered_usd": "8000000",
+      "status": "Seized/Closed",
+      "sources": ["OFAC", "CHA_SANCTIONS", "CHA_POST_HYDRA", "ELLIPTIC", "TRM", "DOJ", "BKA"],
+      "stix_type": "infrastructure",
+      "stix_infrastructure_types": ["anonymization"],
+      "xpolizei_type": "Organisation"
     },
     {
       "id": "promservice",
@@ -37,7 +147,11 @@
       "aliases": "Hosting Company Full Drive; All Wheel Drive; 4x4host.ru",
       "founded": "2015-11",
       "country": "Russia",
-      "role": "Hydra server administration"
+      "role": "Hydra server administration",
+      "sources": ["DOJ", "CHA_SANCTIONS"],
+      "stix_type": "identity",
+      "stix_identity_class": "organization",
+      "xpolizei_type": "Organisation"
     },
     {
       "id": "bka",
@@ -45,7 +159,12 @@
       "type": "Organization",
       "subtype": "Law Enforcement",
       "country": "Germany",
-      "role": "Federal Criminal Police Office"
+      "role": "Federal Criminal Police Office",
+      "sources": ["BKA", "DOJ"],
+      "stix_type": "identity",
+      "stix_identity_class": "organization",
+      "stix_sectors": ["government"],
+      "xpolizei_type": "Behörde"
     },
     {
       "id": "zit",
@@ -53,7 +172,12 @@
       "type": "Organization",
       "subtype": "Law Enforcement",
       "country": "Germany",
-      "role": "Central Office for Combating Cybercrime"
+      "role": "Central Office for Combating Cybercrime",
+      "sources": ["BKA", "DOJ"],
+      "stix_type": "identity",
+      "stix_identity_class": "organization",
+      "stix_sectors": ["government"],
+      "xpolizei_type": "Behörde"
     },
     {
       "id": "usdoj",
@@ -61,7 +185,11 @@
       "type": "Organization",
       "subtype": "Law Enforcement",
       "country": "USA",
-      "role": "Federal prosecution"
+      "role": "Federal prosecution",
+      "sources": ["DOJ", "OFAC"],
+      "stix_type": "identity",
+      "stix_identity_class": "organization",
+      "stix_sectors": ["government"]
     },
     {
       "id": "ofac",
@@ -69,42 +197,67 @@
       "type": "Organization",
       "subtype": "Sanctions Authority",
       "country": "USA",
-      "role": "Office of Foreign Assets Control"
+      "role": "Office of Foreign Assets Control",
+      "sources": ["OFAC"],
+      "stix_type": "identity",
+      "stix_identity_class": "organization",
+      "stix_sectors": ["government"],
+      "applicable_standards": ["EO_13694"]
     },
     {
       "id": "fbi",
       "label": "FBI",
       "type": "Organization",
       "subtype": "Law Enforcement",
-      "country": "USA"
+      "country": "USA",
+      "sources": ["DOJ"],
+      "stix_type": "identity",
+      "stix_identity_class": "organization",
+      "stix_sectors": ["government"]
     },
     {
       "id": "dea",
       "label": "DEA",
       "type": "Organization",
       "subtype": "Law Enforcement",
-      "country": "USA"
+      "country": "USA",
+      "sources": ["DOJ"],
+      "stix_type": "identity",
+      "stix_identity_class": "organization",
+      "stix_sectors": ["government"]
     },
     {
       "id": "irs_ci",
       "label": "IRS Criminal Investigation",
       "type": "Organization",
       "subtype": "Law Enforcement",
-      "country": "USA"
+      "country": "USA",
+      "sources": ["DOJ"],
+      "stix_type": "identity",
+      "stix_identity_class": "organization",
+      "stix_sectors": ["government"]
     },
     {
       "id": "hsi",
       "label": "Homeland Security Investigations",
       "type": "Organization",
       "subtype": "Law Enforcement",
-      "country": "USA"
+      "country": "USA",
+      "sources": ["DOJ"],
+      "stix_type": "identity",
+      "stix_identity_class": "organization",
+      "stix_sectors": ["government"]
     },
     {
       "id": "uspis",
       "label": "U.S. Postal Inspection Service",
       "type": "Organization",
       "subtype": "Law Enforcement",
-      "country": "USA"
+      "country": "USA",
+      "sources": ["DOJ"],
+      "stix_type": "identity",
+      "stix_identity_class": "organization",
+      "stix_sectors": ["government"]
     },
     {
       "id": "jcode",
@@ -112,7 +265,10 @@
       "type": "Organization",
       "subtype": "Task Force",
       "country": "USA",
-      "role": "Joint Criminal Opioid and Darknet Enforcement"
+      "role": "Joint Criminal Opioid and Darknet Enforcement",
+      "sources": ["DOJ"],
+      "stix_type": "identity",
+      "stix_identity_class": "organization"
     },
     {
       "id": "garantex",
@@ -124,7 +280,14 @@
       "location_detail": "Federation Tower",
       "founded": "2019",
       "sanctioned": "2022-04-05",
-      "illicit_transactions_usd": "100000000"
+      "illicit_transactions_usd": "100000000",
+      "conti_proceeds_usd": "6000000",
+      "hydra_proceeds_usd": "2600000",
+      "estonian_license_revoked": "2022-02",
+      "sources": ["OFAC", "CHA_SANCTIONS", "ELLIPTIC"],
+      "stix_type": "infrastructure",
+      "stix_infrastructure_types": ["exfiltration"],
+      "applicable_standards": ["EO_13694"]
     },
     {
       "id": "suex",
@@ -132,7 +295,12 @@
       "type": "Organization",
       "subtype": "Crypto Exchange",
       "location": "Moscow (Federation Tower)",
-      "sanctioned": "2021"
+      "sanctioned": "2021",
+      "note": "First VASP sanctioned in entirety by OFAC",
+      "sources": ["OFAC", "ELLIPTIC"],
+      "stix_type": "infrastructure",
+      "stix_infrastructure_types": ["exfiltration"],
+      "applicable_standards": ["EO_13694"]
     },
     {
       "id": "chatex",
@@ -140,21 +308,34 @@
       "type": "Organization",
       "subtype": "Crypto Exchange",
       "location": "Moscow (Federation Tower)",
-      "sanctioned": "2021"
+      "sanctioned": "2021",
+      "note": "Second VASP sanctioned in entirety by OFAC",
+      "sources": ["OFAC", "ELLIPTIC"],
+      "stix_type": "infrastructure",
+      "stix_infrastructure_types": ["exfiltration"],
+      "applicable_standards": ["EO_13694"]
     },
     {
       "id": "bitpapa",
       "label": "Bitpapa",
       "type": "Organization",
       "subtype": "Crypto Exchange",
-      "sanctioned": "2024-03"
+      "sanctioned": "2024-03",
+      "sources": ["OFAC"],
+      "stix_type": "infrastructure",
+      "stix_infrastructure_types": ["exfiltration"],
+      "applicable_standards": ["EO_13694"]
     },
     {
       "id": "netexchange",
       "label": "NetExchange",
       "type": "Organization",
       "subtype": "Crypto Exchange",
-      "sanctioned": "2024-03"
+      "sanctioned": "2024-03",
+      "sources": ["OFAC"],
+      "stix_type": "infrastructure",
+      "stix_infrastructure_types": ["exfiltration"],
+      "applicable_standards": ["EO_13694"]
     },
     {
       "id": "ramp",
@@ -162,7 +343,12 @@
       "type": "Organization",
       "subtype": "Darknet Marketplace",
       "status": "Shut down Sept 2017",
-      "country": "Russia"
+      "country": "Russia",
+      "note": "After RAMP closure, Hydra became monopolist in Russian DNM space",
+      "sources": ["TRM", "GWERN"],
+      "stix_type": "infrastructure",
+      "stix_infrastructure_types": ["anonymization"],
+      "xpolizei_type": "Organisation"
     },
     {
       "id": "wayaway",
@@ -170,7 +356,10 @@
       "type": "Organization",
       "subtype": "Darknet Forum",
       "domain": "wayaway.biz",
-      "relationship_to_hydra": "Long-time partner"
+      "relationship_to_hydra": "Long-time partner",
+      "sources": ["TRM", "GWERN"],
+      "stix_type": "infrastructure",
+      "stix_infrastructure_types": ["anonymization"]
     },
     {
       "id": "omg_market",
@@ -178,21 +367,39 @@
       "type": "Organization",
       "subtype": "Darknet Marketplace",
       "role": "Hydra successor",
-      "peak_share": "65.2%"
+      "peak_share": "65.2%",
+      "peak_share_date": "2022-04-23",
+      "active_since": "2020-07",
+      "note": "Showed vendor/admin overlap with Hydra via shared deposit addresses; hit by DDoS June 2022",
+      "offers_money_laundering": true,
+      "sources": ["CHA_POST_HYDRA"],
+      "stix_type": "infrastructure",
+      "stix_infrastructure_types": ["anonymization"]
     },
     {
       "id": "mega_market",
       "label": "Mega Darknet Market",
       "type": "Organization",
       "subtype": "Darknet Marketplace",
-      "role": "Hydra successor"
+      "role": "Hydra successor",
+      "offers_money_laundering": true,
+      "note": "Gained share after OMG DDoS attack (June 2022)",
+      "sources": ["CHA_POST_HYDRA"],
+      "stix_type": "infrastructure",
+      "stix_infrastructure_types": ["anonymization"]
     },
     {
       "id": "blacksprut",
       "label": "Blacksprut Market",
       "type": "Organization",
       "subtype": "Darknet Marketplace",
-      "role": "Hydra successor"
+      "role": "Hydra successor",
+      "peak_share": "68.5%",
+      "offers_money_laundering": true,
+      "note": "Hacked November 2022; peaked at 68.5% market share before hack",
+      "sources": ["CHA_POST_HYDRA"],
+      "stix_type": "infrastructure",
+      "stix_infrastructure_types": ["anonymization"]
     },
     {
       "id": "solaris",
@@ -200,14 +407,20 @@
       "type": "Organization",
       "subtype": "Darknet Marketplace",
       "role": "Hydra successor",
-      "status": "Captured by Kraken Jan 2023"
+      "status": "Captured by Kraken Jan 2023",
+      "sources": ["CHA_POST_HYDRA"],
+      "stix_type": "infrastructure",
+      "stix_infrastructure_types": ["anonymization"]
     },
     {
       "id": "kraken_dnm",
       "label": "Kraken (DNM)",
       "type": "Organization",
       "subtype": "Darknet Marketplace",
-      "role": "Captured Solaris"
+      "role": "Captured Solaris",
+      "sources": ["CHA_POST_HYDRA"],
+      "stix_type": "infrastructure",
+      "stix_infrastructure_types": ["anonymization"]
     },
     {
       "id": "darkside",
@@ -215,53 +428,84 @@
       "type": "Organization",
       "subtype": "Ransomware Group",
       "country": "Russia",
-      "notable_attack": "Colonial Pipeline (May 2021)"
+      "notable_attack": "Colonial Pipeline (May 2021)",
+      "sources": ["OFAC", "CHA_SANCTIONS"],
+      "stix_type": "threat-actor",
+      "stix_threat_actor_types": ["criminal"],
+      "stix_secondary_type": "intrusion-set"
     },
     {
       "id": "ryuk",
       "label": "Ryuk",
       "type": "Organization",
-      "subtype": "Ransomware Group"
+      "subtype": "Ransomware Group",
+      "note": "Part of $8M ransomware proceeds laundered through Hydra",
+      "sources": ["OFAC"],
+      "stix_type": "malware",
+      "stix_malware_types": ["ransomware"]
     },
     {
       "id": "sodinokibi",
       "label": "Sodinokibi/REvil",
       "type": "Organization",
-      "subtype": "Ransomware Group"
+      "subtype": "Ransomware Group",
+      "note": "Part of $8M ransomware proceeds laundered through Hydra",
+      "sources": ["OFAC"],
+      "stix_type": "malware",
+      "stix_malware_types": ["ransomware"]
     },
     {
       "id": "conti",
       "label": "Conti",
       "type": "Organization",
-      "subtype": "Ransomware Group"
+      "subtype": "Ransomware Group",
+      "note": "~$6M laundered via Garantex",
+      "sources": ["OFAC", "ELLIPTIC"],
+      "stix_type": "malware",
+      "stix_malware_types": ["ransomware"]
     },
     {
       "id": "sinaloa_cartel",
       "label": "Sinaloa Cartel",
       "type": "Organization",
       "subtype": "Drug Cartel",
-      "country": "Mexico"
+      "country": "Mexico",
+      "sources": ["TRM"],
+      "stix_type": "threat-actor",
+      "stix_threat_actor_types": ["criminal"]
     },
     {
       "id": "cjng",
       "label": "CJNG (Jalisco New Generation Cartel)",
       "type": "Organization",
       "subtype": "Drug Cartel",
-      "country": "Mexico"
+      "country": "Mexico",
+      "sources": ["TRM"],
+      "stix_type": "threat-actor",
+      "stix_threat_actor_types": ["criminal"]
     },
     {
       "id": "moscow_court",
       "label": "Moscow Regional Court",
       "type": "Organization",
       "subtype": "Court",
-      "country": "Russia"
+      "country": "Russia",
+      "sources": ["GWERN", "RUSSIAN_COURT_2024"],
+      "stix_type": "identity",
+      "stix_identity_class": "organization",
+      "stix_sectors": ["government"],
+      "xpolizei_type": "Behörde"
     },
     {
       "id": "us_court_ndca",
       "label": "U.S. District Court N.D. California",
       "type": "Organization",
       "subtype": "Court",
-      "country": "USA"
+      "country": "USA",
+      "sources": ["DOJ"],
+      "stix_type": "identity",
+      "stix_identity_class": "organization",
+      "stix_sectors": ["government"]
     },
     {
       "id": "colonial_pipeline",
@@ -269,7 +513,10 @@
       "type": "Organization",
       "subtype": "Company",
       "country": "USA",
-      "sector": "Oil/Gas Infrastructure"
+      "sector": "Oil/Gas Infrastructure",
+      "sources": ["OFAC", "CHA_SANCTIONS"],
+      "stix_type": "identity",
+      "stix_identity_class": "organization"
     },
     {
       "id": "bitfinex",
@@ -277,7 +524,34 @@
       "type": "Organization",
       "subtype": "Crypto Exchange",
       "hack_year": "2016",
-      "hack_amount_usd": "4500000000"
+      "hack_amount_usd": "4500000000",
+      "note": "Hydra used to launder 2016 Bitfinex hack funds",
+      "sources": ["ELLIPTIC", "CHA_SANCTIONS"],
+      "stix_type": "identity",
+      "stix_identity_class": "organization"
+    },
+    {
+      "id": "alphabay",
+      "label": "AlphaBay",
+      "type": "Organization",
+      "subtype": "Darknet Marketplace",
+      "status": "Seized July 2017",
+      "total_value_at_seizure_usd": "1000000000",
+      "note": "Comparison: AlphaBay had ~$1B in total value when seized vs. Hydra $5.2B",
+      "sources": ["ELLIPTIC"],
+      "stix_type": "infrastructure",
+      "stix_infrastructure_types": ["anonymization"]
+    },
+    {
+      "id": "federation_tower",
+      "label": "Federation Tower (Moscow)",
+      "type": "Infrastructure",
+      "subtype": "Physical Location",
+      "city": "Moscow",
+      "country": "Russia",
+      "note": "Physical location of Garantex, SUEX, and CHATEX operations",
+      "sources": ["OFAC", "ELLIPTIC"],
+      "stix_type": "location"
     },
     {
       "id": "moiseyev",
@@ -288,7 +562,12 @@
       "sentence": "Life imprisonment",
       "sentence_date": "2024-12-02",
       "fine_rubles": "4000000",
-      "convicted_of": "Organizing criminal syndicate; drug production and distribution"
+      "convicted_of": "Organizing criminal syndicate; drug production and distribution",
+      "historic_note": "First life sentence for drug trafficking in Russia",
+      "sources": ["GWERN", "RUSSIAN_COURT_2024"],
+      "stix_type": "threat-actor",
+      "stix_threat_actor_types": ["crime-boss"],
+      "xpolizei_type": "Person/Tatverdächtiger"
     },
     {
       "id": "pavlov",
@@ -298,9 +577,14 @@
       "age_at_indictment": "30",
       "role": "Server operator/administrator",
       "company": "Promservice Ltd.",
+      "company_operated_since": "2015",
       "indictment_date": "2022-04-05",
       "charges": "Conspiracy to distribute narcotics; Conspiracy to commit money laundering",
-      "court": "U.S. District Court N.D. California"
+      "court": "U.S. District Court N.D. California",
+      "sources": ["DOJ", "OFAC", "CHA_SANCTIONS"],
+      "stix_type": "threat-actor",
+      "stix_threat_actor_types": ["criminal"],
+      "xpolizei_type": "Person/Tatverdächtiger"
     },
     {
       "id": "moiseyev_accomplices",
@@ -308,48 +592,71 @@
       "type": "Person_Group",
       "count": "15",
       "sentences_range": "8-23 years",
-      "collective_fines_rubles": "16000000"
+      "collective_fines_rubles": "16000000",
+      "sources": ["GWERN", "RUSSIAN_COURT_2024"],
+      "stix_type": "threat-actor",
+      "stix_threat_actor_types": ["criminal"],
+      "xpolizei_type": "Personengruppe"
     },
     {
       "id": "morgan",
       "label": "Heather 'Razzlekhan' Morgan",
       "type": "Person",
       "nationality": "American",
-      "role": "Bitfinex hack conspirator"
+      "role": "Bitfinex hack conspirator",
+      "sources": ["ELLIPTIC"],
+      "stix_type": "threat-actor",
+      "stix_threat_actor_types": ["criminal"]
     },
     {
       "id": "lichtenstein",
       "label": "Ilya 'Dutch' Lichtenstein",
       "type": "Person",
       "nationality": "American",
-      "role": "Bitfinex hack conspirator"
+      "role": "Bitfinex hack conspirator",
+      "sources": ["ELLIPTIC"],
+      "stix_type": "threat-actor",
+      "stix_threat_actor_types": ["criminal"]
     },
     {
       "id": "zambada",
       "label": "Ismael 'El Mayo' Zambada",
       "type": "Person",
       "nationality": "Mexican",
-      "role": "Sinaloa Cartel leader"
+      "role": "Sinaloa Cartel leader",
+      "sources": ["TRM"],
+      "stix_type": "threat-actor",
+      "stix_threat_actor_types": ["crime-boss"]
     },
     {
       "id": "oseguera",
       "label": "Nemesio 'El Mencho' Oseguera",
       "type": "Person",
       "nationality": "Mexican",
-      "role": "CJNG leader"
+      "role": "CJNG leader",
+      "sources": ["TRM"],
+      "stix_type": "threat-actor",
+      "stix_threat_actor_types": ["crime-boss"]
     },
     {
       "id": "zwiebel",
       "label": "Sebastian Zwiebel",
       "type": "Person",
       "nationality": "German",
-      "role": "BKA investigator (led Hydra takedown)"
+      "role": "BKA investigator (led Hydra takedown)",
+      "sources": ["BKA"],
+      "stix_type": "identity",
+      "stix_identity_class": "individual",
+      "xpolizei_type": "Person/Ermittler"
     },
     {
       "id": "svc_drugs",
       "label": "Drug Sales",
       "type": "Service",
-      "details": "Cocaine, methamphetamine, LSD, heroin, opioids, precursors; wholesale and retail"
+      "details": "Cocaine, methamphetamine, LSD, heroin, opioids, precursors; wholesale and retail",
+      "sources": ["TRM", "CHA_SANCTIONS", "OFAC"],
+      "stix_type": "tool",
+      "xpolizei_type": "Straftat-Bezug (BtMG)"
     },
     {
       "id": "svc_dead_drop",
@@ -357,76 +664,116 @@
       "type": "Service",
       "methods": "Buried (прикоп); Magnetized (магнит); Hidden (тайник)",
       "order_types": "Instant orders; Pre-orders",
-      "cost_share": ">50% of drug price for some items"
+      "cost_share": ">50% of drug price for some items",
+      "note": "Uber-like dead-drop courier system across CIS countries",
+      "sources": ["TRM", "CHA_SANCTIONS", "VOROBYOV_2020"],
+      "stix_type": "attack-pattern"
     },
     {
       "id": "svc_btc_mixer",
       "label": "Bitcoin Bank Mixer",
       "type": "Service",
-      "purpose": "Obfuscate crypto transactions for money laundering"
+      "purpose": "Obfuscate crypto transactions for money laundering",
+      "note": "Tightly controlled BTC mixing infrastructure; used to launder Bitfinex hack funds",
+      "sources": ["CHA_SANCTIONS", "OFAC", "ELLIPTIC"],
+      "stix_type": "tool",
+      "stix_tool_types": ["credential-exploitation"],
+      "applicable_standards": ["NIST_800-86"]
     },
     {
       "id": "svc_cashout",
       "label": "Cash-Out Services",
       "type": "Service",
-      "details": "BTC to RUB; cash deliveries; wire transfers; SIM card payments; physical buried cash"
+      "details": "BTC to RUB; cash deliveries; wire transfers; SIM card payments; physical buried cash",
+      "sources": ["TRM", "OFAC"],
+      "stix_type": "tool",
+      "stix_tool_types": ["credential-exploitation"],
+      "applicable_standards": ["NIST_800-86", "ISO_27042"]
     },
     {
       "id": "svc_forged_docs",
       "label": "Forged/Fraudulent Documents",
       "type": "Service",
-      "details": "Identity documents, customizable with photos"
+      "details": "Identity documents, customizable with photos",
+      "sources": ["OFAC", "DOJ"],
+      "stix_type": "tool",
+      "xpolizei_type": "Straftat (Urkundenfälschung)"
     },
     {
       "id": "svc_stolen_data",
       "label": "Stolen Financial Data",
       "type": "Service",
-      "details": "Credit card information, personal data"
+      "details": "Credit card information, personal data",
+      "sources": ["OFAC", "DOJ"],
+      "stix_type": "tool",
+      "applicable_standards": ["ISO_27037", "NIST_800-86"]
     },
     {
       "id": "svc_hacking",
       "label": "Hacking Services & Tools",
-      "type": "Service"
+      "type": "Service",
+      "sources": ["OFAC", "DOJ"],
+      "stix_type": "tool",
+      "stix_tool_types": ["exploitation"],
+      "applicable_standards": ["NIST_800-86"]
     },
     {
       "id": "svc_raas",
       "label": "Ransomware-as-a-Service",
-      "type": "Service"
+      "type": "Service",
+      "note": "Facilitated laundering of $8M+ in ransomware proceeds (Ryuk, Sodinokibi/REvil, Conti variants)",
+      "sources": ["OFAC"],
+      "stix_type": "malware",
+      "stix_malware_types": ["ransomware"]
     },
     {
       "id": "svc_counterfeit",
       "label": "Counterfeit Currency",
-      "type": "Service"
+      "type": "Service",
+      "sources": ["DOJ"],
+      "stix_type": "tool",
+      "xpolizei_type": "Straftat (Geldfälschung)"
     },
     {
       "id": "svc_escrow",
       "label": "Escrow System",
-      "type": "Service"
+      "type": "Service",
+      "sources": ["TRM", "CHA_SANCTIONS"],
+      "stix_type": "tool"
     },
     {
       "id": "svc_dispute",
       "label": "Dispute Resolution",
-      "type": "Service"
+      "type": "Service",
+      "sources": ["TRM", "CHA_SANCTIONS"],
+      "stix_type": "tool"
     },
     {
       "id": "svc_reputation",
       "label": "Feedback & Reputation System",
       "type": "Service",
-      "details": "5-star rating system"
+      "details": "5-star rating system",
+      "sources": ["TRM", "CHA_SANCTIONS"],
+      "stix_type": "tool"
     },
     {
       "id": "evt_founded",
       "label": "Hydra Market Founded",
       "type": "Event",
       "date": "2015",
-      "description": "Launch of Hydra darknet marketplace"
+      "description": "Launch of Hydra darknet marketplace",
+      "sources": ["ELLIPTIC", "TRM"],
+      "stix_type": "campaign",
+      "stix_first_seen": "2015-12"
     },
     {
       "id": "evt_ramp_closure",
       "label": "RAMP Shut Down",
       "type": "Event",
       "date": "2017-09",
-      "description": "Russian authorities close RAMP; Hydra becomes dominant"
+      "description": "Russian authorities close RAMP; Hydra becomes dominant",
+      "sources": ["TRM", "GWERN"],
+      "stix_type": "campaign"
     },
     {
       "id": "evt_colonial_pipeline",
@@ -435,14 +782,21 @@
       "date": "2021-05-07",
       "ransom_btc": "75",
       "ransom_usd": "4400000",
-      "recovered_btc": "63.7"
+      "recovered_btc": "63.7",
+      "sources": ["OFAC", "CHA_SANCTIONS"],
+      "stix_type": "incident"
     },
     {
       "id": "evt_investigation_start",
       "label": "BKA/ZIT Investigation Begins",
       "type": "Event",
       "date": "2021-08",
-      "description": "German authorities begin investigating Hydra infrastructure"
+      "description": "German authorities begin investigating Hydra infrastructure",
+      "sources": ["BKA", "ELLIPTIC"],
+      "stix_type": "sighting",
+      "stix_first_seen": "2021-08",
+      "xpolizei_type": "Ereignis",
+      "applicable_standards": ["ISO_27037"]
     },
     {
       "id": "evt_seizure",
@@ -452,21 +806,61 @@
       "btc_seized": "543.3",
       "btc_value_eur": "23000000",
       "btc_value_usd": "25000000",
-      "transactions_count": "88"
+      "transactions_count": "88",
+      "sources": ["BKA", "DOJ", "OFAC", "ELLIPTIC"],
+      "stix_type": "sighting",
+      "stix_secondary_type": "observed-data",
+      "xpolizei_type": "Sicherstellung",
+      "applicable_standards": ["ISO_27037", "ISO_27042"]
     },
     {
       "id": "evt_pavlov_indictment",
       "label": "Pavlov Indicted",
       "type": "Event",
       "date": "2022-04-05",
-      "court": "U.S. District Court N.D. California"
+      "court": "U.S. District Court N.D. California",
+      "sources": ["DOJ"],
+      "stix_type": "note",
+      "xpolizei_type": "Ereignis"
     },
     {
       "id": "evt_ofac_sanctions",
       "label": "OFAC Sanctions Hydra & Garantex",
       "type": "Event",
       "date": "2022-04-05",
-      "crypto_addresses_sanctioned": ">100"
+      "crypto_addresses_sanctioned": ">100",
+      "legal_basis": "Executive Order 13694",
+      "sources": ["OFAC"],
+      "stix_type": "note",
+      "applicable_standards": ["EO_13694"]
+    },
+    {
+      "id": "evt_omg_ddos",
+      "label": "OMG!OMG! DDoS Attack",
+      "type": "Event",
+      "date": "2022-06",
+      "description": "OMG!OMG! market hit by DDoS attack; caused migration of vendors to Mega and Blacksprut",
+      "sources": ["CHA_POST_HYDRA"],
+      "stix_type": "incident"
+    },
+    {
+      "id": "evt_blacksprut_hack",
+      "label": "Blacksprut Market Hacked",
+      "type": "Event",
+      "date": "2022-11",
+      "description": "Blacksprut marketplace hacked after reaching 68.5% market share",
+      "sources": ["CHA_POST_HYDRA"],
+      "stix_type": "incident"
+    },
+    {
+      "id": "evt_garantex_license_revoked",
+      "label": "Garantex Estonian License Revoked",
+      "type": "Event",
+      "date": "2022-02",
+      "description": "Estonia's FIU revoked Garantex's virtual currency license for AML violations; Garantex continued operating from Moscow",
+      "sources": ["OFAC"],
+      "stix_type": "note",
+      "applicable_standards": ["EO_13694"]
     },
     {
       "id": "evt_moiseyev_sentence",
@@ -474,91 +868,130 @@
       "type": "Event",
       "date": "2024-12-02",
       "court": "Moscow Regional Court",
-      "historic_note": "First life sentence for drug trafficking in Russia"
+      "historic_note": "First life sentence for drug trafficking in Russia",
+      "sources": ["GWERN", "RUSSIAN_COURT_2024"],
+      "stix_type": "note",
+      "xpolizei_type": "Urteil"
     },
     {
       "id": "evt_bitpapa_sanctions",
       "label": "Bitpapa & NetExchange Sanctioned",
       "type": "Event",
       "date": "2024-03",
-      "reason": "Transacting with Hydra and Garantex"
+      "reason": "Transacting with Hydra and Garantex",
+      "sources": ["OFAC"],
+      "stix_type": "note",
+      "applicable_standards": ["EO_13694"]
     },
     {
       "id": "country_russia",
       "label": "Russia",
-      "type": "Country"
+      "type": "Country",
+      "sources": ["TRM", "OFAC"],
+      "stix_type": "location"
     },
     {
       "id": "country_ukraine",
       "label": "Ukraine",
-      "type": "Country"
+      "type": "Country",
+      "sources": ["TRM"],
+      "stix_type": "location"
     },
     {
       "id": "country_belarus",
       "label": "Belarus",
-      "type": "Country"
+      "type": "Country",
+      "sources": ["TRM"],
+      "stix_type": "location"
     },
     {
       "id": "country_kazakhstan",
       "label": "Kazakhstan",
-      "type": "Country"
+      "type": "Country",
+      "sources": ["TRM"],
+      "stix_type": "location"
     },
     {
       "id": "country_azerbaijan",
       "label": "Azerbaijan",
-      "type": "Country"
+      "type": "Country",
+      "sources": ["TRM"],
+      "stix_type": "location"
     },
     {
       "id": "country_armenia",
       "label": "Armenia",
-      "type": "Country"
+      "type": "Country",
+      "sources": ["TRM"],
+      "stix_type": "location"
     },
     {
       "id": "country_kyrgyzstan",
       "label": "Kyrgyzstan",
-      "type": "Country"
+      "type": "Country",
+      "sources": ["TRM"],
+      "stix_type": "location"
     },
     {
       "id": "country_uzbekistan",
       "label": "Uzbekistan",
-      "type": "Country"
+      "type": "Country",
+      "sources": ["TRM"],
+      "stix_type": "location"
     },
     {
       "id": "country_tajikistan",
       "label": "Tajikistan",
-      "type": "Country"
+      "type": "Country",
+      "sources": ["TRM"],
+      "stix_type": "location"
     },
     {
       "id": "country_moldova",
       "label": "Moldova",
-      "type": "Country"
+      "type": "Country",
+      "sources": ["TRM"],
+      "stix_type": "location"
     },
     {
       "id": "country_germany",
       "label": "Germany",
-      "type": "Country"
+      "type": "Country",
+      "sources": ["BKA", "DOJ"],
+      "stix_type": "location"
     },
     {
       "id": "country_usa",
       "label": "USA",
-      "type": "Country"
+      "type": "Country",
+      "sources": ["DOJ", "OFAC"],
+      "stix_type": "location"
     },
     {
       "id": "country_estonia",
       "label": "Estonia",
-      "type": "Country"
+      "type": "Country",
+      "note": "Garantex was registered here but lost license Feb 2022",
+      "sources": ["OFAC"],
+      "stix_type": "location"
     },
     {
       "id": "country_mexico",
       "label": "Mexico",
-      "type": "Country"
+      "type": "Country",
+      "sources": ["TRM"],
+      "stix_type": "location"
     },
     {
       "id": "hydra_crypto_addresses",
       "label": "Hydra Crypto Addresses (SDN List)",
       "type": "CryptoAsset",
       "count": ">100",
-      "list": "OFAC SDN List"
+      "list": "OFAC SDN List",
+      "sources": ["OFAC"],
+      "stix_type": "indicator",
+      "stix_indicator_types": ["malicious-activity"],
+      "applicable_standards": ["EO_13694", "ISO_27042"]
     },
     {
       "id": "seized_btc",
@@ -567,7 +1000,11 @@
       "amount_btc": "543.3",
       "value_eur": "23000000",
       "value_usd": "25000000",
-      "seizure_date": "2022-04-05"
+      "seizure_date": "2022-04-05",
+      "transaction_count": "88",
+      "sources": ["BKA", "ELLIPTIC"],
+      "stix_type": "observed-data",
+      "applicable_standards": ["ISO_27037", "ISO_27042", "NIST_800-86"]
     },
     {
       "id": "infra_servers",
@@ -575,576 +1012,898 @@
       "type": "Infrastructure",
       "location": "Germany",
       "hosted_by": "Promservice Ltd.",
-      "network": "Tor"
+      "network": "Tor",
+      "sources": ["BKA", "DOJ", "CHA_SANCTIONS"],
+      "stix_type": "infrastructure",
+      "stix_infrastructure_types": ["hosting-target-lists"],
+      "xpolizei_type": "Infrastruktur",
+      "applicable_standards": ["ISO_27037"]
     },
     {
       "id": "infra_tor",
       "label": "Tor Network",
       "type": "Infrastructure",
-      "subtype": "Anonymization Network"
+      "subtype": "Anonymization Network",
+      "sources": ["CHA_SANCTIONS", "TRM", "ELLIPTIC"],
+      "stix_type": "infrastructure",
+      "stix_infrastructure_types": ["anonymization"]
+    },
+    {
+      "id": "eo_13694",
+      "label": "Executive Order 13694",
+      "type": "LegalBasis",
+      "title": "Blocking Property of Certain Persons Engaging in Significant Malicious Cyber-Enabled Activities",
+      "issued_by": "President of the United States",
+      "note": "Legal authority under which OFAC designated Hydra, Garantex, SUEX, CHATEX, Bitpapa, NetExchange",
+      "sources": ["OFAC"],
+      "stix_type": "note"
+    },
+    {
+      "id": "dnm_market_2022",
+      "label": "2022 DNM Market Overview",
+      "type": "MarketData",
+      "total_revenue_2022_usd": "1500000000",
+      "total_revenue_2021_usd": "3100000000",
+      "decline_pct": "51.6%",
+      "note": "Total 2022 DNM revenue fell from $3.1B (2021) to $1.5B — largely due to Hydra shutdown",
+      "sources": ["CHA_POST_HYDRA"],
+      "stix_type": "note"
     }
   ],
   "relationships": [
     {
       "source_id": "moiseyev",
       "target_id": "hydra_market",
-      "relationship_type": "FOUNDED_AND_OPERATED"
+      "relationship_type": "FOUNDED_AND_OPERATED",
+      "sources": ["GWERN", "RUSSIAN_COURT_2024"],
+      "stix_relationship_type": "attributed-to"
     },
     {
       "source_id": "pavlov",
       "target_id": "hydra_market",
-      "relationship_type": "ADMINISTERED_SERVERS"
+      "relationship_type": "ADMINISTERED_SERVERS",
+      "sources": ["DOJ", "CHA_SANCTIONS"],
+      "stix_relationship_type": "uses"
     },
     {
       "source_id": "pavlov",
       "target_id": "promservice",
-      "relationship_type": "OWNED_AND_OPERATED"
+      "relationship_type": "OWNED_AND_OPERATED",
+      "sources": ["DOJ", "CHA_SANCTIONS"],
+      "stix_relationship_type": "attributed-to"
     },
     {
       "source_id": "moiseyev_accomplices",
       "target_id": "hydra_market",
       "relationship_type": "OPERATED_WITH",
-      "details": "15 co-conspirators"
+      "details": "15 co-conspirators",
+      "sources": ["GWERN", "RUSSIAN_COURT_2024"],
+      "stix_relationship_type": "attributed-to"
     },
     {
       "source_id": "zwiebel",
       "target_id": "evt_seizure",
-      "relationship_type": "LED_OPERATION"
+      "relationship_type": "LED_OPERATION",
+      "sources": ["BKA"],
+      "stix_relationship_type": "sighting"
     },
     {
       "source_id": "zwiebel",
       "target_id": "bka",
-      "relationship_type": "WORKS_FOR"
+      "relationship_type": "WORKS_FOR",
+      "sources": ["BKA"],
+      "stix_relationship_type": "attributed-to"
     },
     {
       "source_id": "promservice",
       "target_id": "hydra_market",
       "relationship_type": "HOSTED_SERVERS_FOR",
-      "start": "2015-11"
+      "start": "2015-11",
+      "sources": ["DOJ", "CHA_SANCTIONS"],
+      "stix_relationship_type": "hosts"
     },
     {
       "source_id": "promservice",
       "target_id": "infra_servers",
-      "relationship_type": "ADMINISTERED"
+      "relationship_type": "ADMINISTERED",
+      "sources": ["DOJ"],
+      "stix_relationship_type": "owns"
     },
     {
       "source_id": "hydra_market",
       "target_id": "infra_servers",
-      "relationship_type": "INFRASTRUCTURE"
+      "relationship_type": "INFRASTRUCTURE",
+      "sources": ["BKA", "DOJ"],
+      "stix_relationship_type": "uses"
     },
     {
       "source_id": "infra_servers",
       "target_id": "country_germany",
-      "relationship_type": "LOCATED_IN"
+      "relationship_type": "LOCATED_IN",
+      "sources": ["BKA", "DOJ"],
+      "stix_relationship_type": "located-at"
     },
     {
       "source_id": "hydra_market",
       "target_id": "infra_tor",
-      "relationship_type": "ACCESSIBLE_VIA"
+      "relationship_type": "ACCESSIBLE_VIA",
+      "sources": ["CHA_SANCTIONS", "TRM"],
+      "stix_relationship_type": "uses"
     },
     {
       "source_id": "bka",
       "target_id": "hydra_market",
       "relationship_type": "INVESTIGATED_AND_SEIZED",
       "start": "2021-08",
-      "end": "2022-04-05"
+      "end": "2022-04-05",
+      "sources": ["BKA", "DOJ"],
+      "stix_relationship_type": "investigates"
     },
     {
       "source_id": "zit",
       "target_id": "hydra_market",
       "relationship_type": "INVESTIGATED",
-      "start": "2021-08"
+      "start": "2021-08",
+      "sources": ["BKA"],
+      "stix_relationship_type": "investigates"
     },
     {
       "source_id": "usdoj",
       "target_id": "hydra_market",
-      "relationship_type": "COORDINATED_INVESTIGATION"
+      "relationship_type": "COORDINATED_INVESTIGATION",
+      "sources": ["DOJ"],
+      "stix_relationship_type": "investigates"
     },
     {
       "source_id": "usdoj",
       "target_id": "pavlov",
       "relationship_type": "INDICTED",
-      "date": "2022-04-05"
+      "date": "2022-04-05",
+      "sources": ["DOJ"],
+      "stix_relationship_type": "targets"
     },
     {
       "source_id": "ofac",
       "target_id": "hydra_market",
       "relationship_type": "SANCTIONED",
-      "date": "2022-04-05"
+      "date": "2022-04-05",
+      "legal_basis": "EO 13694",
+      "sources": ["OFAC"],
+      "stix_relationship_type": "targets",
+      "applicable_standards": ["EO_13694"]
     },
     {
       "source_id": "ofac",
       "target_id": "garantex",
       "relationship_type": "SANCTIONED",
-      "date": "2022-04-05"
+      "date": "2022-04-05",
+      "legal_basis": "EO 13694",
+      "sources": ["OFAC"],
+      "stix_relationship_type": "targets",
+      "applicable_standards": ["EO_13694"]
     },
     {
       "source_id": "ofac",
       "target_id": "suex",
       "relationship_type": "SANCTIONED",
-      "date": "2021"
+      "date": "2021",
+      "legal_basis": "EO 13694",
+      "sources": ["OFAC", "ELLIPTIC"],
+      "stix_relationship_type": "targets",
+      "applicable_standards": ["EO_13694"]
     },
     {
       "source_id": "ofac",
       "target_id": "chatex",
       "relationship_type": "SANCTIONED",
-      "date": "2021"
+      "date": "2021",
+      "legal_basis": "EO 13694",
+      "sources": ["OFAC", "ELLIPTIC"],
+      "stix_relationship_type": "targets",
+      "applicable_standards": ["EO_13694"]
     },
     {
       "source_id": "ofac",
       "target_id": "bitpapa",
       "relationship_type": "SANCTIONED",
-      "date": "2024-03"
+      "date": "2024-03",
+      "legal_basis": "EO 13694",
+      "sources": ["OFAC"],
+      "stix_relationship_type": "targets",
+      "applicable_standards": ["EO_13694"]
     },
     {
       "source_id": "ofac",
       "target_id": "netexchange",
       "relationship_type": "SANCTIONED",
-      "date": "2024-03"
+      "date": "2024-03",
+      "legal_basis": "EO 13694",
+      "sources": ["OFAC"],
+      "stix_relationship_type": "targets",
+      "applicable_standards": ["EO_13694"]
     },
     {
       "source_id": "fbi",
       "target_id": "hydra_market",
-      "relationship_type": "INVESTIGATED"
+      "relationship_type": "INVESTIGATED",
+      "sources": ["DOJ"],
+      "stix_relationship_type": "investigates"
     },
     {
       "source_id": "dea",
       "target_id": "hydra_market",
-      "relationship_type": "INVESTIGATED"
+      "relationship_type": "INVESTIGATED",
+      "sources": ["DOJ"],
+      "stix_relationship_type": "investigates"
     },
     {
       "source_id": "irs_ci",
       "target_id": "hydra_market",
-      "relationship_type": "INVESTIGATED"
+      "relationship_type": "INVESTIGATED",
+      "sources": ["DOJ"],
+      "stix_relationship_type": "investigates"
     },
     {
       "source_id": "hsi",
       "target_id": "hydra_market",
-      "relationship_type": "INVESTIGATED"
+      "relationship_type": "INVESTIGATED",
+      "sources": ["DOJ"],
+      "stix_relationship_type": "investigates"
     },
     {
       "source_id": "uspis",
       "target_id": "hydra_market",
-      "relationship_type": "INVESTIGATED"
+      "relationship_type": "INVESTIGATED",
+      "sources": ["DOJ"],
+      "stix_relationship_type": "investigates"
     },
     {
       "source_id": "jcode",
       "target_id": "hydra_market",
-      "relationship_type": "COORDINATED_INVESTIGATION"
+      "relationship_type": "COORDINATED_INVESTIGATION",
+      "sources": ["DOJ"],
+      "stix_relationship_type": "investigates"
     },
     {
       "source_id": "fbi",
       "target_id": "jcode",
-      "relationship_type": "MEMBER_OF"
+      "relationship_type": "MEMBER_OF",
+      "sources": ["DOJ"],
+      "stix_relationship_type": "part-of"
     },
     {
       "source_id": "dea",
       "target_id": "jcode",
-      "relationship_type": "MEMBER_OF"
+      "relationship_type": "MEMBER_OF",
+      "sources": ["DOJ"],
+      "stix_relationship_type": "part-of"
     },
     {
       "source_id": "irs_ci",
       "target_id": "jcode",
-      "relationship_type": "MEMBER_OF"
+      "relationship_type": "MEMBER_OF",
+      "sources": ["DOJ"],
+      "stix_relationship_type": "part-of"
     },
     {
       "source_id": "hsi",
       "target_id": "jcode",
-      "relationship_type": "MEMBER_OF"
+      "relationship_type": "MEMBER_OF",
+      "sources": ["DOJ"],
+      "stix_relationship_type": "part-of"
     },
     {
       "source_id": "uspis",
       "target_id": "jcode",
-      "relationship_type": "MEMBER_OF"
+      "relationship_type": "MEMBER_OF",
+      "sources": ["DOJ"],
+      "stix_relationship_type": "part-of"
     },
     {
       "source_id": "moscow_court",
       "target_id": "moiseyev",
       "relationship_type": "SENTENCED",
       "sentence": "Life imprisonment",
-      "date": "2024-12-02"
+      "date": "2024-12-02",
+      "sources": ["GWERN", "RUSSIAN_COURT_2024"],
+      "stix_relationship_type": "targets",
+      "xpolizei_type": "Urteil"
     },
     {
       "source_id": "moscow_court",
       "target_id": "moiseyev_accomplices",
       "relationship_type": "SENTENCED",
       "sentence": "8-23 years",
-      "date": "2024-12-02"
+      "date": "2024-12-02",
+      "sources": ["GWERN", "RUSSIAN_COURT_2024"],
+      "stix_relationship_type": "targets",
+      "xpolizei_type": "Urteil"
     },
     {
       "source_id": "us_court_ndca",
       "target_id": "pavlov",
       "relationship_type": "INDICTED",
       "charges": "Narcotics conspiracy; Money laundering conspiracy",
-      "date": "2022-04-05"
+      "date": "2022-04-05",
+      "sources": ["DOJ"],
+      "stix_relationship_type": "targets",
+      "xpolizei_type": "Ereignis"
     },
     {
       "source_id": "hydra_market",
       "target_id": "svc_drugs",
-      "relationship_type": "PROVIDED_SERVICE"
+      "relationship_type": "PROVIDED_SERVICE",
+      "sources": ["TRM", "CHA_SANCTIONS", "OFAC"],
+      "stix_relationship_type": "uses"
     },
     {
       "source_id": "hydra_market",
       "target_id": "svc_dead_drop",
-      "relationship_type": "PROVIDED_SERVICE"
+      "relationship_type": "PROVIDED_SERVICE",
+      "sources": ["TRM", "CHA_SANCTIONS", "VOROBYOV_2020"],
+      "stix_relationship_type": "uses"
     },
     {
       "source_id": "hydra_market",
       "target_id": "svc_btc_mixer",
-      "relationship_type": "PROVIDED_SERVICE"
+      "relationship_type": "PROVIDED_SERVICE",
+      "sources": ["CHA_SANCTIONS", "OFAC", "ELLIPTIC"],
+      "stix_relationship_type": "uses"
     },
     {
       "source_id": "hydra_market",
       "target_id": "svc_cashout",
-      "relationship_type": "PROVIDED_SERVICE"
+      "relationship_type": "PROVIDED_SERVICE",
+      "sources": ["TRM", "OFAC"],
+      "stix_relationship_type": "uses"
     },
     {
       "source_id": "hydra_market",
       "target_id": "svc_forged_docs",
-      "relationship_type": "PROVIDED_SERVICE"
+      "relationship_type": "PROVIDED_SERVICE",
+      "sources": ["OFAC", "DOJ"],
+      "stix_relationship_type": "uses"
     },
     {
       "source_id": "hydra_market",
       "target_id": "svc_stolen_data",
-      "relationship_type": "PROVIDED_SERVICE"
+      "relationship_type": "PROVIDED_SERVICE",
+      "sources": ["OFAC", "DOJ"],
+      "stix_relationship_type": "uses"
     },
     {
       "source_id": "hydra_market",
       "target_id": "svc_hacking",
-      "relationship_type": "PROVIDED_SERVICE"
+      "relationship_type": "PROVIDED_SERVICE",
+      "sources": ["OFAC", "DOJ"],
+      "stix_relationship_type": "uses"
     },
     {
       "source_id": "hydra_market",
       "target_id": "svc_raas",
-      "relationship_type": "PROVIDED_SERVICE"
+      "relationship_type": "PROVIDED_SERVICE",
+      "sources": ["OFAC"],
+      "stix_relationship_type": "uses"
     },
     {
       "source_id": "hydra_market",
       "target_id": "svc_counterfeit",
-      "relationship_type": "PROVIDED_SERVICE"
+      "relationship_type": "PROVIDED_SERVICE",
+      "sources": ["DOJ"],
+      "stix_relationship_type": "uses"
     },
     {
       "source_id": "hydra_market",
       "target_id": "svc_escrow",
-      "relationship_type": "PROVIDED_SERVICE"
+      "relationship_type": "PROVIDED_SERVICE",
+      "sources": ["TRM", "CHA_SANCTIONS"],
+      "stix_relationship_type": "uses"
     },
     {
       "source_id": "hydra_market",
       "target_id": "svc_dispute",
-      "relationship_type": "PROVIDED_SERVICE"
+      "relationship_type": "PROVIDED_SERVICE",
+      "sources": ["TRM", "CHA_SANCTIONS"],
+      "stix_relationship_type": "uses"
     },
     {
       "source_id": "hydra_market",
       "target_id": "svc_reputation",
-      "relationship_type": "PROVIDED_SERVICE"
+      "relationship_type": "PROVIDED_SERVICE",
+      "sources": ["TRM", "CHA_SANCTIONS"],
+      "stix_relationship_type": "uses"
     },
     {
       "source_id": "hydra_market",
       "target_id": "country_russia",
-      "relationship_type": "SERVED_MARKET"
+      "relationship_type": "SERVED_MARKET",
+      "sources": ["TRM"],
+      "stix_relationship_type": "located-at"
     },
     {
       "source_id": "hydra_market",
       "target_id": "country_ukraine",
-      "relationship_type": "SERVED_MARKET"
+      "relationship_type": "SERVED_MARKET",
+      "sources": ["TRM"],
+      "stix_relationship_type": "located-at"
     },
     {
       "source_id": "hydra_market",
       "target_id": "country_belarus",
-      "relationship_type": "SERVED_MARKET"
+      "relationship_type": "SERVED_MARKET",
+      "sources": ["TRM"],
+      "stix_relationship_type": "located-at"
     },
     {
       "source_id": "hydra_market",
       "target_id": "country_kazakhstan",
-      "relationship_type": "SERVED_MARKET"
+      "relationship_type": "SERVED_MARKET",
+      "sources": ["TRM"],
+      "stix_relationship_type": "located-at"
     },
     {
       "source_id": "hydra_market",
       "target_id": "country_azerbaijan",
-      "relationship_type": "SERVED_MARKET"
+      "relationship_type": "SERVED_MARKET",
+      "sources": ["TRM"],
+      "stix_relationship_type": "located-at"
     },
     {
       "source_id": "hydra_market",
       "target_id": "country_armenia",
-      "relationship_type": "SERVED_MARKET"
+      "relationship_type": "SERVED_MARKET",
+      "sources": ["TRM"],
+      "stix_relationship_type": "located-at"
     },
     {
       "source_id": "hydra_market",
       "target_id": "country_kyrgyzstan",
-      "relationship_type": "SERVED_MARKET"
+      "relationship_type": "SERVED_MARKET",
+      "sources": ["TRM"],
+      "stix_relationship_type": "located-at"
     },
     {
       "source_id": "hydra_market",
       "target_id": "country_uzbekistan",
-      "relationship_type": "SERVED_MARKET"
+      "relationship_type": "SERVED_MARKET",
+      "sources": ["TRM"],
+      "stix_relationship_type": "located-at"
     },
     {
       "source_id": "hydra_market",
       "target_id": "country_tajikistan",
-      "relationship_type": "SERVED_MARKET"
+      "relationship_type": "SERVED_MARKET",
+      "sources": ["TRM"],
+      "stix_relationship_type": "located-at"
     },
     {
       "source_id": "hydra_market",
       "target_id": "country_moldova",
-      "relationship_type": "SERVED_MARKET"
+      "relationship_type": "SERVED_MARKET",
+      "sources": ["TRM"],
+      "stix_relationship_type": "located-at"
     },
     {
       "source_id": "ramp",
       "target_id": "hydra_market",
       "relationship_type": "COMPETITOR_OF",
       "period": "2015-2017",
-      "outcome": "Hydra became dominant after RAMP closure"
+      "outcome": "Hydra became dominant after RAMP closure",
+      "sources": ["TRM", "GWERN"],
+      "stix_relationship_type": "related-to"
     },
     {
       "source_id": "hydra_market",
       "target_id": "ramp",
-      "relationship_type": "SUCCEEDED"
+      "relationship_type": "SUCCEEDED",
+      "sources": ["TRM", "GWERN"],
+      "stix_relationship_type": "derived-from"
     },
     {
       "source_id": "wayaway",
       "target_id": "hydra_market",
-      "relationship_type": "PARTNER_FORUM"
+      "relationship_type": "PARTNER_FORUM",
+      "sources": ["TRM", "GWERN"],
+      "stix_relationship_type": "related-to"
     },
     {
       "source_id": "omg_market",
       "target_id": "hydra_market",
-      "relationship_type": "SUCCESSOR_OF"
+      "relationship_type": "SUCCESSOR_OF",
+      "note": "Shared vendor/admin deposit addresses indicate overlap",
+      "sources": ["CHA_POST_HYDRA"],
+      "stix_relationship_type": "derived-from"
     },
     {
       "source_id": "mega_market",
       "target_id": "hydra_market",
-      "relationship_type": "SUCCESSOR_OF"
+      "relationship_type": "SUCCESSOR_OF",
+      "sources": ["CHA_POST_HYDRA"],
+      "stix_relationship_type": "derived-from"
     },
     {
       "source_id": "blacksprut",
       "target_id": "hydra_market",
-      "relationship_type": "SUCCESSOR_OF"
+      "relationship_type": "SUCCESSOR_OF",
+      "sources": ["CHA_POST_HYDRA"],
+      "stix_relationship_type": "derived-from"
     },
     {
       "source_id": "solaris",
       "target_id": "hydra_market",
-      "relationship_type": "SUCCESSOR_OF"
+      "relationship_type": "SUCCESSOR_OF",
+      "sources": ["CHA_POST_HYDRA"],
+      "stix_relationship_type": "derived-from"
     },
     {
       "source_id": "kraken_dnm",
       "target_id": "hydra_market",
-      "relationship_type": "SUCCESSOR_OF"
+      "relationship_type": "SUCCESSOR_OF",
+      "sources": ["CHA_POST_HYDRA"],
+      "stix_relationship_type": "derived-from"
     },
     {
       "source_id": "kraken_dnm",
       "target_id": "solaris",
       "relationship_type": "CAPTURED",
-      "date": "2023-01"
+      "date": "2023-01",
+      "sources": ["CHA_POST_HYDRA"],
+      "stix_relationship_type": "related-to"
     },
     {
       "source_id": "garantex",
       "target_id": "hydra_market",
       "relationship_type": "FACILITATED_LAUNDERING",
-      "amount_usd": "2600000"
+      "amount_usd": "2600000",
+      "sources": ["OFAC", "ELLIPTIC"],
+      "stix_relationship_type": "related-to",
+      "applicable_standards": ["ISO_27042"]
     },
     {
       "source_id": "suex",
       "target_id": "hydra_market",
-      "relationship_type": "FACILITATED_LAUNDERING"
+      "relationship_type": "FACILITATED_LAUNDERING",
+      "sources": ["OFAC", "ELLIPTIC"],
+      "stix_relationship_type": "related-to",
+      "applicable_standards": ["ISO_27042"]
     },
     {
       "source_id": "chatex",
       "target_id": "hydra_market",
-      "relationship_type": "FACILITATED_LAUNDERING"
+      "relationship_type": "FACILITATED_LAUNDERING",
+      "sources": ["OFAC", "ELLIPTIC"],
+      "stix_relationship_type": "related-to",
+      "applicable_standards": ["ISO_27042"]
     },
     {
       "source_id": "bitpapa",
       "target_id": "hydra_market",
-      "relationship_type": "TRANSACTED_WITH"
+      "relationship_type": "TRANSACTED_WITH",
+      "sources": ["OFAC"],
+      "stix_relationship_type": "related-to",
+      "applicable_standards": ["EO_13694"]
     },
     {
       "source_id": "netexchange",
       "target_id": "hydra_market",
-      "relationship_type": "TRANSACTED_WITH"
+      "relationship_type": "TRANSACTED_WITH",
+      "sources": ["OFAC"],
+      "stix_relationship_type": "related-to",
+      "applicable_standards": ["EO_13694"]
     },
     {
       "source_id": "darkside",
       "target_id": "hydra_market",
       "relationship_type": "USED_FOR_LAUNDERING",
-      "detail": "4% of BTC gains for cash-out"
+      "detail": "4% of BTC gains for cash-out",
+      "sources": ["OFAC", "CHA_SANCTIONS"],
+      "stix_relationship_type": "uses",
+      "applicable_standards": ["ISO_27042"]
     },
     {
       "source_id": "ryuk",
       "target_id": "hydra_market",
       "relationship_type": "USED_FOR_LAUNDERING",
-      "detail": "Part of $8M ransomware proceeds"
+      "detail": "Part of $8M ransomware proceeds",
+      "sources": ["OFAC"],
+      "stix_relationship_type": "uses"
     },
     {
       "source_id": "sodinokibi",
       "target_id": "hydra_market",
       "relationship_type": "USED_FOR_LAUNDERING",
-      "detail": "Part of $8M ransomware proceeds"
+      "detail": "Part of $8M ransomware proceeds",
+      "sources": ["OFAC"],
+      "stix_relationship_type": "uses"
     },
     {
       "source_id": "conti",
       "target_id": "hydra_market",
       "relationship_type": "USED_FOR_LAUNDERING",
-      "detail": "~$6M via Garantex"
+      "detail": "~$6M via Garantex",
+      "sources": ["OFAC", "ELLIPTIC"],
+      "stix_relationship_type": "uses"
     },
     {
       "source_id": "conti",
       "target_id": "garantex",
       "relationship_type": "USED_FOR_LAUNDERING",
-      "amount_usd": "6000000"
+      "amount_usd": "6000000",
+      "sources": ["OFAC", "ELLIPTIC"],
+      "stix_relationship_type": "uses"
     },
     {
       "source_id": "sinaloa_cartel",
       "target_id": "hydra_market",
       "relationship_type": "USED_FOR_LAUNDERING",
       "method": "Smurfing (<$7500 transactions)",
-      "accounts": "12 linked"
+      "accounts": "12 linked",
+      "sources": ["TRM"],
+      "stix_relationship_type": "uses"
     },
     {
       "source_id": "cjng",
       "target_id": "hydra_market",
       "relationship_type": "USED_FOR_LAUNDERING",
-      "method": "Smurfing (<$7500 transactions)"
+      "method": "Smurfing (<$7500 transactions)",
+      "sources": ["TRM"],
+      "stix_relationship_type": "uses"
     },
     {
       "source_id": "zambada",
       "target_id": "sinaloa_cartel",
-      "relationship_type": "LEADS"
+      "relationship_type": "LEADS",
+      "sources": ["TRM"],
+      "stix_relationship_type": "attributed-to"
     },
     {
       "source_id": "oseguera",
       "target_id": "cjng",
-      "relationship_type": "LEADS"
+      "relationship_type": "LEADS",
+      "sources": ["TRM"],
+      "stix_relationship_type": "attributed-to"
     },
     {
       "source_id": "morgan",
       "target_id": "hydra_market",
       "relationship_type": "USED_MIXER_SERVICE",
-      "detail": "Bitfinex hack proceeds laundering"
+      "detail": "Bitfinex hack proceeds laundering",
+      "sources": ["ELLIPTIC"],
+      "stix_relationship_type": "uses",
+      "applicable_standards": ["ISO_27042"]
     },
     {
       "source_id": "lichtenstein",
       "target_id": "hydra_market",
       "relationship_type": "USED_MIXER_SERVICE",
-      "detail": "Bitfinex hack proceeds laundering"
+      "detail": "Bitfinex hack proceeds laundering",
+      "sources": ["ELLIPTIC"],
+      "stix_relationship_type": "uses",
+      "applicable_standards": ["ISO_27042"]
     },
     {
       "source_id": "morgan",
       "target_id": "bitfinex",
-      "relationship_type": "CONSPIRED_TO_LAUNDER_FROM"
+      "relationship_type": "CONSPIRED_TO_LAUNDER_FROM",
+      "sources": ["ELLIPTIC"],
+      "stix_relationship_type": "targets"
     },
     {
       "source_id": "lichtenstein",
       "target_id": "bitfinex",
-      "relationship_type": "CONSPIRED_TO_LAUNDER_FROM"
+      "relationship_type": "CONSPIRED_TO_LAUNDER_FROM",
+      "sources": ["ELLIPTIC"],
+      "stix_relationship_type": "targets"
     },
     {
       "source_id": "darkside",
       "target_id": "colonial_pipeline",
       "relationship_type": "ATTACKED",
       "date": "2021-05-07",
-      "ransom_btc": "75"
+      "ransom_btc": "75",
+      "sources": ["OFAC", "CHA_SANCTIONS"],
+      "stix_relationship_type": "targets"
     },
     {
       "source_id": "darkside",
       "target_id": "evt_colonial_pipeline",
-      "relationship_type": "PERPETRATED"
+      "relationship_type": "PERPETRATED",
+      "sources": ["OFAC", "CHA_SANCTIONS"],
+      "stix_relationship_type": "attributed-to"
     },
     {
       "source_id": "ofac",
       "target_id": "hydra_crypto_addresses",
       "relationship_type": "ADDED_TO_SDN_LIST",
-      "date": "2022-04-05"
+      "date": "2022-04-05",
+      "sources": ["OFAC"],
+      "stix_relationship_type": "indicates",
+      "applicable_standards": ["EO_13694"]
     },
     {
       "source_id": "bka",
       "target_id": "seized_btc",
       "relationship_type": "SEIZED",
-      "date": "2022-04-05"
+      "date": "2022-04-05",
+      "sources": ["BKA", "ELLIPTIC"],
+      "stix_relationship_type": "related-to",
+      "applicable_standards": ["ISO_27037", "ISO_27042", "NIST_800-86"],
+      "xpolizei_type": "Sicherstellung"
     },
     {
       "source_id": "evt_founded",
       "target_id": "hydra_market",
-      "relationship_type": "RELATES_TO"
+      "relationship_type": "RELATES_TO",
+      "sources": ["ELLIPTIC", "TRM"],
+      "stix_relationship_type": "related-to"
     },
     {
       "source_id": "evt_ramp_closure",
       "target_id": "ramp",
-      "relationship_type": "RELATES_TO"
+      "relationship_type": "RELATES_TO",
+      "sources": ["TRM", "GWERN"],
+      "stix_relationship_type": "related-to"
     },
     {
       "source_id": "evt_investigation_start",
       "target_id": "bka",
-      "relationship_type": "INITIATED_BY"
+      "relationship_type": "INITIATED_BY",
+      "sources": ["BKA", "ELLIPTIC"],
+      "stix_relationship_type": "related-to"
     },
     {
       "source_id": "evt_investigation_start",
       "target_id": "zit",
-      "relationship_type": "INITIATED_BY"
+      "relationship_type": "INITIATED_BY",
+      "sources": ["BKA"],
+      "stix_relationship_type": "related-to"
     },
     {
       "source_id": "evt_seizure",
       "target_id": "hydra_market",
-      "relationship_type": "RELATES_TO"
+      "relationship_type": "RELATES_TO",
+      "sources": ["BKA", "DOJ", "ELLIPTIC"],
+      "stix_relationship_type": "related-to"
     },
     {
       "source_id": "evt_seizure",
       "target_id": "bka",
-      "relationship_type": "EXECUTED_BY"
+      "relationship_type": "EXECUTED_BY",
+      "sources": ["BKA", "DOJ"],
+      "stix_relationship_type": "related-to"
     },
     {
       "source_id": "evt_pavlov_indictment",
       "target_id": "pavlov",
-      "relationship_type": "RELATES_TO"
+      "relationship_type": "RELATES_TO",
+      "sources": ["DOJ"],
+      "stix_relationship_type": "related-to"
     },
     {
       "source_id": "evt_ofac_sanctions",
       "target_id": "hydra_market",
-      "relationship_type": "RELATES_TO"
+      "relationship_type": "RELATES_TO",
+      "sources": ["OFAC"],
+      "stix_relationship_type": "related-to"
     },
     {
       "source_id": "evt_ofac_sanctions",
       "target_id": "garantex",
-      "relationship_type": "RELATES_TO"
+      "relationship_type": "RELATES_TO",
+      "sources": ["OFAC"],
+      "stix_relationship_type": "related-to"
+    },
+    {
+      "source_id": "evt_ofac_sanctions",
+      "target_id": "eo_13694",
+      "relationship_type": "LEGAL_BASIS",
+      "sources": ["OFAC"],
+      "stix_relationship_type": "related-to"
     },
     {
       "source_id": "evt_moiseyev_sentence",
       "target_id": "moiseyev",
-      "relationship_type": "RELATES_TO"
+      "relationship_type": "RELATES_TO",
+      "sources": ["GWERN", "RUSSIAN_COURT_2024"],
+      "stix_relationship_type": "related-to"
     },
     {
       "source_id": "evt_bitpapa_sanctions",
       "target_id": "bitpapa",
-      "relationship_type": "RELATES_TO"
+      "relationship_type": "RELATES_TO",
+      "sources": ["OFAC"],
+      "stix_relationship_type": "related-to"
     },
     {
       "source_id": "evt_bitpapa_sanctions",
       "target_id": "netexchange",
-      "relationship_type": "RELATES_TO"
+      "relationship_type": "RELATES_TO",
+      "sources": ["OFAC"],
+      "stix_relationship_type": "related-to"
+    },
+    {
+      "source_id": "evt_omg_ddos",
+      "target_id": "omg_market",
+      "relationship_type": "RELATES_TO",
+      "sources": ["CHA_POST_HYDRA"],
+      "stix_relationship_type": "related-to"
+    },
+    {
+      "source_id": "evt_blacksprut_hack",
+      "target_id": "blacksprut",
+      "relationship_type": "RELATES_TO",
+      "sources": ["CHA_POST_HYDRA"],
+      "stix_relationship_type": "related-to"
+    },
+    {
+      "source_id": "evt_garantex_license_revoked",
+      "target_id": "garantex",
+      "relationship_type": "RELATES_TO",
+      "sources": ["OFAC"],
+      "stix_relationship_type": "related-to"
+    },
+    {
+      "source_id": "evt_garantex_license_revoked",
+      "target_id": "country_estonia",
+      "relationship_type": "REGULATED_BY",
+      "sources": ["OFAC"],
+      "stix_relationship_type": "related-to"
+    },
+    {
+      "source_id": "garantex",
+      "target_id": "federation_tower",
+      "relationship_type": "LOCATED_AT",
+      "sources": ["OFAC", "ELLIPTIC"],
+      "stix_relationship_type": "located-at"
+    },
+    {
+      "source_id": "suex",
+      "target_id": "federation_tower",
+      "relationship_type": "LOCATED_AT",
+      "sources": ["OFAC", "ELLIPTIC"],
+      "stix_relationship_type": "located-at"
+    },
+    {
+      "source_id": "chatex",
+      "target_id": "federation_tower",
+      "relationship_type": "LOCATED_AT",
+      "sources": ["OFAC", "ELLIPTIC"],
+      "stix_relationship_type": "located-at"
     },
     {
       "source_id": "moiseyev",
       "target_id": "country_russia",
-      "relationship_type": "CITIZEN_OF"
+      "relationship_type": "CITIZEN_OF",
+      "sources": ["DOJ", "GWERN"],
+      "stix_relationship_type": "located-at"
     },
     {
       "source_id": "pavlov",
       "target_id": "country_russia",
-      "relationship_type": "CITIZEN_OF"
+      "relationship_type": "CITIZEN_OF",
+      "sources": ["DOJ"],
+      "stix_relationship_type": "located-at"
     },
     {
       "source_id": "zambada",
       "target_id": "country_mexico",
-      "relationship_type": "CITIZEN_OF"
+      "relationship_type": "CITIZEN_OF",
+      "sources": ["TRM"],
+      "stix_relationship_type": "located-at"
     },
     {
       "source_id": "oseguera",
       "target_id": "country_mexico",
-      "relationship_type": "CITIZEN_OF"
+      "relationship_type": "CITIZEN_OF",
+      "sources": ["TRM"],
+      "stix_relationship_type": "located-at"
     },
     {
       "source_id": "zwiebel",
       "target_id": "country_germany",
-      "relationship_type": "CITIZEN_OF"
+      "relationship_type": "CITIZEN_OF",
+      "sources": ["BKA"],
+      "stix_relationship_type": "located-at"
     }
   ]
 }

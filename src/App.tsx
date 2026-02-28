@@ -39,20 +39,59 @@ function App() {
   const [showIntroGuide, setShowIntroGuide] = useState<boolean>(true)
   const [isPlayingNarration, setIsPlayingNarration] = useState(false)
   const architectureRef = useRef<HTMLDivElement>(null)
-  const narrationAudioRef = useRef<HTMLAudioElement | null>(null)
+  const speechUtteranceRef = useRef<SpeechSynthesisUtterance | null>(null)
+
+  // German police officer narration text
+  const NARRATION_TEXT = `Meine Damen und Herren, hier spricht Kriminaldirektor Weber vom Bundeskriminalamt.
+
+Ich informiere Sie über die Operation Hydra — die Zerschlagung des weltweit größten Darknet-Marktplatzes.
+
+Hydra Market war seit 2015 aktiv und wurde über das Tor-Netzwerk betrieben. Mit über 17 Millionen Kundenkonten und 19.000 Verkäuferkonten wickelte die Plattform Transaktionen im Wert von über 5,2 Milliarden US-Dollar in Kryptowährungen ab.
+
+Das Angebot umfasste Betäubungsmittel aller Art, gestohlene Finanzdaten, gefälschte Dokumente, Hacking-Dienste sowie einen Bitcoin-Mixer zur Geldwäsche. Die Drogen wurden über ein sogenanntes Klad-System verteilt — tote Briefkästen in öffentlichen Räumen, vergraben, magnetisiert oder versteckt.
+
+Die Ermittlungen begannen im August 2021 in Zusammenarbeit mit der Zentralstelle zur Bekämpfung der Internetkriminalität in Frankfurt. Am 5. April 2022 haben wir die Server in Deutschland beschlagnahmt und 543,3 Bitcoin im Wert von rund 25 Millionen US-Dollar sichergestellt.
+
+Der Hauptbetreiber, Stanislav Moiseyev, wurde vom Moskauer Regionalgericht zu lebenslanger Freiheitsstrafe verurteilt — die erste lebenslängliche Strafe für Drogenhandel in der Geschichte Russlands. 15 Mitverschwörer erhielten Strafen zwischen 8 und 23 Jahren.
+
+Der Server-Administrator Dmitry Pavlov wurde in den Vereinigten Staaten angeklagt. Er betrieb die Firma Promservice Ltd., die seit 2015 die Infrastruktur hostete.
+
+Das OFAC des US-Finanzministeriums verhängte Sanktionen nach Executive Order 13694 und setzte über 100 Kryptowährungsadressen auf die SDN-Liste. Ebenfalls sanktioniert wurden die Kryptobörsen Garantex, SUEX und CHATEX — alle drei operierten aus dem Federation Tower in Moskau.
+
+Ransomware-Gruppen wie Ryuk, REvil und Conti wuschen nachweislich 8 Millionen Dollar über Hydra. Die DarkSide-Gruppe, verantwortlich für den Colonial-Pipeline-Angriff, nutzte Hydra für 4 Prozent ihrer Bitcoin-Gewinne.
+
+Nach der Abschaltung sank der tägliche Umsatz des Darknet-Marktes von 4,2 Millionen auf 447.000 Dollar. Nachfolgemärkte wie OMG, Mega und Blacksprut versuchten das Vakuum zu füllen, erreichten aber nie die Dominanz von Hydra.
+
+Diese Graphendatenbank zeigt Ihnen die gesamte Netzwerkstruktur — Personen, Organisationen, Finanzströme, Sanktionen und ihre Verbindungen. Genau solche Werkzeuge bringen Kriminelle schneller vor Gericht.
+
+Danke für Ihre Aufmerksamkeit.`
 
   const toggleNarration = useCallback(() => {
-    if (!narrationAudioRef.current) {
-      const audio = new Audio(import.meta.env.BASE_URL + 'audio/hydra_erklaerung.mp3')
-      audio.addEventListener('ended', () => setIsPlayingNarration(false))
-      narrationAudioRef.current = audio
-    }
+    const synth = window.speechSynthesis
     if (isPlayingNarration) {
-      narrationAudioRef.current.pause()
+      synth.cancel()
       setIsPlayingNarration(false)
-    } else {
-      narrationAudioRef.current.play().then(() => setIsPlayingNarration(true)).catch(() => {})
+      return
     }
+    // Create utterance
+    const utterance = new SpeechSynthesisUtterance(NARRATION_TEXT)
+    utterance.lang = 'de-DE'
+    utterance.pitch = 0.7  // Deep voice
+    utterance.rate = 0.85  // Measured, authoritative pace
+    utterance.volume = 1.0
+
+    // Try to find a German male voice
+    const voices = synth.getVoices()
+    const germanMale = voices.find(v =>
+      v.lang.startsWith('de') && (v.name.toLowerCase().includes('male') || v.name.toLowerCase().includes('mann') || v.name.includes('Daniel') || v.name.includes('Martin'))
+    ) || voices.find(v => v.lang.startsWith('de'))
+    if (germanMale) utterance.voice = germanMale
+
+    utterance.onend = () => setIsPlayingNarration(false)
+    utterance.onerror = () => setIsPlayingNarration(false)
+    speechUtteranceRef.current = utterance
+    synth.speak(utterance)
+    setIsPlayingNarration(true)
   }, [isPlayingNarration])
   
   const { scrollYProgress } = useScroll()
@@ -610,12 +649,12 @@ function App() {
                               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75" />
                               <span className="relative inline-flex rounded-full h-2 w-2 bg-primary" />
                             </span>
-                            Erklärung läuft …
+                            Briefing läuft …
                           </>
                         ) : (
                           <>
                             <Play className="h-4 w-4" />
-                            Erkläre Hydra
+                            Polizei-Briefing
                           </>
                         )}
                       </Button>
@@ -625,10 +664,10 @@ function App() {
                       align="start"
                       className="max-w-xs text-sm leading-relaxed"
                     >
-                      <p className="font-semibold mb-1">KI-Erklärung anhören</p>
+                      <p className="font-semibold mb-1">Polizei-Briefing anhören</p>
                       <p>
-                        Erkläre den realen Kriminalfall &bdquo;Hydra Market&ldquo; – den weltweit größten Darknet-Marktplatz – 
-                        und warum eine Graphendatenbank Kriminelle schneller vor Gericht bringt. (ca. 5 Min.)
+                        Ein Kriminaldirektor des BKA erklärt den realen Fall &bdquo;Hydra Market&ldquo; – den weltweit größten Darknet-Marktplatz – 
+                        und warum eine Graphendatenbank Kriminelle schneller vor Gericht bringt. (Sprachsynthese, ca. 4 Min.)
                       </p>
                     </TooltipContent>
                   </Tooltip>

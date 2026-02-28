@@ -236,6 +236,15 @@ function buildCaseData(): GraphData {
     // ── VICTIMS / TARGETS ──
     { id: 'colonial_pipeline', label: 'Colonial Pipeline', type: 'victim', description: 'US-Öl/Gas-Infrastruktur – DarkSide-Ransomware-Opfer', details: { 'Land': 'USA', 'Sektor': 'Öl/Gas Infrastruktur', 'Lösegeld': '75 BTC (~$4,4 Mio.)', 'Wiederhergestellt': '63,7 BTC' } },
     { id: 'bitfinex', label: 'Bitfinex', type: 'victim', description: 'Kryptobörse – Hack 2016, Erlöse über Hydra gewaschen', details: { 'Hack-Jahr': '2016', 'Schaden': '$4,5 Mrd.', 'Geldwäsche': 'Über Hydra Bitcoin Bank Mixer' } },
+
+    // ── ADDITIONAL ENTITIES ──
+    { id: 'alphabay', label: 'AlphaBay', type: 'case', description: 'Darknet-Marktplatz – beschlagnahmt Juli 2017 (~$1 Mrd.)', details: { 'Status': 'Beschlagnahmt Juli 2017', 'Wert': '~$1 Mrd. bei Beschlagnahmung', 'Vergleich': 'Hydra hatte $5,2 Mrd. Gesamtvolumen' } },
+    { id: 'federation_tower', label: 'Federation Tower (Moskau)', type: 'location', description: 'Standort von Garantex, SUEX und CHATEX', details: { 'Stadt': 'Moskau', 'Land': 'Russland', 'Mieter': 'Garantex, SUEX, CHATEX – alle sanktioniert' } },
+    { id: 'evt_omg_ddos', label: 'OMG!OMG! DDoS-Angriff', type: 'process', description: 'DDoS auf OMG-Markt – Händlermigration zu Mega/Blacksprut', timestamp: 'Juni 2022', details: { 'Auswirkung': 'Vendor-Migration zu Mega und Blacksprut' } },
+    { id: 'evt_blacksprut_hack', label: 'Blacksprut gehackt', type: 'process', description: 'Blacksprut bei 68,5 % Marktanteil gehackt', timestamp: 'November 2022', details: { 'Marktanteil': '68,5 % vor Hack' } },
+    { id: 'evt_garantex_license_revoked', label: 'Garantex-Lizenz entzogen', type: 'process', description: 'Estlands FIU entzog Garantex-Kryptolizenz wegen Geldwäsche', timestamp: 'Februar 2022', details: { 'Behörde': 'Estlands FIU', 'Grund': 'Verstöße gegen Geldwäschevorschriften' } },
+    { id: 'eo_13694', label: 'Executive Order 13694', type: 'law', description: 'US-Sanktionsgrundlage – Blockierung von Eigentum bei Cyber-Aktivitäten', details: { 'Herausgeber': 'Präsident der USA', 'Anwendung': 'Hydra, Garantex, SUEX, CHATEX, Bitpapa, NetExchange' } },
+    { id: 'dnm_market_2022', label: 'DNM-Marktübersicht 2022', type: 'regulation', description: 'Gesamter DNM-Umsatz: $3,1 Mrd. (2021) → $1,5 Mrd. (2022)', details: { 'Umsatz 2021': '$3,1 Mrd.', 'Umsatz 2022': '$1,5 Mrd.', 'Rückgang': '51,6 %', 'Hauptgrund': 'Hydra-Abschaltung' } },
   ]
 
   const links: GraphLink[] = [
@@ -372,6 +381,16 @@ function buildCaseData(): GraphData {
     { source: 'bka', target: 'country_germany', type: 'Sitz' },
     { source: 'ofac', target: 'country_usa', type: 'Sitz' },
     { source: 'usdoj', target: 'country_usa', type: 'Sitz' },
+
+    // ── ADDITIONAL LINKS ──
+    { source: 'evt_omg_ddos', target: 'omg_market', type: 'bezieht sich auf', description: 'DDoS-Angriff Juni 2022' },
+    { source: 'evt_blacksprut_hack', target: 'blacksprut', type: 'bezieht sich auf', description: 'Hack November 2022' },
+    { source: 'evt_garantex_license_revoked', target: 'garantex', type: 'bezieht sich auf', description: 'Lizenzentzug Feb 2022' },
+    { source: 'evt_garantex_license_revoked', target: 'country_estonia', type: 'reguliert von' },
+    { source: 'garantex', target: 'federation_tower', type: 'Standort', description: 'Federation Tower, Moskau' },
+    { source: 'suex', target: 'federation_tower', type: 'Standort', description: 'Federation Tower, Moskau' },
+    { source: 'chatex', target: 'federation_tower', type: 'Standort', description: 'Federation Tower, Moskau' },
+    { source: 'evt_ofac_sanctions', target: 'eo_13694', type: 'Rechtsgrundlage', description: 'Executive Order 13694' },
   ]
 
   return { nodes, links }
