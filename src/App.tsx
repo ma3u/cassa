@@ -627,8 +627,8 @@ function App() {
                     >
                       <p className="font-semibold mb-1">KI-Erklärung anhören</p>
                       <p>
-                        Erkläre die Polizeiakte &bdquo;Hydra&ldquo; und die Beziehungen zwischen den Knoten.
-                        Erkläre, warum eine Graphendatenbank eine effektive Lösung für den Polizeidienst ist.
+                        Erkläre den realen Kriminalfall &bdquo;Hydra Market&ldquo; – den weltweit größten Darknet-Marktplatz – 
+                        und warum eine Graphendatenbank Kriminelle schneller vor Gericht bringt. (ca. 5 Min.)
                       </p>
                     </TooltipContent>
                   </Tooltip>

@@ -1,0 +1,106 @@
+accounts,amount_usd,charges,date,detail,details,end,method,outcome,period,ransom_btc,relationship_type,sentence,source_id,start,target_id
+,,,,,,,,,,,FOUNDED_AND_OPERATED,,moiseyev,,hydra_market
+,,,,,,,,,,,ADMINISTERED_SERVERS,,pavlov,,hydra_market
+,,,,,,,,,,,OWNED_AND_OPERATED,,pavlov,,promservice
+,,,,,15 co-conspirators,,,,,,OPERATED_WITH,,moiseyev_accomplices,,hydra_market
+,,,,,,,,,,,LED_OPERATION,,zwiebel,,evt_seizure
+,,,,,,,,,,,WORKS_FOR,,zwiebel,,bka
+,,,,,,,,,,,HOSTED_SERVERS_FOR,,promservice,2015-11,hydra_market
+,,,,,,,,,,,ADMINISTERED,,promservice,,infra_servers
+,,,,,,,,,,,INFRASTRUCTURE,,hydra_market,,infra_servers
+,,,,,,,,,,,LOCATED_IN,,infra_servers,,country_germany
+,,,,,,,,,,,ACCESSIBLE_VIA,,hydra_market,,infra_tor
+,,,,,,2022-04-05,,,,,INVESTIGATED_AND_SEIZED,,bka,2021-08,hydra_market
+,,,,,,,,,,,INVESTIGATED,,zit,2021-08,hydra_market
+,,,,,,,,,,,COORDINATED_INVESTIGATION,,usdoj,,hydra_market
+,,,2022-04-05,,,,,,,,INDICTED,,usdoj,,pavlov
+,,,2022-04-05,,,,,,,,SANCTIONED,,ofac,,hydra_market
+,,,2022-04-05,,,,,,,,SANCTIONED,,ofac,,garantex
+,,,2021,,,,,,,,SANCTIONED,,ofac,,suex
+,,,2021,,,,,,,,SANCTIONED,,ofac,,chatex
+,,,2024-03,,,,,,,,SANCTIONED,,ofac,,bitpapa
+,,,2024-03,,,,,,,,SANCTIONED,,ofac,,netexchange
+,,,,,,,,,,,INVESTIGATED,,fbi,,hydra_market
+,,,,,,,,,,,INVESTIGATED,,dea,,hydra_market
+,,,,,,,,,,,INVESTIGATED,,irs_ci,,hydra_market
+,,,,,,,,,,,INVESTIGATED,,hsi,,hydra_market
+,,,,,,,,,,,INVESTIGATED,,uspis,,hydra_market
+,,,,,,,,,,,COORDINATED_INVESTIGATION,,jcode,,hydra_market
+,,,,,,,,,,,MEMBER_OF,,fbi,,jcode
+,,,,,,,,,,,MEMBER_OF,,dea,,jcode
+,,,,,,,,,,,MEMBER_OF,,irs_ci,,jcode
+,,,,,,,,,,,MEMBER_OF,,hsi,,jcode
+,,,,,,,,,,,MEMBER_OF,,uspis,,jcode
+,,,2024-12-02,,,,,,,,SENTENCED,Life imprisonment,moscow_court,,moiseyev
+,,,2024-12-02,,,,,,,,SENTENCED,8-23 years,moscow_court,,moiseyev_accomplices
+,,Narcotics conspiracy; Money laundering conspiracy,2022-04-05,,,,,,,,INDICTED,,us_court_ndca,,pavlov
+,,,,,,,,,,,PROVIDED_SERVICE,,hydra_market,,svc_drugs
+,,,,,,,,,,,PROVIDED_SERVICE,,hydra_market,,svc_dead_drop
+,,,,,,,,,,,PROVIDED_SERVICE,,hydra_market,,svc_btc_mixer
+,,,,,,,,,,,PROVIDED_SERVICE,,hydra_market,,svc_cashout
+,,,,,,,,,,,PROVIDED_SERVICE,,hydra_market,,svc_forged_docs
+,,,,,,,,,,,PROVIDED_SERVICE,,hydra_market,,svc_stolen_data
+,,,,,,,,,,,PROVIDED_SERVICE,,hydra_market,,svc_hacking
+,,,,,,,,,,,PROVIDED_SERVICE,,hydra_market,,svc_raas
+,,,,,,,,,,,PROVIDED_SERVICE,,hydra_market,,svc_counterfeit
+,,,,,,,,,,,PROVIDED_SERVICE,,hydra_market,,svc_escrow
+,,,,,,,,,,,PROVIDED_SERVICE,,hydra_market,,svc_dispute
+,,,,,,,,,,,PROVIDED_SERVICE,,hydra_market,,svc_reputation
+,,,,,,,,,,,SERVED_MARKET,,hydra_market,,country_russia
+,,,,,,,,,,,SERVED_MARKET,,hydra_market,,country_ukraine
+,,,,,,,,,,,SERVED_MARKET,,hydra_market,,country_belarus
+,,,,,,,,,,,SERVED_MARKET,,hydra_market,,country_kazakhstan
+,,,,,,,,,,,SERVED_MARKET,,hydra_market,,country_azerbaijan
+,,,,,,,,,,,SERVED_MARKET,,hydra_market,,country_armenia
+,,,,,,,,,,,SERVED_MARKET,,hydra_market,,country_kyrgyzstan
+,,,,,,,,,,,SERVED_MARKET,,hydra_market,,country_uzbekistan
+,,,,,,,,,,,SERVED_MARKET,,hydra_market,,country_tajikistan
+,,,,,,,,,,,SERVED_MARKET,,hydra_market,,country_moldova
+,,,,,,,,Hydra became dominant after RAMP closure,2015-2017,,COMPETITOR_OF,,ramp,,hydra_market
+,,,,,,,,,,,SUCCEEDED,,hydra_market,,ramp
+,,,,,,,,,,,PARTNER_FORUM,,wayaway,,hydra_market
+,,,,,,,,,,,SUCCESSOR_OF,,omg_market,,hydra_market
+,,,,,,,,,,,SUCCESSOR_OF,,mega_market,,hydra_market
+,,,,,,,,,,,SUCCESSOR_OF,,blacksprut,,hydra_market
+,,,,,,,,,,,SUCCESSOR_OF,,solaris,,hydra_market
+,,,,,,,,,,,SUCCESSOR_OF,,kraken_dnm,,hydra_market
+,,,2023-01,,,,,,,,CAPTURED,,kraken_dnm,,solaris
+,2600000,,,,,,,,,,FACILITATED_LAUNDERING,,garantex,,hydra_market
+,,,,,,,,,,,FACILITATED_LAUNDERING,,suex,,hydra_market
+,,,,,,,,,,,FACILITATED_LAUNDERING,,chatex,,hydra_market
+,,,,,,,,,,,TRANSACTED_WITH,,bitpapa,,hydra_market
+,,,,,,,,,,,TRANSACTED_WITH,,netexchange,,hydra_market
+,,,,4% of BTC gains for cash-out,,,,,,,USED_FOR_LAUNDERING,,darkside,,hydra_market
+,,,,Part of $8M ransomware proceeds,,,,,,,USED_FOR_LAUNDERING,,ryuk,,hydra_market
+,,,,Part of $8M ransomware proceeds,,,,,,,USED_FOR_LAUNDERING,,sodinokibi,,hydra_market
+,,,,~$6M via Garantex,,,,,,,USED_FOR_LAUNDERING,,conti,,hydra_market
+,6000000,,,,,,,,,,USED_FOR_LAUNDERING,,conti,,garantex
+12 linked,,,,,,,Smurfing (<$7500 transactions),,,,USED_FOR_LAUNDERING,,sinaloa_cartel,,hydra_market
+,,,,,,,Smurfing (<$7500 transactions),,,,USED_FOR_LAUNDERING,,cjng,,hydra_market
+,,,,,,,,,,,LEADS,,zambada,,sinaloa_cartel
+,,,,,,,,,,,LEADS,,oseguera,,cjng
+,,,,Bitfinex hack proceeds laundering,,,,,,,USED_MIXER_SERVICE,,morgan,,hydra_market
+,,,,Bitfinex hack proceeds laundering,,,,,,,USED_MIXER_SERVICE,,lichtenstein,,hydra_market
+,,,,,,,,,,,CONSPIRED_TO_LAUNDER_FROM,,morgan,,bitfinex
+,,,,,,,,,,,CONSPIRED_TO_LAUNDER_FROM,,lichtenstein,,bitfinex
+,,,2021-05-07,,,,,,,75,ATTACKED,,darkside,,colonial_pipeline
+,,,,,,,,,,,PERPETRATED,,darkside,,evt_colonial_pipeline
+,,,2022-04-05,,,,,,,,ADDED_TO_SDN_LIST,,ofac,,hydra_crypto_addresses
+,,,2022-04-05,,,,,,,,SEIZED,,bka,,seized_btc
+,,,,,,,,,,,RELATES_TO,,evt_founded,,hydra_market
+,,,,,,,,,,,RELATES_TO,,evt_ramp_closure,,ramp
+,,,,,,,,,,,INITIATED_BY,,evt_investigation_start,,bka
+,,,,,,,,,,,INITIATED_BY,,evt_investigation_start,,zit
+,,,,,,,,,,,RELATES_TO,,evt_seizure,,hydra_market
+,,,,,,,,,,,EXECUTED_BY,,evt_seizure,,bka
+,,,,,,,,,,,RELATES_TO,,evt_pavlov_indictment,,pavlov
+,,,,,,,,,,,RELATES_TO,,evt_ofac_sanctions,,hydra_market
+,,,,,,,,,,,RELATES_TO,,evt_ofac_sanctions,,garantex
+,,,,,,,,,,,RELATES_TO,,evt_moiseyev_sentence,,moiseyev
+,,,,,,,,,,,RELATES_TO,,evt_bitpapa_sanctions,,bitpapa
+,,,,,,,,,,,RELATES_TO,,evt_bitpapa_sanctions,,netexchange
+,,,,,,,,,,,CITIZEN_OF,,moiseyev,,country_russia
+,,,,,,,,,,,CITIZEN_OF,,pavlov,,country_russia
+,,,,,,,,,,,CITIZEN_OF,,zambada,,country_mexico
+,,,,,,,,,,,CITIZEN_OF,,oseguera,,country_mexico
+,,,,,,,,,,,CITIZEN_OF,,zwiebel,,country_germany

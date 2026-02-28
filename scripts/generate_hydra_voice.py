@@ -12,62 +12,142 @@ from pathlib import Path
 
 # ── Narration text (German) ──────────────────────────────────────────────────
 HYDRA_NARRATION = """
-Willkommen bei CASSA – dem intelligenten Wissensgrafen der Polizei von Sopra Steria.
+Willkommen bei CASSA – dem intelligenten Wissensgrafen für Ermittlungsbehörden, entwickelt von Sopra Steria.
 
-Ich erkläre Ihnen jetzt die Polizeiakte Operation Hydra, die Beziehungen zwischen den Knoten im Graphen, 
-und warum eine Graphendatenbank die ideale Lösung für den modernen Polizeidienst ist.
+Ich erkläre Ihnen jetzt den realen internationalen Kriminalfall Hydra Market – 
+den weltweit größten Darknet-Marktplatz – und zeige, warum eine Graphendatenbank 
+das mächtigste Werkzeug ist, um die Verbindungen in solch komplexen Fällen aufzudecken.
 
-Die Polizeiakte Operation Hydra.
+Kapitel Eins: Hydra Market – Aufstieg des größten Darknet-Marktplatzes der Welt.
 
-Im Zentrum steht Viktor "Wolf" Sokolov – mutmaßlicher Kopf einer grenzüberschreitenden kriminellen Organisation.
-In diesem Graphen sehen Sie ihn als orangefarbenen Knoten. Vier Verfahren verbinden sich mit ihm:
-Organisierte Kriminalität, Cybercrime, Geldwäsche und Betäubungsmittelhandel.
+Im Jahr 2015 wurde im russischsprachigen Darknet eine Plattform namens Hydra Market gegründet.
+Zugänglich ausschließlich über das Tor-Netzwerk, entwickelte sich Hydra in nur wenigen Jahren
+zum dominantesten illegalen Online-Marktplatz der Geschichte.
 
-Schauen wir auf die Beziehungen zwischen den Knoten.
+Als 2017 der Konkurrent RAMP von russischen Behörden geschlossen wurde, 
+übernahm Hydra die Monopolstellung. Bis 2021 kontrollierte die Plattform
+rund 80 Prozent aller Darknet-Transaktionen weltweit.
 
-Sokolov ist über eine direkte Kante als Hauptverdächtiger mit der Operation Hydra verknüpft. 
-Von ihm führen Kanten zu seinen Mitstreitern: Leon Krause, dem Ransomware-Entwickler; 
-Maria Petrova, der Finanzverwalterin; Kadir Yılmaz, zuständig für Logistik; 
-Anna Bergmann, Strohfrau der Scheinfirmen; sowie zu den Lieferanten in Osteuropa und dem Vertriebsnetz in Deutschland.
+Die Zahlen sind erschreckend: 17 Millionen Kundenkonten, 19.000 Verkäufer,
+und ein kumuliertes Kryptowährungsvolumen von 5,2 Milliarden US-Dollar zwischen 2015 und 2022.
 
-Die Beweismittel-Knoten zeigen ebenfalls wichtige Verbindungen: 
-Das beschlagnahmte Laptop von Krause ist direkt mit dem Ransomware-Code HydraLock verknüpft – 
-und dieser wiederum mit den beiden Opfern: dem Klinikum Nord und den Stadtwerken Kiel als kritische Infrastruktur.
+Hydra bot weit mehr als nur Drogen an – obwohl der Drogenhandel das Kerngeschäft war.
+Das ikonische Liefersystem namens Klad oder Zakladka funktionierte über sogenannte Dead Drops:
+Drogen wurden physisch vergraben, magnetisch befestigt oder an geheimen Orten versteckt.
+Käufer erhielten nach Zahlung die GPS-Koordinaten.
 
-Die Geldflüsse verlaufen über Kontenknoten: von der Phoenix Consulting GmbH in Frankfurt 
-über die Baltic Trade in Tallinn bis zu einem Schweizer Nummernkonto – insgesamt 47 Millionen Euro Geldwäsche.
-Jede Transaktion ist als Kante mit Zeitstempel und Betrag gespeichert.
+Darüber hinaus bot Hydra gestohlene Finanzdaten, gefälschte Identitätsdokumente, 
+Hacking-als-Dienstleistung, Ransomware-as-a-Service, Falschgeld und einen hochentwickelten 
+Bitcoin-Mixing-Service namens Bitcoin Bank Mixer an.
 
-Rechtsgrundlagen-Knoten wie Paragraph 129 Strafgesetzbuch, Paragraph 303b Strafgesetzbuch und Paragraph 261 Strafgesetzbuch 
-sind direkt mit den betroffenen Verdächtigen und Verfahren verbunden. 
-Europäische Regelungen wie NIS2 und DSGVO sind mit den Opfern und dem Cybercrime-Komplex verknüpft.
+Kapitel Zwei: Die Schlüsselpersonen.
 
-Warum ist eine Graphendatenbank die optimale Lösung für den Polizeidienst?
+Im Zentrum des Graphen sehen Sie Hydra Market als zentralen Knoten. 
+Von ihm gehen Verbindungen zu den wichtigsten Akteuren aus.
 
-Erstens: Komplexe Netzwerke auf einen Blick. Traditionelle Datenbanken speichern Daten in Tabellen. 
-Bei einem Fall wie Hydra mit über 80 Entitäten und hunderten Beziehungen 
-bräuchte man dutzende Tabellen-Joins, die Sekunden oder Minuten dauern würden. 
-In einer Graphendatenbank folgt die Abfrage einfach den Kanten – in Millisekunden.
+Stanislav Moiseyev – Gründer und Hauptbetreiber von Hydra.
+Am 2. Dezember 2024 verurteilte das Moskauer Regionalgericht Moiseyev zu lebenslanger Haft.
+Es war das erste Mal in der russischen Geschichte, dass ein Angeklagter für Drogenhandel 
+lebenslänglich verurteilt wurde. 15 seiner Mitverschwörer erhielten Strafen zwischen 8 und 23 Jahren.
 
-Zweitens: Entdeckung verborgener Zusammenhänge. 
-Ein Ermittler kann fragen: Wer kannte Sokolov, der auch Kontakt zu einer Kryptobörse hatte? 
-Der Graph traversiert alle Verbindungen und findet die Antwort sofort – 
-Erkenntnisse, die in Tabellen monatelange manuelle Analyse erfordert hätten.
+Dmitry Pavlov, 30 Jahre alt, betrieb über seine Firma Promservice Limited in Nowosibirsk 
+die physische Server-Infrastruktur von Hydra – sogenanntes Bulletproof Hosting.
+Am 5. April 2022 wurde er von einem Bundesgericht in Nord-Kalifornien angeklagt:
+Verschwörung zum Drogenhandel und Geldwäsche.
 
-Drittens: Dynamische Fallverknüpfung. 
-Neue Strafanzeigen werden automatisch auf Übereinstimmungen mit bestehenden Knoten geprüft. 
-Kommt eine neue Anzeige mit dem Username "ByteL0rd" herein, erkennt das System sofort: 
-dieser Handle ist bereits in der Beweismitteldatenbank mit Leon Krause verknüpft.
+Im Graphen sehen Sie auch die Verbindungen zu internationalen Kriminellen:
+Heather Morgan und Ilya Lichtenstein – die Bitfinex-Hacker – nutzten Hydras Bitcoin-Mixer, 
+um Erlöse aus dem 4,5-Milliarden-Dollar-Hack zu waschen.
+Die mexikanischen Drogenkartelle Sinaloa und das Jalisco New Generation Cartel 
+wuschen über Hydra systematisch Geld durch Smurfing – Kleintransaktionen unter 7.500 Dollar.
 
-Viertens: Rechtssichere Rückverfolgbarkeit. 
-Jede Kante trägt Metadaten: Zeitstempel der Erfassung, Sachbearbeiter, Rechtsgrundlage der Maßnahme. 
-Die vollständige Chain of Custody ist im Graphen abbildbar – gerichtsverwertbar von Anfang an.
+Kapitel Drei: Die Verbindung zur Ransomware und kritischen Infrastruktur.
 
-Fünftens: Föderale Interoperabilität. 
-Durch den XPolizei-Standard können Behörden Teilgraphen sicher tauschen – 
-LKA Hamburg sieht nur die freigegebenen Knoten aus dem BKA-Graphen, Europol erhält seinen eigenen Teilgraphen.
+Besonders alarmierend war die Rolle von Hydra als Geldwäsche-Plattform für Ransomware-Gruppen.
+DarkSide – verantwortlich für den Colonial-Pipeline-Angriff im Mai 2021, der die gesamte 
+US-Ostküste lahmlegte – cashten rund 4 Prozent ihrer Bitcoin-Gewinne über Hydra aus.
+Ryuk, REvil und Conti wuschen zusammen mindestens 8 Millionen Dollar über die Plattform.
+Conti allein transferierte 6 Millionen Dollar über die sanktionierte Börse Garantex.
 
-Das ist CASSA: Eine Graphendatenbank, die vernetzt denkt – genauso wie organisierte Kriminalität vernetzt agiert.
+Im Graphen sehen Sie diese Verbindungskette deutlich:
+Von der Ransomware-Gruppe über Hydra zu den Kryptobörsen – Garantex, SUEX, CHATEX –
+alle in der Moskauer Federation Tower angesiedelt, alle inzwischen sanktioniert.
+
+Kapitel Vier: Die internationale Ermittlung und Abschaltung.
+
+Im August 2021 begannen das Bundeskriminalamt und die Zentralstelle zur Bekämpfung 
+der Internetkriminalität in Frankfurt eine verdeckte Ermittlung gegen Hydra-Server-Infrastruktur in Deutschland.
+
+Am 5. April 2022 schlug die Stunde: Das BKA, geleitet von Ermittler Sebastian Zwiebel, 
+beschlagnahmte die Hydra-Server und 543,3 Bitcoin im Wert von rund 25 Millionen Dollar.
+
+Zeitgleich koordinierte die JCODE Task Force in den USA – bestehend aus FBI, DEA, 
+IRS Criminal Investigation, Homeland Security und dem Postal Inspection Service – 
+die internationale Verfolgung.
+
+Das OFAC, die Sanktionsbehörde des US-Finanzministeriums, setzte Hydra und Garantex 
+auf die Sanktionsliste und blockte über 100 Kryptowährungsadressen. 
+2024 folgten Sanktionen gegen Bitpapa und NetExchange.
+
+Im Graphen sehen Sie dieses internationale Netzwerk der Strafverfolgung:
+Deutsche, amerikanische und russische Behörden – verbunden durch Ermittlungskanten zum zentralen Hydra-Knoten.
+Jede Behörde, jedes Gericht, jede Sanktion ist als eigener Knoten modelliert,
+mit den relevanten Metadaten als Knotenattribute.
+
+Kapitel Fünf: Nachfolger und die Fragmentierung des Darknet.
+
+Nach der Abschaltung von Hydra fragmentierte sich der russischsprachige Darknet-Markt.
+OMG!OMG! übernahm mit 65 Prozent den größten Marktanteil.
+Mega, Blacksprut, Solaris und Kraken kämpften um den Rest.
+Im Januar 2023 kaperte Kraken sogar den Konkurrenten Solaris.
+Das Wayaway-Forum blieb als langjähriger Partner weiterhin aktiv.
+
+Alle diese Nachfolgemärkte sind im Graphen als Organisationsknoten modelliert,
+mit Kanten die ihre Beziehung zu Hydra beschreiben: Nachfolger von, Konkurrent von, oder Partner.
+
+Kapitel Sechs: Warum eine Graphendatenbank Kriminelle schneller vor Gericht bringt.
+
+Erstens: Netzwerktraversierung in Echtzeit. 
+Hydra hat über 80 Entitäten und mehr als 130 Beziehungen in unserem Graphen.
+In einer relationalen Datenbank bräuchten Sie dutzende Tabellen-Joins.
+In einer Graphendatenbank wie Neo4j folgen Sie einfach den Kanten – in Millisekunden.
+Die Frage "Welche Ransomware-Gruppen nutzten Hydra, und über welche Börsen wuschen sie Geld?"
+wird durch eine einzige Graph-Traversierung von drei Hops beantwortet.
+
+Zweitens: Mustererkennung über Silos hinweg.
+Traditionelle Polizeisysteme speichern Drogendelikte, Cyberangriffe und Geldwäsche 
+in getrennten Datenbanken. Der Fall Hydra zeigt: Diese Verbrechen sind vernetzt.
+Ein Graph verbindet automatisch den Ransomware-Angriff auf Colonial Pipeline 
+mit dem Bitcoin-Mixer auf Hydra und den Kryptobörsen in Moskau –
+Zusammenhänge, die in Silos monatelang unentdeckt blieben.
+
+Drittens: Echtzeit-Alerting bei neuen Ermittlungsdaten.
+Wird ein neuer Kryptovorfall gemeldet und eine bekannte Wallet-Adresse taucht auf,
+erkennt der Graph sofort: Diese Adresse ist bereits mit Hydra verknüpft –
+ein direkter Ermittlungshinweis, der in Tabellen erst nach manuellem Abgleich aufgefallen wäre.
+
+Viertens: Gerichtsverwertbare Beweisketten.
+Jede Kante im Graphen trägt Metadaten: Zeitstempel, Rechtsgrundlage, Sachbearbeiter.
+Die Chain of Evidence – von der Beschlagnahmung der 543 Bitcoin 
+über die Blockchain-Analyse bis zur Verurteilung von Moiseyev – 
+ist als zusammenhängender Pfad im Graphen nachvollziehbar.
+
+Fünftens: Internationale Zusammenarbeit durch Teilgraphen.
+BKA, FBI, OFAC und Europol arbeiten an unterschiedlichen Aspekten desselben Falls.
+Durch Graph-basierte Zugriffskontrolle kann jede Behörde genau den Teilgraphen sehen,
+der für ihren Zuständigkeitsbereich relevant ist – datenschutzkonform und in Echtzeit.
+
+Zusammenfassung.
+
+Der Fall Hydra Market demonstriert eindrucksvoll, warum moderne Kriminalitätsbekämpfung 
+vernetzte Datenstrukturen braucht. Ein einzelner Darknet-Marktplatz verband Drogenhandel 
+in zehn Ländern, Ransomware-Angriffe auf kritische Infrastruktur, Geldwäsche über sanktionierte Börsen,
+mexikanische Kartelle und den größten Kryptohack in der Geschichte.
+
+Nur ein Wissensgraph kann diese Komplexität abbilden, durchsuchen und in Echtzeit auswerten.
+
+Das ist CASSA – die Zukunft der Ermittlungsarbeit. 
+Eine Graphendatenbank, die genauso vernetzt denkt wie die organisierte Kriminalität selbst agiert.
 """.strip()
 
 # ── Voice preference (German professional voices) ────────────────────────────
