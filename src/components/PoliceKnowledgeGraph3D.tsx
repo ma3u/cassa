@@ -700,10 +700,10 @@ export function PoliceKnowledgeGraph3D() {
     return sprite as THREE.Object3D
   }, [])
 
-  const linkPositionUpdate = useCallback((sprite: any, linkData: any, coords: any) => {
-    // sprite   = THREE SpriteText object
-    // linkData = the link object (source/target/type) — 2nd arg in react-force-graph-3d
-    // coords   = { start, end } world positions — 3rd arg
+  const linkPositionUpdate = useCallback((sprite: any, coords: any, linkData: any) => {
+    // sprite   = THREE SpriteText object (from linkThreeObject)
+    // coords   = { start: {x,y,z}, end: {x,y,z} } — world positions (2nd arg)
+    // linkData = the link object (source/target/type) — 3rd arg in react-force-graph-3d
     if (!sprite || typeof sprite.text !== 'string') return
     if (!coords?.start || !coords?.end) return
 
