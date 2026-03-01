@@ -652,12 +652,11 @@ function App() {
                       align="start"
                       className="max-w-xs text-sm leading-relaxed"
                     >
-                      <p className="font-semibold mb-1">CASSA-Briefing anhören</p>
+                      <p className="font-semibold mb-1">Briefing anhören</p>
                       <p>
-                        Ausführliches Briefing zum Hydra-Fall: Warum ChatGPT für Ermittlungen ungeeignet ist, 
-                        die 4-Schichten-Architektur von CASSA, der komplette Hydra-Graph mit 88 Knoten und 113 
-                        Beziehungen — erklärt an konkreten Beispielen wie Geldwäsche-Netzwerke, Ransomware-Gruppen,
-                        Nachfolgemärkte, Standards und Best Practices. (ElevenLabs-Stimme, ca. 8 Min.)
+                        Ausführliches Briefing zum Hydra-Fall: Eine Graphen-Architektur der den Hydra-Market Fall mit 88 Knoten und 113 
+                        Beziehungen zeigt und erklärt, wie Geldwäsche-Netzwerke, Ransomware-Gruppen,
+                        Nachfolgemärkte, Standards und Best Practices. (ca. 8 Min.)
                       </p>
                     </TooltipContent>
                   </Tooltip>
