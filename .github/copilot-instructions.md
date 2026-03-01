@@ -43,7 +43,7 @@ npm run optimize  # vite optimize (pre-bundle deps)
 │   ├── hydra_nodes*.csv           # Node CSVs (original + enriched)
 │   └── hydra_relationships*.csv   # Relationship CSVs (original + enriched)
 ├── public/audio/                  # Static audio assets
-│   ├── hydra_briefing.mp3         # ElevenLabs narration (Lucius voice, current)
+│   ├── hydra_briefing.mp3         # ElevenLabs narration (Otto voice, warm German male, current)
 │   ├── hydra_erklaerung.mp3       # Legacy narration (unused)
 │   └── hydra_narration.mp3        # Legacy narration (unused)
 ├── scripts/                       # Python helper scripts (see below)
@@ -166,6 +166,15 @@ Every node in the enriched JSON (`input/hydra_graph_data (1).json`) carries:
 | `ELEVENLABS_API_KEY` | `.env` | ElevenLabs TTS API key (for `scripts/*.py`) |
 
 `.env` is in `.gitignore` — never commit API keys.
+
+## Narration / Audio
+- **Always use ElevenLabs** for text-to-speech generation — **never** use the Web Speech API (`SpeechSynthesis`)
+- Voice: **male, warm friendly tone, native German** (currently ElevenLabs voice ID `FTNCalFNG5bRnkkaP5Ug` "Otto")
+- Model: `eleven_multilingual_v2`
+- API key is read from `.env` (`ELEVENLABS_API_KEY`) — never hardcode it
+- Generate script: `python3 scripts/generate_narration.py` → outputs `public/audio/hydra_briefing.mp3`
+- The **player in `App.tsx` always uses the stored MP3 file** (`HTMLAudioElement` with `public/audio/hydra_briefing.mp3`) — never inline `SpeechSynthesisUtterance`
+- When the narration text changes, **regenerate the MP3** by running the generate script before committing
 
 ## Security
 - Report vulnerabilities via `opensource-security@github.com`, not public issues

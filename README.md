@@ -259,4 +259,4 @@ Das Projekt integriert folgende Standards für polizeiliche Ermittlungsarbeit:
 
 ## Lizenz
 
-Die Spark-Template-Dateien und -Ressourcen von GitHub sind unter der MIT-Lizenz lizenziert, Copyright GitHub, Inc.
+MIT License — siehe [LICENSE](LICENSE)

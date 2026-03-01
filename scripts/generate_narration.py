@@ -2,30 +2,64 @@
 """Generate ElevenLabs narration audio for CASSA police knowledge graph."""
 import json, urllib.request, os, sys
 
-API_KEY = os.environ.get("ELEVENLABS_API_KEY", "sk_7b84de73a0b49273b9e91f6735696d0097a56f967ef8b4ba")
-VOICE_ID = "ekJ0doQ5Wa25P7W5HCj7"  # Lucius - Deep voice, male, old, German
+API_KEY = os.environ.get("ELEVENLABS_API_KEY", "")
+VOICE_ID = "FTNCalFNG5bRnkkaP5Ug"  # Otto - Native German male, warm narrator
 
-NARRATION_TEXT = """Meine Damen und Herren, hier spricht Kriminaldirektor Weber vom Bundeskriminalamt.
+NARRATION_TEXT = """Hallo und willkommen bei CASSA — dem intelligenten Wissensgraphen, entwickelt von Sopra Steria.
 
-Ich lade Sie ein, einen Blick hinter die Kulissen moderner Ermittlungsarbeit zu werfen, und zu verstehen, warum ein Knowledge Graph das entscheidende Werkzeug im Kampf gegen organisierte Kriminalität ist.
+Fangen wir mit einer ehrlichen Frage an: Warum kann man nicht einfach ChatGPT für polizeiliche Ermittlungen nutzen?
 
-Stellen Sie sich vor, Sie ermitteln gegen ein internationales Darknet-Netzwerk. Sie haben Millionen von Datenpunkten — Personen, Konten, Kryptowährungsadressen, Kommunikationsverläufe, Beweismittel, Gerichtsbeschlüsse. In klassischen Datenbanken liegen diese Informationen in getrennten Silos. Zusammenhänge bleiben unsichtbar. Genau hier setzt der Knowledge Graph an: Er verbindet alle Entitäten und ihre Beziehungen in einem einzigen, navigierbaren Wissensnetz. Was ein Analyst in Tagen zusammenträgt, zeigt der Graph in Sekunden.
+Die Antwort ist simpel — und gleichzeitig komplex. ChatGPT und andere Large Language Models haben drei fundamentale Probleme im Ermittlungskontext.
 
-Doch ein Graph allein reicht nicht. Polizeiliche Ermittlungen unterliegen strengen rechtlichen und zeitlichen Rahmenbedingungen. Deshalb haben wir eine Multi-Layered Ontologie-Architektur mit vier Schichten entwickelt.
+Erstens: Halluzinationen. Ein LLM erfindet plausibel klingende Fakten. In einem Strafverfahren kann das katastrophal sein — ein falscher Zusammenhang, eine erfundene Rechtsgrundlage, und ein Beschuldigter wird zu Unrecht verfolgt oder ein Täter kommt frei.
 
-Schicht Eins ist die Normative Schicht, das strukturelle Skelett. Sie bildet die gesamte Hierarchie der Rechtsquellen ab — vom EU-Recht über das Grundgesetz und die Strafprozessordnung bis hin zu den Landespolizeigesetzen und Dienstvorschriften. Das System kennt die Normenhierarchie und traversiert sie konsistent. Jede Ermittlungsmaßnahme wird automatisch gegen die geltende Rechtsgrundlage geprüft.
+Zweitens: Keine rechtliche Validierung. ChatGPT weiß nicht, welche Fassung der Strafprozessordnung zum Tatzeitpunkt galt. Es kann keine Verjährungsfristen berechnen, keine Haftprüfungstermine überwachen, und keine TKÜ-Verlängerungen fristgerecht anstoßen.
 
-Schicht Zwei ist die Zeitliche Dimension, Validität und Versionierung. Jede Rechtsgrundlage hat eine zeitliche Gültigkeit. Das System prüft automatisch, welche Gesetzesfassung zum Tatzeitpunkt galt, berechnet Verjährungsfristen korrekt und warnt rechtzeitig vor ablaufenden Haftprüfungsterminen oder TKÜ-Verlängerungen.
+Drittens: Keine Beweiskette. Vor Gericht muss jeder Ermittlungsschritt nachvollziehbar sein — wer hat wann was gesichert, auf welcher Rechtsgrundlage, mit welchem Ergebnis. Ein LLM liefert Text ohne Herkunftsnachweis. Das ist nicht gerichtsverwertbar.
 
-Schicht Drei ist die Prozedurale Zustandsmaschine, die Prozessdimension. Hier werden Ermittlungsverfahren als formale Prozesse mit definierten Zuständen, Übergängen und Fristen modelliert. Das System macht proaktive Vorschläge für nächste Schritte, überwacht Verfahrenszustände und stellt sicher, dass keine Frist versäumt wird.
+Genau hier setzt CASSA an — mit einer Multi-Layered Ontologie-Architektur in vier Schichten.
 
-Schicht Vier ist der Fallbezogene Overlay, die Faktendimension. Hier liegen die konkreten Fakten eines Ermittlungsvorgangs: Personen, Beweismittel, Zeugenaussagen, Kommunikationsdaten, Finanztransaktionen. All diese Fakten werden im Kontext der darunterliegenden drei Schichten interpretiert und verknüpft.
+Schicht Eins ist die Normative Schicht. Sie bildet die gesamte Hierarchie der Rechtsquellen ab — vom EU-Recht über das Grundgesetz und die StPO bis hin zu Landespolizeigesetzen und Dienstvorschriften. Jede Ermittlungsmaßnahme wird automatisch gegen die geltende Rechtsgrundlage geprüft — das kann kein LLM.
 
-Was Sie jetzt vor sich sehen, ist genau ein solcher Knowledge Graph. Er zeigt die Operation Hydra — die Zerschlagung des weltweit größten Darknet-Marktplatzes. Jeder Knoten ist eine Entität, jede Verbindungslinie eine nachgewiesene Beziehung. Personen, Organisationen, Kryptobörsen, Sanktionen, Rechtsgrundlagen — alles miteinander verwoben.
+Schicht Zwei ist die Zeitliche Dimension. Jedes Gesetz hat eine zeitliche Gültigkeit. Das System prüft automatisch, welche Fassung zum Tatzeitpunkt galt, berechnet Verjährungsfristen und warnt rechtzeitig vor ablaufenden Terminen.
 
-Diese vier Schichten zusammen bilden einen digitalen Zwilling des Ermittlungsfalls. Kein Datensilo, keine verlorene Verbindung, keine übersehene Frist. Das ist die Zukunft der Polizeiarbeit.
+Schicht Drei ist die Prozedurale Zustandsmaschine. Ermittlungsverfahren werden als formale Prozesse modelliert — mit definierten Zuständen, Übergängen und Fristen. Das System schlägt proaktiv nächste Schritte vor und stellt sicher, dass keine Frist versäumt wird.
 
-Danke für Ihre Aufmerksamkeit."""
+Schicht Vier ist der Fallbezogene Overlay. Hier liegen die konkreten Fakten: Personen, Beweismittel, Kommunikationsdaten, Finanztransaktionen. All diese Fakten werden im Kontext der darunterliegenden drei Schichten interpretiert.
+
+Jetzt wird es spannend — schauen wir uns den konkreten Fall an. Was ihr im Graphen seht, ist die Operation Hydra: die Zerschlagung des weltweit größten Darknet-Marktplatzes. Und dieser Fall zeigt perfekt, warum ein vernetzter Wissensgraph unverzichtbar ist.
+
+Hydra Market wurde 2015 von Stanislav Moiseyev gegründet und zusammen mit 15 Mittätern betrieben. Dmitry Pavlov administrierte über seine Firma Promservice die Server-Infrastruktur, die sich physisch in Deutschland befand — erreichbar ausschließlich über das Tor-Netzwerk. Allein in diesem ersten Satz stecken schon fünf verknüpfte Entitäten: eine Person, eine Organisation, eine Firma, eine Infrastruktur und ein Land. Das ist die Stärke eines Graphen — alles ist mit allem verbunden.
+
+Die Plattform hatte 17 Millionen Kundenkonten und 19.000 Verkäufer. Hydra bot zwölf verschiedene Service-Kategorien an: Drogenhandel mit einem einzigartigen Dead-Drop-System namens Klad oder Zakladka, einen eingebauten Bitcoin-Mixer, Cash-Out-Services, gefälschte Dokumente, gestohlene Finanzdaten, Hacking-Tools, Ransomware-as-a-Service, Falschgeld — und dazu ein internes Escrow-System, Streitschlichtung und ein Bewertungssystem. Jeder dieser zwölf Services ist im Graph ein eigener Knoten, direkt mit Hydra Market verlinkt.
+
+Was den Fall besonders komplex macht: Hydra bediente zehn Länder — Russland, Ukraine, Belarus, Kasachstan, Aserbaidschan, Armenien, Kirgisistan, Usbekistan, Tadschikistan und Moldawien. Im Graphen sieht man diese zehn Länder als Knoten, jeweils über die Beziehung SERVED MARKET mit Hydra verbunden. Das allein zeigt: mit einer klassischen Aktenstruktur wäre das nicht darstellbar.
+
+Noch komplexer wird das Netzwerk durch die Geldwäsche. Vier große Ransomware-Gruppen — DarkSide, Ryuk, REvil und Conti — nutzten Hydras Bitcoin-Mixer, um Lösegelder zu waschen. DarkSide war die Gruppe hinter dem Colonial-Pipeline-Angriff 2021, der die Treibstoffversorgung an der US-Ostküste lahmlegte. Dazu kamen zwei mexikanische Kartelle — das Sinaloa-Kartell unter Ismael Zambada und das CJNG unter Nemesio Oseguera — die Hydra ebenfalls zur Geldwäsche nutzten. Und dann wären da noch Ilya Lichtenstein und Heather Morgan, bekannt als Dutch und Razzlekhan, die gestohlene Bitcoin aus dem Bitfinex-Hack über Hydras Mixer-Service wuschen.
+
+Im Graphen ergibt das ein hochvernetztes Netz: Personen führen Organisationen, Organisationen nutzen Services, Services gehören zu Hydra, und alles ist über unterschiedliche Beziehungstypen wie LEADS, USED FOR LAUNDERING und USED MIXER SERVICE verbunden. Ein einzelnes Dokument könnte diese Zusammenhänge niemals so darstellen.
+
+Und dann die Finanzspur: Garantex, SUEX und Chatex — drei Kryptobörsen, die Hydra-Gelder wuschen — hatten alle ihren Sitz im selben Gebäude: dem Federation Tower in Moskau. Im Graphen ist das sofort sichtbar: drei Organisations-Knoten, alle über LOCATED AT mit demselben Infrastruktur-Knoten verbunden. So eine räumliche Koinzidenz fällt in Akten vielleicht nie auf — im Graphen springt sie ins Auge.
+
+Am 5. April 2022 schlug die Stunde Null. BKA-Ermittler Sebastian Zwiebel leitete die Operation, bei der die Server beschlagnahmt und 543 Bitcoin sichergestellt wurden. Gleichzeitig koordinierte die JCODE Task Force in den USA die internationale Verfolgung — ein Zusammenschluss aus FBI, DEA, IRS Criminal Investigation, Homeland Security und dem U.S. Postal Inspection Service.
+
+Das OFAC setzte daraufhin nicht nur Hydra und Garantex auf die Sanktionsliste, sondern später auch Bitpapa und NetExchange. Über 100 Kryptowallet-Adressen landeten auf der SDN-Liste — der Specially Designated Nationals List. Die rechtliche Grundlage dafür war Executive Order 13694. Im Graphen ist all das als Event-Kette modelliert: Gründung, RAMP-Schließung, Ermittlungsbeginn, Beschlagnahmung, Anklage, Sanktionen, und schließlich Moiseyevs lebenslange Freiheitsstrafe durch das Moskauer Bezirksgericht.
+
+Und nach der Schließung von Hydra? Im Graph sieht man fünf Nachfolger-Märkte — OMG OMG, Mega, Blacksprut, Solaris und Kraken — alle über SUCCESSOR OF mit Hydra verbunden. Kraken übernahm sogar Solaris komplett. Und auch die Nachfolger wurden Opfer: OMG wurde per DDoS attackiert, Blacksprut wurde gehackt. Die Geschichte geht weiter, und der Graph wächst mit.
+
+Dieser Fall nutzte zahlreiche internationale Standards. STIX 2.1 für den standardisierten Austausch von Bedrohungsinformationen zwischen BKA, FBI und Europol — jede Entität im Graph trägt einen STIX-Typ, zum Beispiel threat-actor für Moiseyev oder infrastructure für die Server. ISO 27037 und ISO 27042 für die forensische Sicherung und Analyse der Beweismittel — die Serverimages, die Wallets, die Kommunikationsdaten. NIST SP 800-86 als Framework für die digitale Forensik. XPolizei 2.0 für den Datenaustausch zwischen deutschen Bundes- und Landesbehörden. Und Executive Order 13694 als Rechtsgrundlage der OFAC-Sanktionen.
+
+Die Best Practices aus dem Hydra-Fall:
+
+Digitale Beweissicherung: SHA-256-Hashwerte bei jeder Sicherung, Write-Blocker, Vier-Augen-Prinzip — lückenlose Chain of Custody nach ISO 27037.
+
+Blockchain-Forensik: Cluster-Analyse von Wallet-Adressen, Cross-Chain-Tracking über Mixer hinweg, automatischer OFAC-Abgleich. Genau so wurde die Verbindung zwischen Garantex, SUEX, Chatex und dem Federation Tower entdeckt.
+
+Strukturierte Ermittlungsführung: Im Graph werden Hypothesen modelliert. Wenn ein neuer Knoten auftaucht — sagen wir, eine neue Wallet-Adresse — verbindet das System automatisch über bestehende Beziehungen. Fristenmanagement läuft automatisch. Aktenzeichen verknüpfen alle Beweismittel.
+
+Und schließlich: der neuro-symbolische Ansatz — LLM-Sprachverarbeitung kombiniert mit deterministischer Graph-Validierung. Das LLM hilft beim Verstehen von Freitext, aber die Validierung läuft über den Graphen. Keine Halluzinationen. Gerichtsverwertbar. BVerfG-konform.
+
+88 Knoten, 113 Beziehungen, 18 Knotentypen, 10 Länder, 12 Services, 7 Schlüsselpersonen, 12 Ereignisse — das ist der Hydra Graph. Und das ist CASSA: ein System, das genauso vernetzt denkt wie die organisierte Kriminalität selbst agiert. Aber auf der richtigen Seite des Gesetzes."""
 
 # Use ElevenLabs text-to-speech API
 url = f"https://api.elevenlabs.io/v1/text-to-speech/{VOICE_ID}"
@@ -35,7 +69,7 @@ payload = json.dumps({
     "voice_settings": {
         "stability": 0.65,
         "similarity_boost": 0.80,
-        "style": 0.35,
+        "style": 0.30,
         "use_speaker_boost": True
     }
 }).encode("utf-8")
@@ -54,7 +88,7 @@ req = urllib.request.Request(
 output_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "public", "audio", "hydra_briefing.mp3")
 os.makedirs(os.path.dirname(output_path), exist_ok=True)
 
-print(f"Generating speech with voice: Lucius (Deep voice)...")
+print(f"Generating speech with voice: Otto (Native German, warm narrator)...")
 print(f"Text length: {len(NARRATION_TEXT)} characters")
 print(f"Output: {output_path}")
 

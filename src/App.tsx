@@ -642,7 +642,7 @@ function App() {
                         ) : (
                           <>
                             <Play className="h-4 w-4" />
-                            Polizei-Briefing
+                            CASSA-Briefing
                           </>
                         )}
                       </Button>
@@ -652,10 +652,12 @@ function App() {
                       align="start"
                       className="max-w-xs text-sm leading-relaxed"
                     >
-                      <p className="font-semibold mb-1">Polizei-Briefing anhören</p>
+                      <p className="font-semibold mb-1">CASSA-Briefing anhören</p>
                       <p>
-                        Ein Kriminaldirektor des BKA erklärt, warum ein Knowledge Graph das entscheidende Werkzeug gegen organisierte Kriminalität ist 
-                        und wie die Multi-Layered Ontologie-Architektur mit vier Schichten Ermittlungen revolutioniert. (ElevenLabs-Stimme, ca. 3 Min.)
+                        Ausführliches Briefing zum Hydra-Fall: Warum ChatGPT für Ermittlungen ungeeignet ist, 
+                        die 4-Schichten-Architektur von CASSA, der komplette Hydra-Graph mit 88 Knoten und 113 
+                        Beziehungen — erklärt an konkreten Beispielen wie Geldwäsche-Netzwerke, Ransomware-Gruppen,
+                        Nachfolgemärkte, Standards und Best Practices. (ElevenLabs-Stimme, ca. 8 Min.)
                       </p>
                     </TooltipContent>
                   </Tooltip>
