@@ -686,29 +686,49 @@ export function PoliceKnowledgeGraph3D() {
     return highlightLinks.has(linkKey(link)) ? 4 : 0
   }, [highlightLinks, linkKey])
 
-  const linkThreeObject = useCallback((link: any) => {
-    const isHighlighted = highlightLinks.size > 0 && highlightLinks.has(linkKey(link))
-    const sprite = new SpriteText(`${link.type}`) as any
-    sprite.color = isHighlighted ? '#ffd166' : 'rgba(255,255,255,0.35)'
-    sprite.textHeight = isHighlighted ? 2.5 : 1.4
-    sprite.fontWeight = isHighlighted ? 'bold' : 'normal'
-    sprite.backgroundColor = isHighlighted ? 'rgba(0,0,0,0.7)' : 'rgba(0,0,0,0.25)'
-    sprite.padding = isHighlighted ? 1.2 : 0.6
-    sprite.borderRadius = 3
+  const linkThreeObject = useCallback((_link: any) => {
+    // Create sprite for every link. Visibility is toggled per-frame in linkPositionUpdate.
+    const sprite = new SpriteText('') as any
+    sprite.visible = false
+    sprite.color = '#ffd166'
+    sprite.textHeight = 2.8
+    sprite.fontWeight = 'bold'
+    sprite.backgroundColor = 'rgba(10,14,26,0.88)'
+    sprite.padding = 1.5
+    sprite.borderRadius = 4
+    sprite.strokeWidth = 0
     return sprite as THREE.Object3D
-  }, [highlightLinks, linkKey])
+  }, [])
 
-  const linkPositionUpdate = useCallback((sprite: any, _coords: any, info: any) => {
-    // Only reposition custom SpriteText labels, not default line objects
+  const linkPositionUpdate = useCallback((sprite: any, linkData: any, coords: any) => {
+    // sprite   = THREE SpriteText object
+    // linkData = the link object (source/target/type) — 2nd arg in react-force-graph-3d
+    // coords   = { start, end } world positions — 3rd arg
     if (!sprite || typeof sprite.text !== 'string') return
-    if (!info?.start || !info?.end) return
+    if (!coords?.start || !coords?.end) return
+
+    const lKey = linkData ? linkKey(linkData) : null
+    const isHighlighted = lKey ? (highlightLinks.size > 0 && highlightLinks.has(lKey)) : false
+
+    if (!isHighlighted) {
+      sprite.visible = false
+      return
+    }
+
+    // Format type: FOUNDED_AND_OPERATED → FOUNDED AND OPERATED
+    const label = linkData?.type
+      ? (linkData.type as string).replace(/_/g, '\u00a0')
+      : ''
+    sprite.text = label
+    sprite.visible = true
+
     const middle = {
-      x: info.start.x + (info.end.x - info.start.x) / 2,
-      y: info.start.y + (info.end.y - info.start.y) / 2,
-      z: info.start.z + (info.end.z - info.start.z) / 2,
+      x: coords.start.x + (coords.end.x - coords.start.x) / 2,
+      y: coords.start.y + (coords.end.y - coords.start.y) / 2,
+      z: coords.start.z + (coords.end.z - coords.start.z) / 2,
     }
     Object.assign((sprite as THREE.Object3D).position, middle)
-  }, [])
+  }, [highlightLinks, linkKey])
 
   const navigateToNode = useCallback((nodeId: string) => {
     const node = graphData.nodes.find(n => n.id === nodeId)
